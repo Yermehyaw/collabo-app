@@ -1,6 +1,6 @@
-fastapi[standard]==0.113.0
+fastapi[standard]
 pydantic==2.8.0
 websockets
 motor
 typing
-
+uvicorn
