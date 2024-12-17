@@ -1,6 +1,9 @@
 fastapi[standard]
 pydantic==2.8.0
+pydantic-bson
 websockets
 motor
 typing
-uvicorn
+uvicorn[standard]
+pymongo[snappy, gssapi]
+bcrypt
