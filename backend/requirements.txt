@@ -3,4 +3,6 @@ pydantic==2.8.0
 websockets
 motor
 typing
-uvicorn
+uvicorn[standard]
+pymongo
+bcrypt
