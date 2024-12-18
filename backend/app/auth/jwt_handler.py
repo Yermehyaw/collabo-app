@@ -6,6 +6,7 @@ MODULES:
     - datetime: datetime class
     - dotenv: load_dotenv function, load env variables
     - os: getenv function
+    - typing: Union
 
 """
 import jwt
@@ -15,6 +16,7 @@ from datetime import (
 ) 
 from dotenv import load_dotenv
 import os
+from typing import Union
 
 load_dotenv()
 
@@ -23,7 +25,7 @@ JWT_ALGORITHM = os.getenv("JWT_ALGORITHM")
 EXPIRES = 180  # Each user token expires in 3 hours
 
 
-def create_access_token(data: dict):
+def create_access_token(data: dict) -> str:
     """
     Create a jwt access token
 
@@ -43,7 +45,7 @@ def create_access_token(data: dict):
     return token
 
 
-def verify_access_token(token: str):
+def verify_access_token(token: str) -> Union[dict, None]:
     """
     Verify the jwt access token
 
