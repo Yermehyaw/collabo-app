@@ -71,7 +71,7 @@ class UserSignup(BaseModel):
 
 
 # RETRIEVE USER
-class UserRetrieve(BaseModel):
+class UserResponse(BaseModel):
     """
     Users description class for retrieving a user for responses. Only non-sensitive data should be included.
 
@@ -95,10 +95,10 @@ class UserRetrieve(BaseModel):
         - timezone: str
 
     """
-    user_id: str = str(uuid4())
+    user_id: str
     name: str = Field(..., min_length=1, max_length=100)
     email: EmailStr
-    created_at: str = datetime.now().isoformat()
+    created_at: str
     profile_pic: Optional[bytes] = None
     bio: Optional[str] = None
     skills: Optional[list] = None
