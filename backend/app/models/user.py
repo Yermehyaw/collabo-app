@@ -49,7 +49,8 @@ class UserSignup(BaseModel):
         - timezone: str
 
     """
-    user_id: str = 'user' + str(uuid4())
+    user_id: str = 'user' + str(uuid4())  # unique user id
+    id: str = None # database id of user
     name: str = Field(..., min_length=1, max_length=100)
     email: EmailStr
     password: str = Field(..., min_length=8)
