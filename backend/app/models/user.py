@@ -23,8 +23,8 @@ from datetime import datetime
 from uuid import uuid4
 
 
-# CREATE USER
-class UserSignup(BaseModel):
+# DEFINTION OF A USER
+class User(BaseModel):
     """
     Users description class for creating a new user
 
@@ -53,7 +53,7 @@ class UserSignup(BaseModel):
     db_id: str = None # database id of user object
     name: str = Field(..., min_length=1, max_length=100)
     email: EmailStr
-    password: str = Field(..., min_length=8)
+    password: str = Field(..., min_length=8)  # hashed password, real password are never stored
     created_at: str = datetime.now().isoformat()
     updated_at: str = datetime.now().isoformat()
     profile_pic: Optional[bytes] = None
@@ -114,6 +114,21 @@ class UserResponse(BaseModel):
     location: Optional[str] = None
     timezone: Optional[str] = 'UTC'
 
+
+# USER SIGNUP
+class UserSignup(User):
+    """
+    Users description class for signing up a new user
+
+    ATTRIBUTES:
+        - name: str
+        - email: str
+        - password: str
+
+    """
+    name: str
+    email: EmailStr
+    password: str = Field(..., min_length=8)
 
 # USER LOGIN
 class UserLogin(BaseModel):
