@@ -43,7 +43,7 @@ class UserService:
             - user: User, user object
 
         RETURNS:
-            - User: user object
+            - User: newly created and stored user object
 
         """
         # connect to collection
@@ -54,22 +54,20 @@ class UserService:
             raise ValueError("User already exists")
         
         user.password = hash_password(user.password)
-        user.created_at = datetime.now()
-        user.updated_at = datetime.now()
-
-        # user.id = str(self.collection.insert_one(user.dict()).inserted_id)
+        user.db_id = str(collection.insert_one(user.dict()).inserted_id)  # insert user into collection and store the  id as an attr of the user obj
+        
         return user
 
-    async def authenticate_user(self, email: str, password: str) -> Optional[User]:
+    async def authenticate_user(self, email: str, password: str) -> dict:
         """
-        Method to authenticate a user
+        Method to authenticate/login a user. Generates a uniwues access token for the user
 
         PARAMETERS:
             - email: str, email of the user
             - password: str, password of the user
 
         RETURNS:
-            - User: user object
+            - dict: access token
 
         """
         user = await self.get_user_by_email(email)
@@ -77,8 +75,12 @@ class UserService:
             return None
         if not verify_password(password, user.password):
             return None
-        return user
 
+        # create token
+        token = create_access_token({"sub": user.user_id, "email": user.email})
+
+        return {"access_token": token, "token_type": "bearer"}
+    
     async def get_user_by_email(self, email: str) -> Optional[User]:
         """
         Method to get a user by email
@@ -90,42 +92,46 @@ class UserService:
             - User: user object
 
         """
-        user = await self.collection.find_one({"email": email})
+        collection = await get_collection(self.collection_name)
+        user = await collection.find_one({"email": email})
         if user:
-            return User(**user)
+            return User(**user)  # the dict returned from is unpacked and turned into a User object
         return None
 
-    async def get_user_by_id(self, user_id: str) -> Optional[User]:
+    async def get_user_by_id(self, _id: str) -> Optional[User]:
         """
         Method to get a user by id
 
         PARAMETERS:
-            - user_id: str, id of the user
+            - user_id: str, database id of the user document
 
         RETURNS:
             - User: user object
 
         """
-        user = await self.collection.find_one({"id": user_id})
+        collection = await get_collection(self.collection_name)
+        user = await collection.find_one({"db_id": _id})
         if user:
             return User(**user)
         return None
 
-    async def update_user(self, user_id: str, user: User) -> Optional[User]:
+    async def update_user(self, _id: str, user: User) -> Optional[User]:
         """
         Method to update a user
 
         PARAMETERS:
-            - user_id: str, id of the user
-            - user: User, user object
+            - _id: str, db id of the user doc
+            - user: User, sample user object to be used to update the user in the database
 
         RETURNS:
             - User: user object
 
         """
-        user.updated_at = datetime.now()
-        updated_user = await self.collection.find_one_and_update(
-            {"id": user_id},
+        collection = await get_collection(self.collection_name)
+        user.updated_at = datetime.now().isoformat()
+        
+        updated_user = await collection.find_one_and_update(
+            {"db_id": _id},
             {"$set": user.dict()},
             return_document=True
         )
