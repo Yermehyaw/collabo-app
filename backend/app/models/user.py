@@ -50,7 +50,7 @@ class UserSignup(BaseModel):
 
     """
     user_id: str = 'user' + str(uuid4())  # unique user id
-    id: str = None # database id of user
+    db_id: str = None # database id of user object
     name: str = Field(..., min_length=1, max_length=100)
     email: EmailStr
     password: str = Field(..., min_length=8)
