@@ -9,7 +9,6 @@ MODULES:
 
 """
 from typing import (
-    Union,
     Optional
 )
 from pydantic import (
@@ -22,10 +21,10 @@ from datetime import datetime
 from uuid import uuid4
 
 
-# DEFINTION OF A USER: USED FOR BOTH USER CREATION AND UPDATE
+# DEFINTION OF A USER: USED FOR USER CREATION AND RETRIEVAL
 class User(BaseModel):
     """
-    Users description class for creating a new user
+    Users description class for creating and retrieving a new user. Only non-sensitive data should be included during retrieval.
 
     ATTRIBUTES:
         - user_id: str
@@ -54,7 +53,7 @@ class User(BaseModel):
     email: EmailStr
     password: str = Field(..., min_length=8)  # hashed password, real password are never stored
     created_at: str = datetime.now().isoformat()
-    updated_at: str = datetime.now().isoformat()
+    updated_at: Optional[str] = None
     profile_pic: Optional[bytes] = None
     bio: Optional[str] = None
     skills: Optional[list] = []
@@ -81,16 +80,14 @@ class User(BaseModel):
         }
     )
 
-# RETRIEVE USER
-class UserResponse(BaseModel):
+# UPDATE USER
+class UserUpdate(BaseModel):
     """
-    Users description class for retrieving a user for responses. Only non-sensitive data should be included.
+    Users description class for updating a user for responses.
 
     ATTRIBUTES:
-        - user_id: str
         - name: str
         - email: str
-        - created_at: str
         - profile_pic: bytes
         - bio: str
         - skills: list
@@ -109,7 +106,7 @@ class UserResponse(BaseModel):
     user_id: str
     name: str = Field(..., min_length=1, max_length=100)
     email: EmailStr
-    created_at: str
+    updated_at: str = datetime.now().isoformat()
     profile_pic: Optional[bytes] = None
     bio: Optional[str] = None
     skills: Optional[list] = []

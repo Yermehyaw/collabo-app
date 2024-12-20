@@ -18,8 +18,7 @@ from pydantic import (
     Field,
 )
 from datetime import datetime
-from uuid import uuid4
-from user import User
+from bson import ObjectId
 
 
 # STANDARD PROJECT DEF MODEL
@@ -48,7 +47,7 @@ class Project(BaseModel):
     title: str = Field(..., min_length=4, max_length=100)
     description: Optional[str] = Field(max_length=1000)
     created_at: str = datetime.now().isoformat()
-    updated_at: str = datetime.now().isoformat()
+    updated_at: Optional[str] = None
     starting: Optional[str] = None
     ending: Optional[str] = None
     creator_id: str
@@ -58,6 +57,7 @@ class Project(BaseModel):
     followers: List[str] = []
     project_tools: List[str] = []
     project_location: Optional[str] = None
+
 
 
 # UPDATE PROJECT MODEL
@@ -77,8 +77,8 @@ class ProjectUpdate(BaseModel):
     - project_tools: list, list of technologues/tools to be used in the project
 
     """
-    title: str = Field(..., min_length=4, max_length=100)
-    description: Optional[str] = Field(max_length=1000)
+    title: Optional[str] = Field(..., min_length=4, max_length=100, default=None)
+    description: Optional[str] = Field(max_length=1000, default=None)
     updated_at: str = datetime.now().isoformat()
     starting: Optional[str] = None
     ending: Optional[str] = None
@@ -108,12 +108,12 @@ class ProjectResponse(BaseModel):
     - followers: list
 
     """
-    project_id: Optional[str]
+    project_id: str
     title: str
     description: Optional[str] = Field(max_length=1000)
     created_by: str
-    created_at: str = datetime.now().isoformat()
-    updated_at: str = datetime.now().isoformat()
+    created_at: str
+    updated_at: Optional[str] = None
     starting: Optional[str] = None
     ending: Optional[str] = None
     type: Optional[str] = None
