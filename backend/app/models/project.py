@@ -2,7 +2,7 @@
 Project model for fastapi app
 
 MODULES:
-    - typing: Union class
+    - typing: custom types
     - pydantic: BaseModel class
     - datetime: datetime class
     - uuid: uuid4 class
@@ -11,7 +11,6 @@ MODULES:
 """
 from typing import (
     Optional,
-    Union,
     List
 )
 from pydantic import (
@@ -45,19 +44,19 @@ class Project(BaseModel):
     - followers: list
 
     """
-    project_id: str = 'project' + str(uuid4())
-    db_id: str = None
+    project_id: Optional[str] = Field(alias='_id', default=None)
     title: str = Field(..., min_length=4, max_length=100)
     description: Optional[str] = Field(max_length=1000)
     created_at: str = datetime.now().isoformat()
     updated_at: str = datetime.now().isoformat()
-    deadline: Optional[str] = None
+    starting: Optional[str] = None
+    ending: Optional[str] = None
     creator_id: str
     type: Optional[str] = None
-    tags: List[Union[str | None]] = []
-    collaborators: List[Union[str | None]] = []
-    followers: List[Union[str | None]] = []
-    project_tools: List[Union[str | None]] = []
+    tags: List[str] = []
+    collaborators: List[str] = []
+    followers: List[str] = []
+    project_tools: List[str] = []
     project_location: Optional[str] = None
 
 
@@ -70,7 +69,8 @@ class ProjectUpdate(BaseModel):
     - title: str
     - description: str
     - updated_at: str
-    - deadline: str
+    - starting: str
+    - ending: str
     - collaborators: list
     - type: str
     - project_location
@@ -80,10 +80,11 @@ class ProjectUpdate(BaseModel):
     title: str = Field(..., min_length=4, max_length=100)
     description: Optional[str] = Field(max_length=1000)
     updated_at: str = datetime.now().isoformat()
-    deadline: Optional[str] = None
+    starting: Optional[str] = None
+    ending: Optional[str] = None
     type: Optional[str] = None
-    collaborators: List[Union[str | None]] = []
-    project_tools: List[Union[str | None]] = []
+    collaborators: List[str] = []
+    project_tools: List[str] = []
     project_location: Optional[str] = None
 
 
@@ -107,16 +108,17 @@ class ProjectResponse(BaseModel):
     - followers: list
 
     """
-    project_id: str = 'project' + str(uuid4())
-    title: str = Field(..., min_length=4, max_length=100)
+    project_id: Optional[str]
+    title: str
     description: Optional[str] = Field(max_length=1000)
+    created_by: str
     created_at: str = datetime.now().isoformat()
     updated_at: str = datetime.now().isoformat()
-    deadline: Optional[str] = None
-    creator_id: str
+    starting: Optional[str] = None
+    ending: Optional[str] = None
     type: Optional[str] = None
-    tags: List[Union[str | None]] = []
-    collaborators: List[Union[str | None]] = []
-    followers: List[Union[str | None]] = []
-    project_tools: List[Union[str | None]] = []
+    tags: List[str] = []
+    collaborators: List[str] = []
+    followers: List[str] = []
+    project_tools: List[str] = []
     project_location: Optional[str] = None
