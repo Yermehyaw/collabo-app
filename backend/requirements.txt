@@ -5,8 +5,9 @@ websockets
 motor
 typing
 uvicorn[standard]
-pymongo
+pymongo==4.9.0
 bcrypt
 python-dotenv
 pyjwt
+typing_extensions
 
