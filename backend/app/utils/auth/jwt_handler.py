@@ -11,18 +11,16 @@ MODULES:
 
 """
 import jwt
-from fastapi import Depends
-from fastapi.security import OAuthPasswordBearer
 from datetime import (
     datetime,
-    timedelta
+    timedelta,
+    timezone
 ) 
 from dotenv import load_dotenv
 import os
 from typing import Union
 
 load_dotenv()
-oauth2_scheme = OAuthPasswordBearer(tokenUrl="token")
 
 JWT_SECRET = os.getenv("JWT_SECRET")
 JWT_ALGORITHM = os.getenv("JWT_ALGORITHM")
@@ -41,7 +39,7 @@ def create_access_token(data: dict) -> str:
 
     """
     data_to_encode = data.copy()  # make a copy of the json dict
-    expire = datetime.utcnow() + timedelta(minutes=EXPIRES)  # set the token expiration time
+    expire = datetime.now(timezone.utc) + timedelta(minutes=EXPIRES)  # set the token expiration time
 
     data_to_encode.update({"exp": expire})  # add the expiration time to the data
 
@@ -49,7 +47,7 @@ def create_access_token(data: dict) -> str:
     return token
 
 
-def verify_access_token(token: str = Depends(oauth2_scheme)) -> Union[dict, None]:
+def verify_access_token(token: str) -> Union[dict, None]:
     """
     Verify the jwt access token
 
