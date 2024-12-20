@@ -3,22 +3,18 @@ User Service Module
 Handles all the business logic for the user model
 
 MODULES:
-    - typing: List, Optional, Union
     - datetime: datetime class
-    - models.user: User
+    - models.user: UserUpdate, UserResponse
     - db: get_collection, get collections from db client
+    - bson: ObjectId, validate and create byte ids
 
 """
-from typing import (
-    List,
-    Optional,
-    Union
-)
 from datetime import datetime
 from models.user import (
-    User, UserUpdate, UserResponse
+    UserUpdate, UserResponse
 )
 from db import get_collection
+from bson import ObjectId
 
 
 class UserService:
@@ -33,60 +29,48 @@ class UserService:
     def __init__(self):
         self.collection_name = "users"
 
-
-    async def get_user_by_email(self, email: str) -> Optional[UserResponse]:
-        """
-        Method to get a user by email
-
-        PARAMETERS:
-            - email: str, email of the user
-
-        RETURNS:
-            - User: user object
-
-        """
-        collection = await get_collection(self.collection_name)
-        user = await collection.find_one({"email": email})
-        if user:
-            return User(**user)  # the dict returned from is unpacked and turned into a User object
-        return None
-
     async def get_user_by_id(self, user_id: str) -> Optional[UserResponse]:
         """
         Method to get a user by id
 
         PARAMETERS:
-            - user_id: str, id of the user
+            - user_id: str, unique id of the user
 
         RETURNS:
             - User: user object
 
         """
         collection = await get_collection(self.collection_name)
-        user = await collection.find_one({"user_id": user_id})
+
+        if not ObjectId.is_valid(user_id):  # validate that the id is first a valid objectid. ObjectId is the type used by mongodb to assign ids to its entries
+            return None
+
+        user = await collection.find_one({"_id": ObjectId(user_id)}, {"password": 0})
         if user:
-            return User(**user)
+            return UserResponse(**user)
         return None
 
-    async def update_user(self, _id: str, user: UserUpdate) -> Optional[UserResponse]:
+    async def update_user(self, user_id: str, user: UserUpdate) -> Optional[int]:
         """
         Method to update a user
 
         PARAMETERS:
-            - _id: str, db id of the user doc
+            - user_id: str, db id of the user doc
             - user: User, sample user object to be used to update the user in the database
 
         RETURNS:
-            - User: user object
+            - int: no of fields updated
 
         """
         collection = await get_collection(self.collection_name)
+
+        if not ObjectId.is_valid(user_id):
+            return None
+
         user.updated_at = datetime.now().isoformat()
-        
-        updated_user = await collection.find_one_and_update(
-            {"db_id": _id},
-            {"$set": user.dict()},
-            return_document=True
+        update_response = await collection.update_one(
+            {"_id": ObjectId(user_id)},
+            {"$set": user.model_dump()},
         )
-        if updated_user:
-            return User(**updated_user)
+
+        return update_response.modified_count

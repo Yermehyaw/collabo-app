@@ -108,24 +108,3 @@ class AuthService:
         if user:
             return UserResponse(**user)
         return None
-
-    async def get_user_by_id(self, user_id: str) -> Optional[UserResponse]:
-        """
-        Method to get a user by id
-
-        PARAMETERS:
-            - user_id: str, unique id of the user
-
-        RETURNS:
-            - User: user object
-
-        """
-        collection = await get_collection(self.collection_name)
-
-        if not ObjectId.is_valid(user_id):  # validate that the id is first a valid objectid. ObjectId is the type used by mongodb to assign ids to its entries
-            return None
-
-        user = await collection.find_one({"_id": ObjectId(user_id)}, {"password": 0})
-        if user:
-            return UserResponse(**user)
-        return None 
