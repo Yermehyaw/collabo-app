@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        .peer-avatar, .project-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-12 text-center mb-4">
+                <h1 class="text-primary">John Doe's Profile</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <img src="https://randomuser.me/api/portraits/men/1.jpg" class="rounded-circle mb-3" alt="Avatar" width="150" height="150">
+                        <h5 class="card-title">John Doe</h5>
+                        <p class="card-text">Web Developer</p>
+                        <p class="card-text"><strong>Skills:</strong> HTML, CSS, JavaScript</p>
+                        <button class="btn btn-primary mr-2">Connect</button>
+                        <button class="btn btn-secondary">Message</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <ul class="nav nav-tabs" id="profileTabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="true">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="projects-tab" data-toggle="tab" href="#projects" role="tab" aria-controls="projects" aria-selected="false">Projects</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="peers-tab" data-toggle="tab" href="#peers" role="tab" aria-controls="peers" aria-selected="false">Peers</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="profileTabsContent">
+                    <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                        <div class="card mt-3">
+                            <div class="card-body">
+                                <h5 class="card-title">About John Doe</h5>
+                                <p class="card-text">John is a skilled web developer with over 5 years of experience in HTML, CSS, and JavaScript. He has worked on numerous projects and is always eager to learn new technologies.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="projects" role="tabpanel" aria-labelledby="projects-tab">
+                        <div class="card mt-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Projects</h5>
+                                <div class="list-group">
+                                    <a href="project-alpha.html" class="list-group-item list-group-item-action">
+                                        <img src="https://via.placeholder.com/30" alt="Project Alpha" class="project-avatar">
+                                        Project Alpha
+                                        <p class="mb-1">A brief description of Project Alpha.</p>
+                                    </a>
+                                    <a href="project-beta.html" class="list-group-item list-group-item-action">
+                                        <img src="https://via.placeholder.com/30" alt="Project Beta" class="project-avatar">
+                                        Project Beta
+                                        <p class="mb-1">A brief description of Project Beta.</p>
+                                    </a>
+                                    <a href="project-gamma.html" class="list-group-item list-group-item-action">
+                                        <img src="https://via.placeholder.com/30" alt="Project Gamma" class="project-avatar">
+                                        Project Gamma
+                                        <p class="mb-1">A brief description of Project Gamma.</p>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="peers" role="tabpanel" aria-labelledby="peers-tab">
+                        <div class="card mt-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Peers</h5>
+                                <div class="list-group">
+                                    <a href="peer-jane.html" class="list-group-item list-group-item-action">
+                                        <img src="https://randomuser.me/api/portraits/women/2.jpg" alt="Jane Smith" class="peer-avatar">
+                                        Jane Smith
+                                    </a>
+                                    <a href="peer-alice.html" class="list-group-item list-group-item-action">
+                                        <img src="https://randomuser.me/api/portraits/women/3.jpg" alt="Alice Johnson" class="peer-avatar">
+                                        Alice Johnson
+                                    </a>
+                                    <a href="peer-bob.html" class="list-group-item list-group-item-action">
+                                        <img src="https://randomuser.me/api/portraits/men/4.jpg" alt="Bob Brown" class="peer-avatar">
+                                        Bob Brown
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
