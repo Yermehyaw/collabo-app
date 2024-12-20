@@ -31,6 +31,31 @@
             border-radius: 50%;
             margin-right: 10px;
         }
+        /* New styles for notifications and messages */
+        .notification-icon .fa-bell,
+        .notification-icon .fa-envelope {
+            color: #007bff;
+            font-size: 1.2rem;
+        }
+        .notification-icon .badge-notification {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: #ff4444;
+            color: white;
+            border-radius: 50%;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            transform: translate(25%, -25%);
+        }
+        .notification-icon {
+            position: relative;
+            padding-right: 1rem;
+        }
+        /* Remove dropdown arrow */
+        .notification-icon.dropdown-toggle::after {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -51,7 +76,7 @@
                 <li class="nav-item"><a class="nav-link" href="#">Peers</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">Projects</a></li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="notificationsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle notification-icon" href="#" id="notificationsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-bell"></i>
                         <span class="badge badge-notification">3</span>
                     </a>
@@ -73,7 +98,7 @@
                     </div>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle notification-icon" href="#" id="messagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-envelope"></i>
                         <span class="badge badge-notification">5</span>
                     </a>
