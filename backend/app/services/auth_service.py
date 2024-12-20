@@ -20,7 +20,7 @@ from typing import (
 )
 from datetime import datetime
 from models.user import (
-    User, UserResponse, Token
+    User, UserSignup, UserResponse, Token
 )
 from utils.auth.password_utils import hash_password, verify_password
 from utils.auth.jwt_handler import create_access_token
@@ -41,7 +41,7 @@ class AuthService:
     def __init__(self):
         self.collection_name = "users"
 
-    async def create_user(self, signup: dict) -> str:
+    async def create_user(self, signup: UserSignup) -> str:
         """
         Method to create a new user
 
@@ -59,11 +59,8 @@ class AuthService:
         if existing_user:
             raise ValueError("User already exists")
 
-        try:
-            p_hash = hash_password(signup.password)
-            user = User(name=signup.name, email=signup.email, password=p_hash)
-        except (ValidationError, KeyError) as e:
-            raise ValueError("User creation failed: ", e)
+        p_hash = hash_password(signup.password)
+        user = User(name=signup.name, email=signup.email, password=p_hash)
 
         insertion_id = collection.insert_one(
             user.model_dump(by_alias=True)).inserted_id  # user obj must be transformed into a dict using model_dump() or dict()

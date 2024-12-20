@@ -60,7 +60,7 @@ async def login(user: UserLogin):
 
     """
     token = await auth_service.authenticate_user(user.email, user.password)
-    if not user:
+    if not token:
         failure = {"error": "Invalid email or password", "code": "UNAUTHORIZED"}
         raise HTTPException(status_code=401, detail=failure)
     
