@@ -7,6 +7,7 @@ MODULES:
     - datetime: datetime class
     - models.user: User
     - utils.auth.password_utils: hash_password, verify_password
+    - utils.auth.jwt_handler: create_access_token
     - db: get_collection, get collections from db client
 
 """
@@ -16,8 +17,12 @@ from typing import (
     Union
 )
 from datetime import datetime
-from models.user import User, UserSignup
+from models.user import (
+    User, UserSignup,
+    UserResponse
+)
 from utils.auth.password_utils import hash_password, verify_password
+from utils.auth.jwt_handler import create_access_token
 from db import get_collection
 
 
@@ -76,9 +81,10 @@ class AuthService:
         if not verify_password(password, user.password):
             return None
         
-        return user
-    
-    async def get_user_by_email(self, email: str) -> Optional[User]:
+        access_token = create_access_token(data={"sub": user.user_id, "email": user.email})
+        return {"access_token": access_token, "token_type": "bearer"}
+
+    async def get_user_by_email(self, email: str) -> Optional[UserResponse]:
         """
         Method to get a user by email
 
@@ -92,10 +98,12 @@ class AuthService:
         collection = await get_collection(self.collection_name)
         user = await collection.find_one({"email": email})
         if user:
-            return User(**user)  # the dict returned from is unpacked and turned into a User object
+            resp = UserResponse()  # the dict returned is used to init a UserResponse obj with mutual keys
+            resp = {key: user[key] for key in user if key in resp} # potential bug here! resp is a UserResponse obj, but we are trying to copy the dict values from user to resp
+            return resp
         return None
 
-    async def get_user_by_id(self, user_id: str) -> Optional[User]:
+    async def get_user_by_id(self, user_id: str) -> Optional[UserResponse]:
         """
         Method to get a user by id
 
@@ -109,5 +117,7 @@ class AuthService:
         collection = await get_collection(self.collection_name)
         user = await collection.find_one({"user_id": user_id})
         if user:
-            return User(**user)
-        return None
+            resp = UserResponse()  # the dict returned is used to init a UserResponse obj with mutual keys
+            resp = {key: user[key] for key in user if key in resp}
+            return resp
+        return None 

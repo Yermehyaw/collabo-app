@@ -15,7 +15,9 @@ from typing import (
     Union
 )
 from datetime import datetime
-from models.user import User
+from models.user import (
+    User, UserUpdate, UserResponse
+)
 from db import get_collection
 
 
@@ -32,7 +34,7 @@ class UserService:
         self.collection_name = "users"
 
 
-    async def get_user_by_email(self, email: str) -> Optional[User]:
+    async def get_user_by_email(self, email: str) -> Optional[UserResponse]:
         """
         Method to get a user by email
 
@@ -49,7 +51,7 @@ class UserService:
             return User(**user)  # the dict returned from is unpacked and turned into a User object
         return None
 
-    async def get_user_by_id(self, user_id: str) -> Optional[User]:
+    async def get_user_by_id(self, user_id: str) -> Optional[UserResponse]:
         """
         Method to get a user by id
 
@@ -66,7 +68,7 @@ class UserService:
             return User(**user)
         return None
 
-    async def update_user(self, _id: str, user: User) -> Optional[User]:
+    async def update_user(self, _id: str, user: UserUpdate) -> Optional[UserResponse]:
         """
         Method to update a user
 
