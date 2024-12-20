@@ -24,7 +24,8 @@ from uuid import uuid4
 # DEFINTION OF A USER: USED FOR USER CREATION AND RETRIEVAL
 class User(BaseModel):
     """
-    Users description class for creating and retrieving a new user. Only non-sensitive data should be included during retrieval.
+    Users description class for creating and retrieving a new user. 
+    Only non-sensitive data should be included during retrieval.
 
     ATTRIBUTES:
         - user_id: str
@@ -103,9 +104,8 @@ class UserUpdate(BaseModel):
         - timezone: str
 
     """
-    user_id: str
-    name: str = Field(..., min_length=1, max_length=100)
-    email: EmailStr
+    name: Optional[str] = Field(..., min_length=1, max_length=100)
+    email: Optional[EmailStr]
     updated_at: str = datetime.now().isoformat()
     profile_pic: Optional[bytes] = None
     bio: Optional[str] = None
