@@ -3,6 +3,7 @@ JWT Handler module
 
 MODULES:
     - jwt
+    - fastapi: fastapi modeules
     - datetime: datetime class
     - dotenv: load_dotenv function, load env variables
     - os: getenv function
@@ -10,6 +11,8 @@ MODULES:
 
 """
 import jwt
+from fastapi import Depends
+from fastapi.security import OAuthPasswordBearer
 from datetime import (
     datetime,
     timedelta
@@ -19,6 +22,7 @@ import os
 from typing import Union
 
 load_dotenv()
+oauth2_scheme = OAuthPasswordBearer(tokenUrl="token")
 
 JWT_SECRET = os.getenv("JWT_SECRET")
 JWT_ALGORITHM = os.getenv("JWT_ALGORITHM")
@@ -45,7 +49,7 @@ def create_access_token(data: dict) -> str:
     return token
 
 
-def verify_access_token(token: str) -> Union[dict, None]:
+def verify_access_token(token: str = Depends(oauth2_scheme)) -> Union[dict, None]:
     """
     Verify the jwt access token
 
