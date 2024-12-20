@@ -66,7 +66,7 @@ class AuthService:
             raise ValueError("User creation failed: ", e)
 
         insertion_id = collection.insert_one(
-            user.model_dump(by_alias=True)).inserted_id
+            user.model_dump(by_alias=True)).inserted_id  # user obj must be transformed into a dict using model_dump() or dict()
 
         return str(insertion_id)  # same as the user_id because alias of user_id which is _id was set to True
 
@@ -121,6 +121,10 @@ class AuthService:
 
         """
         collection = await get_collection(self.collection_name)
+
+        if not ObjectId.is_valid(user_id):  # validate that the id is first a valid objectid. ObjectId is the type used by mongodb to assign ids to its entries
+            return None
+
         user = await collection.find_one({"_id": ObjectId(user_id)}, {"password": 0})
         if user:
             return UserResponse(**user)
