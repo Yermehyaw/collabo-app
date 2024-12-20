@@ -16,19 +16,19 @@ from pydantic import (
     BaseModel,
     EmailStr,
     Field,
-    constr,
-    validator
+    ConfigDict
 )
 from datetime import datetime
 from uuid import uuid4
 
 
-# DEFINTION OF A USER
+# DEFINTION OF A USER: USED FOR BOTH USER CREATION AND UPDATE
 class User(BaseModel):
     """
     Users description class for creating a new user
 
     ATTRIBUTES:
+        - user_id: str
         - name: str
         - email: str
         - password: str
@@ -49,9 +49,7 @@ class User(BaseModel):
         - timezone: str
 
     """
-    user_id: str =  # unique user id
-    
-        db_id: str = None # database id of user object
+    user_id: Optional[str] = Field(alias="_id", default=None) # unique user id, same as db insertion id
     name: str = Field(..., min_length=1, max_length=100)
     email: EmailStr
     password: str = Field(..., min_length=8)  # hashed password, real password are never stored
@@ -59,18 +57,29 @@ class User(BaseModel):
     updated_at: str = datetime.now().isoformat()
     profile_pic: Optional[bytes] = None
     bio: Optional[str] = None
-    skills: Optional[list] = None
-    friends: Optional[list] = None
-    collabees: Optional[list] = None  # list of users the user is currently collaborating with
-    objs: Optional[list] = None
-    interests: Optional[list] = None
-    projects: Optional[list] = None
-    followers: Optional[list] = None
-    following: Optional[list] = None
+    skills: Optional[list] = []
+    friends: Optional[list] = []
+    collabees: Optional[list] = []  # list of users the user is currently collaborating with
+    objs: Optional[list] = []
+    interests: Optional[list] = []
+    projects: Optional[list] = []
+    followers: Optional[list] = []
+    following: Optional[list] = []
     language: Optional[str] = 'eng'
     location: Optional[str] = None
     timezone: Optional[str] = 'UTC'
-
+    model_config = ConfigDict(
+        populate_by_name=True,  # permit the id alias of user_id to work
+        arbitrary_types_allowed=True,
+        # Example of expected format with the min req attr in the data supposed to utilize this model
+        json_scheme_extra={
+            "example": {
+                "name": "John Doe",
+                "email": "jdoe@example.com",
+                "password": "jdoepassword"
+            }
+        }
+    )
 
 # RETRIEVE USER
 class UserResponse(BaseModel):
@@ -103,14 +112,14 @@ class UserResponse(BaseModel):
     created_at: str
     profile_pic: Optional[bytes] = None
     bio: Optional[str] = None
-    skills: Optional[list] = None
-    friends: Optional[list] = None
-    collabees: Optional[list] = None  # list of users the user is currently collaborating with
-    objs: Optional[list] = None
-    interests: Optional[list] = None
-    projects: Optional[list] = None
-    followers: Optional[list] = None
-    following: Optional[list] = None
+    skills: Optional[list] = []
+    friends: Optional[list] = []
+    collabees: Optional[list] = []  # list of users the user is currently collaborating with
+    objs: Optional[list] = []
+    interests: Optional[list] = []
+    projects: Optional[list] = []
+    followers: Optional[list] = []
+    following: Optional[list] = []
     language: Optional[str] = 'eng'
     location: Optional[str] = None
     timezone: Optional[str] = 'UTC'
