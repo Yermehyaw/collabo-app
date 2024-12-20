@@ -59,10 +59,9 @@ async def login(user: UserLogin):
         - Token: access token
 
     """
-    user = await auth_service.authenticate_user(user.email, user.password)
+    token = await auth_service.authenticate_user(user.email, user.password)
     if not user:
         failure = {"error": "Invalid email or password", "code": "UNAUTHORIZED"}
         raise HTTPException(status_code=401, detail=failure)
     
-    access_token = create_access_token(data={"sub": user.user_id, "email": user.email})
-    return {"access_token": access_token, "token_type": "bearer"}
+    return token
