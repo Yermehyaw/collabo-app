@@ -71,6 +71,9 @@ class UserService:
         update_response = await collection.update_one(
             {"_id": ObjectId(user_id)},
             {"$set": user.model_dump()},
-        )
+        )  # update_one never returns none even if no document was flund with the user_id
+
+        if not update_response.matched_count:
+            return None # document with user_id dosent exist
 
         return update_response.modified_count
