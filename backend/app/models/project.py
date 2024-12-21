@@ -151,6 +151,7 @@ class ProjectResponse(BaseModel):
         # Example of expected format
         json_scheme_extra={
             "example": {
+                "project_id": "project1",
                 "title": "My new project",
                 "description": "very important project",
                 "created_by": "user1010",
