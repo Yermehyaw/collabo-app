@@ -16,4 +16,4 @@ class Notification(BaseModel):
     type: str
     content: str
     is_read: Optional[bool] = False
-    created_at: Optional[datetime] = datetime.utc.now()
+    created_at: Optional[datetime] = datetime.now().isoformat()
