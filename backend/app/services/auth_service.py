@@ -64,12 +64,12 @@ class AuthService:
         p_hash = hash_password(signup.password)
         user = User(name=signup.name, email=signup.email, password=p_hash)
 
+        user_data = user.model_dump(by_alias=True)  # user obj must first transformed into a simple dict, with the use of by_alias=True to use the alias name of _id instead of user_id
         new_id = 'user' + str(uuid4())
-        insertion_id = collection.insert_one(
-            user.model_dump(by_alias=True), {"_id": new_id}  # the dict param specifies the mongoDb should use the new_id as its _id
-        ).inserted_id  # user obj must be transformed into a dict using model_dump() or dict()
+        user_data["_id"] = new_id
+        insertion_id = collection.insert_one(user_data).inserted_id 
 
-        return str(insertion_id)  # new_id should be the the same as insertion_id
+        return str(insertion_id)  # new_id should now be the the same as insertion_id
 
     async def authenticate_user(self, email: str, password: str) -> Optional[Token]:
         """
