@@ -31,7 +31,7 @@ class NotificationService:
                 "type": notification_type,
                 "content": content,
                 "is_read": False,
-                "created_at": datetime.now().isoformat(),
+                "created_at": datetime.now().strftime('%Y-%m-%dT%H:%H:M:%S'),
             }
             result = await self.collection.insert_one(notification)
             return str(result.inserted_id)
