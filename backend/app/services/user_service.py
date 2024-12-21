@@ -9,6 +9,7 @@ MODULES:
     - bson: ObjectId, validate and create byte ids
 
 """
+from typing import Optional
 from datetime import datetime
 from models.user import (
     UserUpdate, UserResponse
@@ -42,10 +43,10 @@ class UserService:
         """
         collection = await get_collection(self.collection_name)
 
-        if not ObjectId.is_valid(user_id):  # validate that the id is first a valid objectid. ObjectId is the type used by mongodb to assign ids to its entries
-            return None
+        #if not ObjectId.is_valid(user_id):  # validate that the id is first a valid objectid. ObjectId is the type used by mongodb to assign ids to its entries
+        #    return None
 
-        user = await collection.find_one({"_id": ObjectId(user_id)}, {"password": 0})
+        user = await collection.find_one({"_id": user_id}, {"password": 0})
         if user:
             return UserResponse(**user)
         return None
@@ -64,12 +65,12 @@ class UserService:
         """
         collection = await get_collection(self.collection_name)
 
-        if not ObjectId.is_valid(user_id):
-            return None
+        # if not ObjectId.is_valid(user_id):
+        #    return None
 
         user.updated_at = datetime.now().isoformat()
         update_response = await collection.update_one(
-            {"_id": ObjectId(user_id)},
+            {"_id": user_id},
             {"$set": user.model_dump()},
         )  # update_one never returns none even if no document was flund with the user_id
 
@@ -77,3 +78,58 @@ class UserService:
             return None # document with user_id dosent exist
 
         return update_response.modified_count
+
+    async def search_users(self, filters: dict) -> list:
+        """
+        Method to search for users
+
+        PARAMETERS:
+            - filters: dict, filter params to be used in the search
+
+        RETURNS:
+            - list: list of user objects
+
+        """
+        collection = await get_collection(self.collection_name)
+
+        # Create custom query dict from the filters dict received
+        if not filters:
+            return []
+        
+        query = {}
+        for key, value in filters.items():
+            if key == "name":
+                query[key] = {"$regex": value, "$options": "i"}
+            
+            if key == "skills":
+                if isinstance(value, str):
+                    query[key] = value.split(", ")
+                else:
+                    query[key] = {"$in": value}
+
+            if key == "interests":
+                if isinstance(value, str):
+                    query[key] = value.split(", ")
+                else:
+                    query[key] = {"$in": value}
+            
+            if key == "location":
+                query[key] = {"$regex": value, "$options": "i"}
+            
+            if key == "language":
+                query[key] = value
+
+            if key == "timezone":
+                query[key] = value
+            
+            if key == "projects":
+                query[key] = {"$in": value}
+            
+            if key == "followers":
+                query[key] = {"$in": value}
+            
+            if key == "following":
+                query[key] = {"$in": value}
+
+        users = await collection.find(query).to_list(length=None)
+        return [UserResponse(**user) for user in users]
