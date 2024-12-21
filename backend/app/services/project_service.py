@@ -101,3 +101,107 @@ class ProjectService:
         projects = await self.project_collection().find({"created_by": user_id}).to_list(length=None)
 
         return [ProjectResponse(**project) for project in projects]
+
+    async def update_project(self, project_id: str, project: ProjectUpdate) -> Optional[int]:
+        """
+        Update a project
+
+        PARAMETERS:
+            - project_id: str, db id of the project doc
+            - project: Project, sample project object to be used to update the project in the database
+
+        RETURNS:
+            - int: no of fields updated
+
+        """
+        project.updated_at = datetime.now().isoformat()
+        update_response = await self.project_collection().update_one(
+            {"_id": project_id},
+            {"$set": project.model_dump()}
+        )
+
+        if not update_response.matched_count:
+            return None # document with project_id was not found
+
+        return update_response.modified_count
+
+    async def delete_project(self, project_id: str) -> Optional[int]:
+        """
+        Delete a project
+
+        PARAMETERS:
+            - project_id: str, db id of the project doc
+
+        RETURNS:
+            - int: no of projrct doc deleted
+        
+        """
+        delete_response = await self.project_collection().delete_one({"_id": project_id})
+
+        return delete_response.deleted_count if delete_response.deleted_count == 1 else None  # every project has a unique id, so only one project should be deleted
+    
+    async def search_projects(self, filters: dict) -> List[ProjectResponse]:
+        """
+        Search for projects
+
+        PARAMETERS:
+            - filters: dict, search filters
+
+        RETURNS:
+            - List[Project]: list of project objects
+
+        """
+        # create a custom quesry from the filters dict received
+        query = {}
+        for key, value in filters.items():
+            if key == "title":
+                query[key] = {"$regex": value, "$options": "i"}  # find poject with the exact tiltle, case insensitive
+            
+            if key == "tags":
+                if isinstance(value, str):
+                    query[key] = {"$in": value.split(', ')}  # if tags is a string, split it into a list of tags delineated by a whitespace folllowing a comma
+                else:  # if tags is a list
+                    query[key] = {"$in": value}  # search for project bearing any tag from the list of  tags passed
+
+            if key == "type":
+                query[key] = value
+            
+            if key == "created_at":
+                query[key] = {"$gte": value}  # search for projects created on or after the date
+            
+            if key == "updated_at":
+                query[key] = {"$lte": value}  # search for projects updated on or before the date
+
+            if key == "starting":
+                query[key] = {"$gte": value}
+
+            if key == "ending":
+                query[key] = {"$lte": value}
+
+            if key == "created_by":
+                query[key] = value
+
+            if key == "collaborators":
+                if isinstance(value, str):
+                    query[key] = {"$in": value.split()}
+                else:
+                    query[key] = {"$in": value}
+
+            if key == "project_location":
+                query[key] = value
+
+            if key == "project_tools":
+                if isinstance(value, str):
+                    query[key] = {"$in": value.split(', ')}
+                else:
+                    query[key] = {"$in": value}
+
+            if key == "followers":
+                if isinstance(value, str):
+                    query[key] = {"$in": value.split(', ')}
+                else:
+                    query[key] = {"$in": value}
+
+        projects = await self.project_collection().find(query).to_list(length=None)
+
+        return [ProjectResponse(**project) for project in projects]
