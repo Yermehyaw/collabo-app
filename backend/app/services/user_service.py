@@ -103,13 +103,13 @@ class UserService:
             
             if key == "skills":
                 if isinstance(value, str):
-                    query[key] = value.split(", ")
+                    query[key] = {"$in": value.split(", ")}
                 else:
                     query[key] = {"$in": value}
 
             if key == "interests":
                 if isinstance(value, str):
-                    query[key] = value.split(", ")
+                    query[key] = {"$in": value.split(", ")}
                 else:
                     query[key] = {"$in": value}
             
@@ -123,13 +123,22 @@ class UserService:
                 query[key] = value
             
             if key == "projects":
-                query[key] = {"$in": value}
+                if isinstance(value, str):
+                    query[key] = {"$in": value.split(", ")}
+                else:
+                    query[key] = {"$in": value}
             
             if key == "followers":
-                query[key] = {"$in": value}
+                if isinstance(value, str):
+                    query[key] = {"$in": value.split(", ")}
+                else:
+                    query[key] = {"$in": value}
             
             if key == "following":
-                query[key] = {"$in": value}
+                if isinstance(value, str):
+                    query[key] = {"$in": value.split(", ")}
+                else:
+                    query[key] = {"$in": value}
 
         users = await collection.find(query).to_list(length=None)
         return [UserResponse(**user) for user in users]
