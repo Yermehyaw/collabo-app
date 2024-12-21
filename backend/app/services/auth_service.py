@@ -11,6 +11,7 @@ MODULES:
     - db: get_collection, get collections from db client
     - pydantic: ValidationError
     - bson: ObjectId
+    - uuid: uuid4 method
 
 """
 from typing import (
@@ -27,6 +28,7 @@ from utils.auth.jwt_handler import create_access_token
 from db import get_collection
 from pydantic import ValidationError
 from bson import ObjectId
+from uuid import uuid4
 
 
 class AuthService:
@@ -62,10 +64,12 @@ class AuthService:
         p_hash = hash_password(signup.password)
         user = User(name=signup.name, email=signup.email, password=p_hash)
 
+        new_id = 'user' + str(uuid4())
         insertion_id = collection.insert_one(
-            user.model_dump(by_alias=True)).inserted_id  # user obj must be transformed into a dict using model_dump() or dict()
+            user.model_dump(by_alias=True), {"_id": new_id}  # the dict param specifies the mongoDb should use the new_id as its _id
+        ).inserted_id  # user obj must be transformed into a dict using model_dump() or dict()
 
-        return str(insertion_id)  # same as the user_id because alias of user_id which is _id was set to True
+        return str(insertion_id)  # new_id should be the the same as insertion_id
 
     async def authenticate_user(self, email: str, password: str) -> Optional[Token]:
         """
