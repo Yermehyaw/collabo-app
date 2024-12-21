@@ -72,7 +72,7 @@ async def update_user_profile(user_id: str, token: str = Depends(verify_access_t
         raise HTTPException(status_code=404, detail=failure)
 
     if fields_updated == 0:  # user_id found, but no change
-        success = {"message": "No updates entered"}
+        success = {"message": "No data entries updated/created"}
     else:
         success = {"message": "profile updated successfully"}
 
