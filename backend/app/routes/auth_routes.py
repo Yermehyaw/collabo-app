@@ -27,7 +27,7 @@ from utils.auth.jwt_handler import (
 auth_router = APIRouter()
 auth_service = AuthService()
 
-@auth_router.post("/signup", response_model=dict)
+@auth_router.post("/signup", response_model=dict, status_code=status.HTTP_201_CREATED)
 async def signup(user: UserSignup):
     """
     Route to create a new user
