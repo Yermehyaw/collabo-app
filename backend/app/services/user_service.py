@@ -43,10 +43,10 @@ class UserService:
         """
         collection = await get_collection(self.collection_name)
 
-        if not ObjectId.is_valid(user_id):  # validate that the id is first a valid objectid. ObjectId is the type used by mongodb to assign ids to its entries
-            return None
+        #if not ObjectId.is_valid(user_id):  # validate that the id is first a valid objectid. ObjectId is the type used by mongodb to assign ids to its entries
+        #    return None
 
-        user = await collection.find_one({"_id": ObjectId(user_id)}, {"password": 0})
+        user = await collection.find_one({"_id": user_id}, {"password": 0})
         if user:
             return UserResponse(**user)
         return None
@@ -65,12 +65,12 @@ class UserService:
         """
         collection = await get_collection(self.collection_name)
 
-        if not ObjectId.is_valid(user_id):
-            return None
+        # if not ObjectId.is_valid(user_id):
+        #    return None
 
         user.updated_at = datetime.now().isoformat()
         update_response = await collection.update_one(
-            {"_id": ObjectId(user_id)},
+            {"_id": user_id},
             {"$set": user.model_dump()},
         )  # update_one never returns none even if no document was flund with the user_id
 
