@@ -9,6 +9,7 @@ MODULES:
     - bson: ObjectId, validate and create byte ids
 
 """
+from typing import Optional
 from datetime import datetime
 from models.user import (
     UserUpdate, UserResponse
