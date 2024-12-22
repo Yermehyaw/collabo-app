@@ -62,7 +62,7 @@ async def update_user_profile(user_id: str, token: str = Depends(verify_access_t
 
     """
     if str(token["sub"]) != user_id:
-        failure={"error": "Permission denied", "code": "PERMISSION_DENIED"}
+        failure = {"error": "Permission denied", "code": "PERMISSION_DENIED"}
         raise HTTPException(status_code=403, detail=failure)
 
     fields_updated = await user_service.update_user(user)
