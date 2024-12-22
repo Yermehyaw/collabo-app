@@ -121,9 +121,9 @@ class ProjectService:
         )
 
         if not update_response.matched_count:
-            return None # document with project_id was not found
+            return None # a document with req project_id was not found
 
-        return update_response.modified_count
+        return update_response.modified_count  # no of fields changed in the modified document
 
     async def delete_project(self, project_id: str) -> Optional[int]:
         """
@@ -151,7 +151,7 @@ class ProjectService:
             - List[Project]: list of project objects
 
         """
-        # create a custom quesry from the filters dict received
+        # create a custom query from the filters dict received
         query = {}
         for key, value in filters.items():
             if key == "title":
@@ -201,6 +201,8 @@ class ProjectService:
                     query[key] = {"$in": value.split(', ')}
                 else:
                     query[key] = {"$in": value}
+
+            # Search by invitations and applications can be implemented in the future
 
         projects = await self.project_collection().find(query).to_list(length=None)
 
