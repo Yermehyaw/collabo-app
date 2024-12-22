@@ -121,9 +121,9 @@ class ProjectService:
         )
 
         if not update_response.matched_count:
-            return None # a document with req project_id was not found
+            return None # a document with req project_id was not found, 404
 
-        return update_response.modified_count  # no of fields changed in the modified document
+        return update_response.modified_count  # no of fields changed in the modified document, 200
 
     async def delete_project(self, project_id: str) -> Optional[int]:
         """
