@@ -20,7 +20,9 @@ from fastapi import (
 )
 from typing_extensions import Annotated
 from services.user_service import UserService
-from models.user import User, UserResponse
+from models.user import (
+    UserUpdate, UserResponse
+)
 from utils.auth.password_utils import verify_password
 from utils.auth.jwt_handler import verify_access_token
 
@@ -49,7 +51,7 @@ async def get_user_profile(user_id: str, token: str = Depends(verify_access_toke
 
 
 @user_router.put("/profile/{user_id}", response_model=UserResponse)
-async def update_user_profile(user_id: str, token: str = Depends(verify_access_token)):
+async def update_user_profile(user_id: str, user: UserUpdate, token: str = Depends(verify_access_token)):
     """
     Route to update a user profile
 
@@ -65,11 +67,11 @@ async def update_user_profile(user_id: str, token: str = Depends(verify_access_t
         failure = {"error": "Permission denied", "code": "PERMISSION_DENIED"}
         raise HTTPException(status_code=403, detail=failure)
 
-    fields_updated = await user_service.update_user(user)
+    fields_updated = await user_service.update_user(user_id, user)
 
     if fields_updated is None:  # user_id not found
         failure = {"error": "User not found", "code": "NOT_FOUND"}
-        raise HTTPException(status_code=404, detail=failure)
+        raise HTTPException(status_code=400, detail=failure)
 
     if fields_updated == 0:  # user_id found, but no change
         success = {"message": "No data entries updated/created"}
