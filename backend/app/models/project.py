@@ -46,32 +46,32 @@ class Project(BaseModel):
     - project_location
     - project_tools: list, list of technologues/tools to be used in the project
     - followers: list
+    
+    FUTURE IMPROVEMENTS:
+    - status: Literal['ongoing', 'completed', 'paused'], describes the current state of the project
     - applications: list, list of application objs
     - invitations: list, list of invitation objs
+    - project_tools: list, list of technologies/tools to be used in the project
 
     """
+    # Required attr
     project_id: Optional[str] = Field(alias='_id', default=None)
     title: str = Field(..., min_length=4, max_length=100)
     description: Optional[str] = Field(max_length=1000)
     creator: UserResponse
     created_at: str = datetime.now().isoformat()
+
+    # Optional attr
     updated_at: Optional[str] = None
     deadline: Optional[str] = None
     type: Optional[str] = None
-    skills_required: List[str] = []  # skills required by any intending collaborator/collabee
-    status: Literal['ongoing', 'completed', 'paused'] = 'ongoing'
-    tags: List[str] = []
+    skills_required: List[str] = []  # skills required from intending collaborator/collabee
+    tags: List[str] = ["#creative", "#innovative"]  # keywords used to aid recommendation/feed/suggestions
     collaborators: List[str] = []
     followers: List[str] = []
     project_location: Optional[str] = None
     applications: List[Application] = []  # list of applications from collabee to the project creator
     invitations: List[Invitation] = []  # list of invitations by the project creator to potential collabees
-    """
-    FUTURE IMPROVEMENTS:
-    starting: Optional[str] = None
-    ending: Optional[str] = None
-    project_tools: List[str] = []  # list of technologies/tools to be used in the project
-    """
     model_config = ConfigDict(
         populate_by_name=True,  # permit the id alias of user_id to work
         arbitrary_types_allowed=True,  # permit the use of non-native types in model
@@ -80,7 +80,12 @@ class Project(BaseModel):
             "example": {
                 "title": "My new project",
                 "description": "very important project",
-                "created_by": "user1010"
+                "creator": {
+                    "user_id": "user1010",
+                    "name": "john doe",
+                    "email": "johndoe@example.com"
+                },
+                "created_at": "2025-12-31"
             }
         }
     )
@@ -109,7 +114,6 @@ class ProjectUpdate(BaseModel):
     deadline: Optional[str] = None
     type: Optional[str] = None
     skills_required: List[str] = []  # skills required by any intending collaborator/collabee
-    status: Literal['ongoing', 'completed', 'paused'] = 'ongoing'
     collaborators: List[str] = []
     project_location: Optional[str] = None
     applications: Optional[List[Application]] = []  # list of applications from collabee to the project creator
@@ -122,8 +126,7 @@ class ProjectUpdate(BaseModel):
             "example": {
                 "title": "My updated project",
                 "description": "very very important project",
-                "starting": "2025-01-01",
-                "ending": "2025-12-31",
+                "deadline": "2025-12-31",
             }
         }
     )
@@ -160,7 +163,7 @@ class ProjectResponse(BaseModel):
     collaborators: Optional[List[str]]
     followers: Optional[List[str]]
     project_location: Optional[str]
-    applications: Optional[List[Any]]  # list of applications from collabee to the project creator
+    applications: Optional[List[Any]]  # list of applications from potential collabee to the project creator
     invitations: Optional[List[Any]]  # list of invitations by the project creator to potential collabees
     model_config = ConfigDict(
         # Example of expected format
@@ -170,8 +173,7 @@ class ProjectResponse(BaseModel):
                 "title": "My new project",
                 "description": "very important project",
                 "created_by": "user1010",
-                "starting": "2025-01-01",
-                "ending": "2025-12-31"
+                "deadline": "2025-12-31"
             }
         }
     )
