@@ -80,7 +80,7 @@ class InvitationServices:
           - None
         """
         if not ObjectId.is_valid(invitation_id):
-            return None  # 403 err
+            return None
 
         update_response = await self.invitations_collection().update_one(
             {"_id": ObjectId(invitation_id)},
@@ -88,6 +88,6 @@ class InvitationServices:
         )
 
         if not update_response.matched_count:
-            return None  # 403 error
+            return None
 
         return update_response.modified_count
