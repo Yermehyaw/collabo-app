@@ -1,4 +1,12 @@
-fastapi[standard]==0.113.0
+fastapi[standard]
 pydantic==2.8.0
+bson
 websockets
 motor
+typing
+uvicorn[standard]
+pymongo
+bcrypt
+python-dotenv
+pyjwt
+
