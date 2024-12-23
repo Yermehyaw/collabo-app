@@ -6,6 +6,7 @@ MODULES:
     - pydantic: BaseModel, Field, ConfigDict
     - datetime: datetime class
     - uuid: uuid4 class
+    - bson: ObjectId
 
 """
 from typing import (
@@ -18,8 +19,7 @@ from pydantic import (
     ConfigDict
 )
 from datetime import datetime
-from models.application import Application
-from models.invitation import Invitation
+from bson import ObjectId
 
 
 # STANDARD PROJECT DEF MODEL
