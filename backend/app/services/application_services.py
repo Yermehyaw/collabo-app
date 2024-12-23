@@ -37,21 +37,26 @@ class ApplicationServices:
         """
         return await get_collection(self.collection_name)
 
-    async def submit_application(self, apply: ApplicationCreate) -> str:  # apply can be a dict as well, there is no type checking by fastapi here
+    async def submit_application(self, apply: dict) -> str:
         """
         Submits an application to join a project
 
         PARAMETERS:
-             - apply: ApplicationCreate, application creation  obj holding prerequisite params
+             - apply: ApplicationCreate/dict, application creation  obj holding prerequisite param(s) namely project_id
 
         RETURNS:
             - application_id: stringified ObjectId, id of newly created and stored project object
 
         """
+        # Add the additional params req to create an ApplicationResponse durig
+        apply["created_at"] = datetime.now().isoformat()
+        apply["status"] = "pending"
+
+        # Insert the dict into the db, the 3 other attrs req to create a valid ApplicationResponse namely, application_id, project_id and applicant_id are still missing
         insertion_id = self.applications_collection().insert_one(apply).insertion_id  # a bson ObjectId
         application_id = str(insertion_id)
 
-        return application_id
+        return application_id  # this is the application_id to be used in creating the obj in the corresp. route
 
     async def get_applications_to_project(self, project_id: str):
         """
