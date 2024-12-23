@@ -6,6 +6,7 @@ MODULES:
     - typing: List, Optional, Union, Dict 
     - datetime: datetime method
     - models.project: project models
+    - services.user: user manipulation mthds
     - utils.auth.jwt_handler: verify_access_token
     - db: get_collection, get collections from db client
     - uuid: uuid4 method
@@ -20,9 +21,13 @@ from datetime import datetime
 from models.project import (
     Project, ProjectUpdate, ProjectResponse
 )
+from services.user import UserService
 from utils.auth.jwt_handler import verify_access_token
 from db import get_collection
 from uuid import uuid4
+
+
+user_service = UserService()
 
 
 class ProjectService:
@@ -68,6 +73,18 @@ class ProjectService:
             project_data
         ).inserted_id
         
+
+        # insert new project into the projects attr of its creator
+        user = await user_service.get_user_by_id(project_data["created_by"])
+        if not user:  # Faulty user_id was passed in the dict used to create a project
+            return None
+        user["projects"] = project_data
+
+        # update the user object in the db
+        project_data["project_id"] = project_data.pop("_id")  # replace alias by original name
+        user_service.update_user(user.user_id, user)
+
+        # return new project id
         return new_id if insertion_id == new_id else None # insertion_id should be the same as new_id, just me playing around ;)
     
     async def get_project_by_id(self, project_id: str) -> Optional[ProjectResponse]:
