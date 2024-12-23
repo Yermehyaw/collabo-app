@@ -27,7 +27,7 @@ application_services = ApplicationServices()
 project_service = ProjectService()
 
 
-@application_router.post("/", response_model=ApplicationResponse, status_code=status.HTTP_201_CREATED)
+@application_router.post("/", response_model=dict, status_code=status.HTTP_201_CREATED)
 async def submit_application(application: ApplicationCreate, token: str = Depends(verify_access_token)):
     """
     Submit an application to a project
@@ -39,12 +39,13 @@ async def submit_application(application: ApplicationCreate, token: str = Depend
         - message: JSON dict, response message or error
 
     """
-    project = await project_service.get_project_by_id(application.application_id)
+    project = await project_service.get_project_by_id(application.project_id)
 
     if not project:
         failure = {"error": "Project not found", "code": "NOT_FOUND"}
         raise HTTPException(status_code=404, detail=failure)
 
+    application["applicant_id"] = token["sub"]
     application_id = application_services.submit_application(application)
 
     if not application_id:
@@ -77,12 +78,12 @@ async def get_applications_to_project(project_id: str, token: str = Depends(veri
     return applications
 
 @application_router.put("/{application_id}", response_model=dict)
-async def update_application_status(self, status: str, application_id: str, token: str = Depends(verify_access_token)):
+async def update_application_status(status: str, application_id: str, token: str = Depends(verify_access_token)):
     """
     Update the status of an application
 
     PARAMETERS:
-        - status: str, status of the invi
+        - status: str, new status of the application
         - application_id: str, id of the application
         - token: str, jwt token
 

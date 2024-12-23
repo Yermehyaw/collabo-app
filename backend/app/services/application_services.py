@@ -5,14 +5,12 @@ Handles business logic for applications to collaborate on a project
 MODULES:
     - db: get_collection, get collections from db client
     - bson: ObjectId
-    - models.applications: application models
+    - datetime: datetime
 
 """
-from models.applications import (
-    ApplicationCreate, ApplicationUpdate
-)
 from db import get_collection
 from bson import ObjectId
+from datetime import datetime
 
 
 class ApplicationServices:
@@ -48,7 +46,7 @@ class ApplicationServices:
             - application_id: stringified ObjectId, id of newly created and stored project object
 
         """
-        # Add the additional params req to create an ApplicationResponse durig
+        # Add the additional params req to create an ApplicationResponse during response creation
         apply["created_at"] = datetime.now().isoformat()
         apply["status"] = "pending"
 
@@ -57,6 +55,24 @@ class ApplicationServices:
         application_id = str(insertion_id)
 
         return application_id  # this is the application_id to be used in creating the obj in the corresp. route
+
+    async def get_application_by_id(self, application_id: str):
+        """
+        Get an application by its id
+
+        PARAMETERS:
+            - application_id: str
+
+        RETURNS:
+            - application: application obj
+
+        """
+        if not ObjectId.is_valid(application_id):
+            return None
+
+        application = await self.applications_collection().find_one({"_id": ObjectId(application_id)})
+
+        return application
 
     async def get_applications_to_project(self, project_id: str):
         """
