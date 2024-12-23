@@ -1,6 +1,6 @@
 """
 Project Services Module
-Handles businesds logic for Projects
+Handles business logic for Projects
 
 MODULES:
     - typing: List, Optional, Union, Dict 
@@ -78,14 +78,15 @@ class ProjectService:
         user = await user_service.get_user_by_id(project_data["created_by"])
         if not user:  # Faulty user_id was passed in the dict used to create a project
             return None
-        user["projects"] = project_data
+        user_data = user.dict()
+        user_data["projects"] = project_data
 
         # update the user object in the db
         project_data["project_id"] = project_data.pop("_id")  # replace alias by original name
-        user_service.update_user(user.user_id, user)
+        user_service.update_user(token["sub"], user_data)  # the sub key of token holds the user_id
 
         # return new project id
-        return new_id if insertion_id == new_id else None # insertion_id should be the same as new_id, just me playing around ;)
+        return new_id if str(insertion_id) == new_id else None # insertion_id should be the same as new_id, just me playing around ;)
     
     async def get_project_by_id(self, project_id: str) -> Optional[ProjectResponse]:
         """
