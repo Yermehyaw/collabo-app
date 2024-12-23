@@ -5,14 +5,12 @@ Handles business logic for invitations to collaborate on a project
 MODULES:
     - db: get_collection, get collections from db client
     - bson: ObjectId
-    - models.invitations: invitation models
+    - datetime: datetime
 
 """
-from models.invitations import (
-    InvitationCreate, InvitationUpdate
-)
 from db import get_collection
 from bson import ObjectId
+from datetime import datetime
 
 
 class InvitationServices:
@@ -42,16 +40,40 @@ class InvitationServices:
         Send an invitation to a user
 
         PARAMETERS:
-             - invite: dict, holding prerequisite params namely invitee_id, project_id, and inviter_id
+             - invite: dict, holding prerequisite params namely invitee_id, project_id and inviter_id
 
         RETURNS:
             - invitation_id: stringified ObjectId, id of newly created and stored project object
 
         """
+        # Add the additional params req to create an InvitationResponse during response creation
+        # project_id, invitee_id and inviter_id should already be in the dict
+        invite["created_at"] = datetime.now().isoformat()
+        invite["status"] = "pending"
+        
         insertion_id = self.invitations_collection().insert_one(invite).insertion_id  # a bson ObjectId
         invitation_id = str(insertion_id)
 
-        return invitation_id
+        return invitation_id  # invitation_id is saved in the db as the _id attr
+    
+    async def get_invitation_by_id(self, invitation_id: str):
+        """
+        Get an invitation by its id
+
+        PARAMETERS:
+            - invitation_id: str
+
+        RETURNS:
+            - invitation: invitation obj
+
+        """
+        if not ObjectId.is_valid(invitation_id):
+            return None
+
+        invitation = await self.invitations_collection().find_one({"_id": ObjectId(invitation_id)})
+
+        return invitation
+
 
     async def get_invitations_to_user(self, user_id: str):
         """

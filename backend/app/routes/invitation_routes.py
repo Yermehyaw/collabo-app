@@ -29,28 +29,27 @@ project_service = ProjectService()
 invitation_services = InvitationServices()
 
 
-@invitation_router.post("/", response_model=InvitationResponse, status_code=status.HTTP_201_CREATED)
-async def send_invitation(invitation: InvitationCreate, token: str = Depends(verify_access_token)):
+@invitation_router.post("/", response_model=dict, status_code=status.HTTP_201_CREATED)
+async def send_invitation(invite: InvitationCreate, token: str = Depends(verify_access_token)):
     """
     Send an invitation to a user to join a project
 
     ATTRIBUTES:
-        - invitation: InvitationCreate, model request
+        - invite: InvitationCreate, model request
 
     RETURNS:
         - message: JSON dict, response message or error
 
     """
     # Ensure its the project owner sending the request
-    project = await project_service.get_project(invitation.project_id)
+    project = await project_service.get_project(invite.project_id)
 
     if not project or project.creator_id != token["sub"]:
         failure = {"error": "You are not permitted to send invites to other users on this project", "code": "PERMISSION_DENIED"}
         raise HTTPException(status_code=403, detail=failure)
 
-    invitation_id = await invitation_services.send_invitation(
-        {"project_id": invitation}
-        )
+    invite["inviter_id"] = token["sub"]
+    invitation_id = await invitation_services.send_invitation(invite)
 
     if not invitation_id:
         failure = {"error": "Invitation failed", "code": "BAD_REQUEST"}
@@ -85,12 +84,12 @@ async def get_invitations_to_user(user_id: str):
     return invitations
 
 @invitation_router.put("/{invitation_id}", response_model=dict)
-async def update_invitation_status(self, status: str, invitation_id: str, token: str = Depends(verify_access_token)):
+async def update_invitation_status(status: str, invitation_id: str, token: str = Depends(verify_access_token)):
     """
     Update the status of an invitation
 
     PARAMETERS:
-        - status: str, status of the invitation
+        - status: str, new status of the invitation
         - application_id: str, id of the invitation
         - token: str, jwt token
 
