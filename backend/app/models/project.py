@@ -6,7 +6,6 @@ MODULES:
     - pydantic: BaseModel, Field, ConfigDict
     - datetime: datetime class
     - uuid: uuid4 class
-    - user: User object
 
 """
 from typing import (
@@ -19,8 +18,6 @@ from pydantic import (
     ConfigDict
 )
 from datetime import datetime
-from bson import ObjectId
-from models.user import UserResponse
 from models.application import Application
 from models.invitation import Invitation
 
@@ -37,14 +34,12 @@ class Project(BaseModel):
     - description: str
     - created_at: str
     - updated_at: str
-    - creator: UserResponse, user object
+    - created_by: str, id of user
     - deadline: str
-    - status: Literal, either 'ongoing', 'completed', or 'paused'
     - collaborators: list
     - type: str
     - tags: list, keywords used to aid recommendation/feed/siggestions
-    - project_location
-    - project_tools: list, list of technologues/tools to be used in the project
+    - project_location: str
     - followers: list
     
     FUTURE IMPROVEMENTS:
@@ -58,7 +53,7 @@ class Project(BaseModel):
     project_id: Optional[str] = Field(alias='_id', default=None)
     title: str = Field(..., min_length=4, max_length=100)
     description: Optional[str] = Field(max_length=1000)
-    creator: UserResponse
+    created_by: str
     created_at: str = datetime.now().isoformat()
 
     # Optional attr
@@ -80,12 +75,7 @@ class Project(BaseModel):
             "example": {
                 "title": "My new project",
                 "description": "very important project",
-                "creator": {
-                    "user_id": "user1010",
-                    "name": "john doe",
-                    "email": "johndoe@example.com"
-                },
-                "created_at": "2025-12-31"
+                "created_by": "user1010",
             }
         }
     )
@@ -110,7 +100,7 @@ class ProjectUpdate(BaseModel):
     """
     title: Optional[str] = Field(None, min_length=4, max_length=100, default=None)
     description: Optional[str] = Field(None, max_length=1000)
-    updated_at: str = datetime.now().isoformat()
+    updated_at: str = datetime.now().isoformat()  # potential security issue, user shouldnt be able to manipulate update time
     deadline: Optional[str] = None
     type: Optional[str] = None
     skills_required: List[str] = []  # skills required by any intending collaborator/collabee
@@ -142,7 +132,7 @@ class ProjectResponse(BaseModel):
     - description: str
     - created_at: str
     - updated_at: str
-    - creator_id: str
+    - created_by: str
     - deadline: str
     - collaborators: list
     - type: str
@@ -155,7 +145,7 @@ class ProjectResponse(BaseModel):
     project_id: str
     title: str
     description: Optional[str]
-    creator: UserResponse
+    created_by: str
     updated_at: Optional[str]
     deadline: Optional[str]
     type: Optional[str]
