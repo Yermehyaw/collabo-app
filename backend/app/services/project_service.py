@@ -89,7 +89,10 @@ class ProjectService:
 
     async def get_all_projects_by_user_id(self, user_id: str) -> List[ProjectResponse]:
         """
-        Get all projects by a user
+        Get all projects by a user.
+        NOTE: REDUNDANT LOGIC! The methodology used to retrieve all projects by a user_id is redundant 
+        because a user obj retrueved from the db has all its projects in its projects att,
+        However for the sake of MVP and build-time considerations, lol... Let it be so for nw
 
         ATTRIBUTES:
             - user_id: str, unique id of the user
