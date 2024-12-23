@@ -37,12 +37,12 @@ class InvitationServices:
         """
         return await get_collection(self.collection_name)
 
-    async def send_invitation(self, invite: InvitationCreate) -> str:
+    async def send_invitation(self, invite: dict) -> str:
         """
         Send an invitation to a user
 
         PARAMETERS:
-             - invite: InvitationCreate, invitation creation  obj holding prerequisite params
+             - invite: dict, holding prerequisite params namely invitee_id, project_id, and inviter_id
 
         RETURNS:
             - invitation_id: stringified ObjectId, id of newly created and stored project object
