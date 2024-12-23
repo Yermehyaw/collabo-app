@@ -1,16 +1,17 @@
-import React from "react";
-import FeatureCard from "./FeatureCard";
-import { Zap, MessageSquare, Users } from "lucide-react";
+import React from 'react';
+import { Zap, MessageSquare, Users } from 'lucide-react';
 
-interface FeatureGridProps {
-  features?: Array<{
-    icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-    title: string;
-    description: string;
-  }>;
-}
+const FeatureCard = ({ icon: Icon, title, description }) => (
+  <div className="bg-white p-6 rounded-lg shadow-sm">
+    <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+      <Icon className="w-6 h-6 text-blue-600" />
+    </div>
+    <h3 className="text-xl font-semibold text-gray-900 mb-2">{title}</h3>
+    <p className="text-gray-600">{description}</p>
+  </div>
+);
 
-const FeatureGrid = ({ features }: FeatureGridProps) => {
+const FeatureGrid = ({ features }) => {
   const defaultFeatures = [
     {
       icon: MessageSquare,
