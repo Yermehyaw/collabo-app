@@ -3,25 +3,15 @@ Project Invitation services Module
 Handles business logic for invitations to collaborate on a project
 
 MODULES:
-    - typing: List, Optional, Union, Dict 
-    - utils.auth.jwt_handler: verify_access_token
     - db: get_collection, get collections from db client
     - bson: ObjectId
+    - models.invitations: invitation models
 
 """
-from typing import (
-    List,
-    Optional,
-    Union, Dict
-)
-from datetime import datetime
 from models.invitations import (
     InvitationCreate, InvitationUpdate
 )
-from services.user import UserService
-from utils.auth.jwt_handler import verify_access_token
 from db import get_collection
-from uuid import uuid4
 from bson import ObjectId
 
 
@@ -37,7 +27,7 @@ class InvitationServices:
         """Object initializing method"""
         self.collection_name = 'invitations'
 
-    async def insertion_collection(self):
+    async def invitations_collection(self):
         """
         Get the invitations collection
 
@@ -58,7 +48,7 @@ class InvitationServices:
             - invitation_id: stringified ObjectId, id of newly created and stored project object
 
         """
-        insertion_id = self.insertion_collection().insert_one(invite).insertion_id  # a bson ObjectId
+        insertion_id = self.invitations_collection().insert_one(invite).insertion_id  # a bson ObjectId
         invitation_id = str(insertion_id)
 
         return invitation_id
@@ -74,7 +64,7 @@ class InvitationServices:
             - list: invitation objs
 
         """
-        invitations = await self.insertion_collection().find({"invitee_id": user_id}).to_list()
+        invitations = await self.invitations_collection().find({"invitee_id": user_id}).to_list()
 
         return invitations
 
@@ -92,7 +82,7 @@ class InvitationServices:
         if not ObjectId.is_valid(invitation_id):
             return None  # 403 err
 
-        update_response = await self.insertion_collection().update_one(
+        update_response = await self.invitations_collection().update_one(
             {"_id": ObjectId(invitation_id)},
             {"$set": {"status": status}}
         )
