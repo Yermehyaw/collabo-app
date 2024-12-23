@@ -42,7 +42,7 @@ class ProjectService:
         """Object initializing method"""
         self.collection_name = 'projects'
 
-    async def project_collection(self):
+    async def projects_collection(self):
         """
         Get the project collection
 
@@ -69,7 +69,7 @@ class ProjectService:
         project_data['_id'] = new_id
         
         # insert project into db
-        insertion_id = self.project_collection().insert_one(
+        insertion_id = self.projects_collection().insert_one(
             project_data
         ).inserted_id
         
@@ -99,7 +99,7 @@ class ProjectService:
             - Project: coresponding project object
         
         """
-        project = await self.project_collection().find_one({"_id": project_id})
+        project = await self.projects_collection().find_one({"_id": project_id})
 
         if project:
             return ProjectResponse(**project)
@@ -119,7 +119,7 @@ class ProjectService:
             - List[Project]: list of project objects
         """
 
-        projects = await self.project_collection().find({"created_by": user_id}).to_list(length=None)
+        projects = await self.projects_collection().find({"created_by": user_id}).to_list(length=None)
 
         return [ProjectResponse(**project) for project in projects]
 
@@ -136,7 +136,7 @@ class ProjectService:
 
         """
         project.updated_at = datetime.now().isoformat()
-        update_response = await self.project_collection().update_one(
+        update_response = await self.projects_collection().update_one(
             {"_id": project_id},
             {"$set": project.model_dump()}
         )
@@ -157,7 +157,7 @@ class ProjectService:
             - int: no of projrct doc deleted
         
         """
-        delete_response = await self.project_collection().delete_one({"_id": project_id})
+        delete_response = await self.projects_collection().delete_one({"_id": project_id})
 
         return delete_response.deleted_count if delete_response.deleted_count == 1 else None  # every project has a unique id, so only one project should be deleted
     
@@ -225,6 +225,6 @@ class ProjectService:
 
             # Search by invitations and applications can be implemented in the future
 
-        projects = await self.project_collection().find(query).to_list(length=None)
+        projects = await self.projects_collection().find(query).to_list(length=None)
 
         return [ProjectResponse(**project) for project in projects]
