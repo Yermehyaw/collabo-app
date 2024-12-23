@@ -13,6 +13,7 @@ from fastapi import (
     APIRouter, HTTPException,
     status, Depends
 )
+from services.user_service import UserService
 from services.project_service import ProjectService
 from services.invitation_service import InvitationServices
 from models.invitations import (
@@ -23,6 +24,7 @@ from bson import ObjectId
 
 
 invitation_router = APIRouter()
+user_service = UserService()
 project_service = ProjectService()
 invitation_services = InvitationServices()
 
@@ -70,6 +72,14 @@ async def get_invitations_to_user(user_id: str):
         - invitations: list of InvitationResponse objects
 
     """
+    # Ensure its the user requesting for their own invitations
+    user = await user_service.get_user(user_id)
+
+    if not user or user["user_id"] != user_id:
+        failure = {"error": "You are not permitted to view these invitations", "code": "PERMISSION_DENIED"}
+        raise HTTPException(status_code=403, detail=failure)
+
+    # Get the invitations
     invitations = await invitation_services.get_invitations_to_user(user_id)
 
     return invitations
@@ -85,7 +95,7 @@ async def update_invitation_status(self, status: str, invitation_id: str, token:
         - token: str, jwt token
 
     RETURNS:
-        - updated_response: bool, True if the status was updated successfully, False otherwise 
+        - dict: json, message response
 
     """
     # validate its invitation_id and the request was sent by the invitee
