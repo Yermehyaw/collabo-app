@@ -65,8 +65,6 @@ class Project(BaseModel):
     collaborators: List[str] = []
     followers: List[str] = []
     project_location: Optional[str] = None
-    applications: List[Application] = []  # list of applications from collabee to the project creator
-    invitations: List[Invitation] = []  # list of invitations by the project creator to potential collabees
     model_config = ConfigDict(
         populate_by_name=True,  # permit the id alias of user_id to work
         arbitrary_types_allowed=True,  # permit the use of non-native types in model
@@ -106,8 +104,6 @@ class ProjectUpdate(BaseModel):
     skills_required: List[str] = []  # skills required by any intending collaborator/collabee
     collaborators: List[str] = []
     project_location: Optional[str] = None
-    applications: Optional[List[Application]] = []  # list of applications from collabee to the project creator
-    invitations: Optional[List[Invitation]] = []  # list of invitations by the project creator to potential collabees
     model_config = ConfigDict(
         arbitrary_types_allowed=True,
         json_encoders={ObjectId: str},  # permit the use of ObjectId type in model but serialize/deserialize it as a str
@@ -153,8 +149,6 @@ class ProjectResponse(BaseModel):
     collaborators: Optional[List[str]]
     followers: Optional[List[str]]
     project_location: Optional[str]
-    applications: Optional[List[Any]]  # list of applications from potential collabee to the project creator
-    invitations: Optional[List[Any]]  # list of invitations by the project creator to potential collabees
     model_config = ConfigDict(
         # Example of expected format
         json_scheme_extra={
