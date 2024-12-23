@@ -7,7 +7,6 @@ MODULES:
     - pydantic: BaseModel, Field, ConfigDict
     - datetime: datetime class
     - uuid: uuid4 class
-    - bson: ObjectId
 
 """
 from typing import (
@@ -20,7 +19,6 @@ from pydantic import (
     ConfigDict
 )
 from datetime import datetime
-from bson import ObjectId
 
 
 class ApplicationCreate(BaseModel):
@@ -29,18 +27,17 @@ class ApplicationCreate(BaseModel):
 
     ATTRUBUTES:
        - project_id: str
-       - applicant_id: str
+       NOTE: There is no applicant_id, as this can be retrieved from the token and poses a security risk 
+    whereby users with tge ids of other users can make a request on their behalf without their consent
 
        FUTURE IMPROVEMENETS:
           - message: str, message by applicant to project owner. Muar be Optional
     """
     project_id: str
-    applicant_id: str
     model_config = ConfigDict(
         json_scheme_extra={  # example of expected model of a json request body
             "example": {
                 "project_id": "projectxxxx",
-                "applicant_id": "userxxxxxc"
             }
         }
     )
@@ -54,6 +51,7 @@ class ApplicationResponse(BaseModel):
        - application_id: str, stringified ObjectId
        - applicant_id: str, id of user
        - project_id: str, id of project being applied to
+       - status: literal str
        - created_at: str
 
        FUTURE IMPROVEMENTS:
@@ -63,6 +61,7 @@ class ApplicationResponse(BaseModel):
     application_id: str
     project_id: str
     applicant_id: str
+    status: Literal["pending", "approved", "rejected"] = "pending"
     created_at: str = datetime.now().isoformat()
     model_config = ConfigDict(
         json_scheme_extra={
