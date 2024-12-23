@@ -72,7 +72,8 @@ class InvitationResponse(BaseModel):
             "example": {
                 "invitation_id": "xxxxxc",
                 "project_id": "projectxxxx",
-                "applicant_id": "userxxxxxc"
+                "invitee_id": "userxxxxxa",
+                "inviter_id": "userxxxxxb",
                 "created_at": "2025-01-01"
             }
         }

@@ -68,7 +68,7 @@ class ApplicationResponse(BaseModel):
             "example": {
                 "application_id": "xxxxxc",
                 "project_id": "projectxxxx",
-                "applicant_id": "userxxxxxc"
+                "applicant_id": "userxxxxxc",
                 "created_at": "2025-01-01"
             }
         }
