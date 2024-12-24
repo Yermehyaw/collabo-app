@@ -78,12 +78,12 @@ class ProjectService:
         user = await user_service.get_user_by_id(project_data["created_by"])
         if not user:  # Faulty user_id was passed in the dict used to create a project
             return None
-        user_data = user.dict()
+        user_data = user.dict()  # dont use alias
         user_data["projects"] = project_data
 
         # update the user object in the db
         project_data["project_id"] = project_data.pop("_id")  # replace alias by original name
-        user_service.update_user(token["sub"], user_data)  # the sub key of token holds the user_id
+        user_service.update_user(user_data["user_id"], user_data)  # the sub key of token holds the user_id
 
         # return new project id
         return new_id if str(insertion_id) == new_id else None # insertion_id should be the same as new_id, just me playing around ;)
@@ -228,3 +228,56 @@ class ProjectService:
         projects = await self.projects_collection().find(query).to_list(length=None)
 
         return [ProjectResponse(**project) for project in projects]
+
+    async def search_projects(self, filters: dict) -> list:
+        """
+        Search for projects
+
+        PARAMETERS:
+            - filters: dict, search filters
+
+        RETURNS:
+            - list: list of project objects
+
+        """
+        # create a custom query from the filters dict received
+        query = {}
+        for key, value in filters.items():
+            if key == "title":
+                query[key] = {"$regex": value, "$options": "i"}
+
+            if key == "created_by":
+                query[key] = value
+
+            if key == "deadline" or key == "ending":
+                query[key] = {"$lte": value}
+
+            if key == "starting" or key == "created_at":
+                query[key] = {"$gte": value}
+
+            if key == "type":
+                query[key] = value
+
+            if key == "tags":
+                if isinstance(value, str):
+                    query[key] = {"$in": value.split(', ')}
+                else:
+                    query[key] = {"$in": value}
+
+            if key == "collaborators":
+                if isinstance(value, str):
+                    query[key] = {"$in": value.split(', ')}
+                else:
+                    query[key] = {"$in": value}
+
+            if key == "project_location":
+                query[key] = value
+
+            if key == "project_tools":
+                if isinstance(value, str):
+                    query[key] = {"$in": value.split(', ')}
+                else:
+                    query[key] = {"$in": value}
+
+        projects = await self.projects_collection().find(query).to_list(length=None)
+        return [ProjectResponse(**prj) for prj in projects]
