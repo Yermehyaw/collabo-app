@@ -134,13 +134,14 @@ class ProjectResponse(BaseModel):
     - type: str
     - tags: list, keywords used to aid recommendation/feed/siggestions
     - project_location
-    - project_tools: list, list of technologues/tools to be used in the project
+    - project_tools: list, list of technologies/tools to be used in the project
     - followers: list
 
     """
     project_id: str
     title: str
     description: Optional[str]
+    created_at: str
     created_by: str
     updated_at: Optional[str]
     deadline: Optional[str]
@@ -148,6 +149,7 @@ class ProjectResponse(BaseModel):
     tags: Optional[list]  # List[str] is almost analogous to Optional[list] but the former is more explicit
     collaborators: Optional[List[str]]
     followers: Optional[List[str]]
+    project_tools: Optional[List[str]]
     project_location: Optional[str]
     model_config = ConfigDict(
         # Example of expected format
