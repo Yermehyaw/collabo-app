@@ -65,7 +65,7 @@ class InvitationResponse(BaseModel):
     project_id: str
     inviter_id: str
     invitee_id: str
-    status: Literal["pending", "accepted", "decloned"] = "pending"
+    status: Literal["pending", "accepted", "declined"] = "pending"
     created_at: str = datetime.now().isoformat()
     model_config = ConfigDict(
         json_scheme_extra={
