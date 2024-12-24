@@ -28,7 +28,7 @@ class ApplicationCreate(BaseModel):
     ATTRUBUTES:
        - project_id: str
        NOTE: There is no applicant_id, as this can be retrieved from the token and poses a security risk 
-    whereby users with tge ids of other users can make a request on their behalf without their consent
+        whereby users with the ids of other users can make a request on their behalf without their consent
 
        FUTURE IMPROVEMENETS:
           - message: str, message by applicant to project owner. Muar be Optional
@@ -58,12 +58,13 @@ class ApplicationResponse(BaseModel):
         - message: str, message by applicant to project owner
 
     """
-    application_id: str
+    application_id: str = Field(None, alias="_id")
     project_id: str
     applicant_id: str
     status: Literal["pending", "approved", "rejected"] = "pending"
     created_at: str = datetime.now().isoformat()
     model_config = ConfigDict(
+        # populate_by_name=True,  # Not sure if this is necessary, but it allows an instance to be created with the name insteead of its alias
         json_scheme_extra={
             "example": {
                 "application_id": "xxxxxc",

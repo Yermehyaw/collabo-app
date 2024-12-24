@@ -61,13 +61,14 @@ class InvitationResponse(BaseModel):
         - message: str, message by applicant to project owner
 
     """
-    invitation_id: str
+    invitation_id: str = Field(None, alias="_id")
     project_id: str
     inviter_id: str
     invitee_id: str
     status: Literal["pending", "accepted", "declined"] = "pending"
     created_at: str = datetime.now().isoformat()
     model_config = ConfigDict(
+        # populate_by_name=True,  # Not sure if this is necessary, but it allows an instance to be created with the name insteead of its alias
         json_scheme_extra={
             "example": {
                 "invitation_id": "xxxxxc",

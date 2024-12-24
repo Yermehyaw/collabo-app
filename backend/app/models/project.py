@@ -50,7 +50,7 @@ class Project(BaseModel):
 
     """
     # Required attr
-    project_id: Optional[str] = Field(alias='_id', default=None)
+    project_id: Optional[str] = Field(None, alias='_id')
     title: str = Field(..., min_length=4, max_length=100)
     description: Optional[str] = Field(max_length=1000)
     created_by: str
@@ -66,7 +66,7 @@ class Project(BaseModel):
     followers: List[str] = []
     project_location: Optional[str] = None
     model_config = ConfigDict(
-        populate_by_name=True,  # permit the id alias of user_id to work
+        populate_by_name=True,  # permit the original name of a field to be used in creating instances of the model rather than its alias
         arbitrary_types_allowed=True,  # permit the use of non-native types in model
         # Example of expected format with the min req attr in the data supposed to utilize this model
         json_scheme_extra={
