@@ -51,7 +51,7 @@ class ApplicationServices:
         apply["status"] = "pending"
 
         # Insert the dict into the db, the 3 other attrs req to create a valid ApplicationResponse namely, application_id, project_id and applicant_id are still missing
-        insertion_id = self.applications_collection().insert_one(apply).insertion_id  # a bson ObjectId
+        insertion_id = self.applications_collection().insert_one(apply.model_dump(by_alias=True)).insertion_id  # the application_id is aliased to _id so that the db auto assigns it
         application_id = str(insertion_id)
 
         return application_id  # this is the application_id to be used in creating the obj in the corresp. route

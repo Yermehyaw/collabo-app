@@ -51,7 +51,7 @@ class InvitationServices:
         invite["created_at"] = datetime.now().isoformat()
         invite["status"] = "pending"
         
-        insertion_id = self.invitations_collection().insert_one(invite).insertion_id  # a bson ObjectId
+        insertion_id = self.invitations_collection().insert_one(invite.model_dump(by_alias=True)).insertion_id  # the invitation_id is aliased to _id so that the db auto assigns it
         invitation_id = str(insertion_id)
 
         return invitation_id  # invitation_id is saved in the db as the _id attr
