@@ -124,3 +124,24 @@ class UserService:
 
         users = await collection.find(query).to_list(length=None)
         return [UserResponse(**user) for user in users]
+
+    async def submit_friend_request(self, receipient: str):
+        """
+        Submit a friendship/connect request to a user
+
+        PARAMETERS:
+            - receipient: str, user id of the receipient of the connect request
+
+        """
+        pass
+
+    async def update_friend_request_status(self, sender: str, status: str):
+        """
+        Update the status of a friend request
+
+        PARAMETERS:
+            - sender: str, user id of the sender of the request
+            - status: str, status of the request
+
+        """
+        pass
