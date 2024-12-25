@@ -4,9 +4,9 @@ It integrates the NotificationService class to handle database operations
 and models defined in the application.
 """
 from fastapi import APIRouter, Depends, HTTPException, Query
-from app.db import db
-from app.models.notifications import Notification
-from app.services.notification_service import NotificationService
+from db import db
+from models.notifications import Notification
+from services.notification_service import NotificationService
 
 router = APIRouter()
 
