@@ -117,28 +117,10 @@ class UserService:
                 query[key] = {"$regex": value, "$options": "i"}
             
             if key == "language":
-                query[key] = value
+                query[key] = {"$regex": value, "$options": "i"}
 
             if key == "timezone":
                 query[key] = value
-            
-            if key == "projects":
-                if isinstance(value, str):
-                    query[key] = {"$in": value.split(", ")}
-                else:
-                    query[key] = {"$in": value}
-            
-            if key == "followers":
-                if isinstance(value, str):
-                    query[key] = {"$in": value.split(", ")}
-                else:
-                    query[key] = {"$in": value}
-            
-            if key == "following":
-                if isinstance(value, str):
-                    query[key] = {"$in": value.split(", ")}
-                else:
-                    query[key] = {"$in": value}
 
         users = await collection.find(query).to_list(length=None)
         return [UserResponse(**user) for user in users]
