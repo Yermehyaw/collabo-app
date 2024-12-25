@@ -39,7 +39,7 @@ class Project(BaseModel):
     - collaborators: list
     - type: str
     - tags: list, keywords used to aid recommendation/feed/siggestions
-    - project_location: str
+    - location: str
     - followers: list
     
     FUTURE IMPROVEMENTS:
@@ -64,7 +64,7 @@ class Project(BaseModel):
     tags: List[str] = ["#creative", "#innovative"]  # keywords used to aid recommendation/feed/suggestions
     collaborators: List[str] = []
     followers: List[str] = []
-    project_location: Optional[str] = None
+    location: Optional[str] = None
     model_config = ConfigDict(
         populate_by_name=True,  # permit the original name of a field to be used in creating instances of the model rather than its alias
         arbitrary_types_allowed=True,  # permit the use of non-native types in model
@@ -103,7 +103,7 @@ class ProjectUpdate(BaseModel):
     type: Optional[str] = None
     skills_required: List[str] = []  # skills required by any intending collaborator/collabee
     collaborators: List[str] = []
-    project_location: Optional[str] = None
+    location: Optional[str] = None
     model_config = ConfigDict(
         arbitrary_types_allowed=True,
         json_encoders={ObjectId: str},  # permit the use of ObjectId type in model but serialize/deserialize it as a str
@@ -150,7 +150,7 @@ class ProjectResponse(BaseModel):
     collaborators: Optional[List[str]]
     followers: Optional[List[str]]
     project_tools: Optional[List[str]]
-    project_location: Optional[str]
+    location: Optional[str]
     model_config = ConfigDict(
         # Example of expected format
         json_scheme_extra={
