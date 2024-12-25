@@ -249,15 +249,22 @@ class ProjectService:
             if key == "created_by":
                 query[key] = value
 
-            if key == "deadline" or key == "ending":
+            if key == "deadline":
                 query[key] = {"$lte": value}
 
-            if key == "starting" or key == "created_at":
+            if key == "ending":
+                query[key] = {"$lte": value}
+
+            if key == "created_at":
+                query[key] = {"$gte": value}
+
+            if key == "starting":
                 query[key] = {"$gte": value}
 
             if key == "type":
                 query[key] = value
 
+            # Can be made case-insensitive in future improvements
             if key == "tags":
                 if isinstance(value, str):
                     query[key] = {"$in": value.split(', ')}
@@ -270,10 +277,11 @@ class ProjectService:
                 else:
                     query[key] = {"$in": value}
 
-            if key == "project_location":
-                query[key] = value
+            if key == "location":
+                query[key] = {"$regex": value, "$options": "i"}
 
-            if key == "project_tools":
+            # Can be made case-inssnsitive in future improvements
+            if key == "project_tools" or key == "tools" or key == "skills":
                 if isinstance(value, str):
                     query[key] = {"$in": value.split(', ')}
                 else:
