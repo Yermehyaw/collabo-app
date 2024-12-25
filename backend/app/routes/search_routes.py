@@ -33,12 +33,10 @@ user_service = UserService()
 async def search_users(
     token: str = Depends(verify_access_token), 
     name: Annotated[Union[str, None], Query()] = None,
+    location: Annotated[Union[str, None], Query()] = None,
     skills: Annotated[Union[List[str], str, None], Query()] = [],  # can either be passed as a list, commas sep strings or a single string, yet is optional witha default of []
     interests: Annotated[Union[List[str], str, None], Query()] = [],
-    projects: Annotated[Union[List[str], str, None], Query()] = [],
-    followers: Annotated[Union[List[str], str, None], Query()] = [],
-    following: Annotated[Union[List[str], str, None], Query()] = [],
-    location: Annotated[Union[str, None] Query()] = None,
+    timezone: Annotated[Union[str, None], Query()] = None,
 ):
     """
     Route to search for users
@@ -86,7 +84,7 @@ async def search_projects(
     project_tools: Annotated[Union[List[str], str, None], Query()] = [],
     tags: Annotated[Union[List[str], str, None], Query()] = [],
     collaborators: Annotated[Union[List[str], str, None], Query()] = [],
-    project_location: Annotated[str, Query()] = None,
+    location: Annotated[str, Query()] = None,
 ):
     """
     Route to search for projects
@@ -112,7 +110,7 @@ async def search_projects(
     params = {
         "title": title, "created_at": created_at, "created_by": created_by,  "starting": starting,
         "deadline": deadline, "ending": ending, "type": type, "tags": tags, "collaborators": collaborators,
-        "project_tools": project_tools, "tools": tools, "skills": skills  # These three refer to the same concept
+        "project_tools": project_tools, "tools": tools, "skills": skills,  # These three refer to the same concept
         "location": location  # likewise
     }
     query = {}
