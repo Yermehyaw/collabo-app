@@ -11,3 +11,4 @@ python-dotenv
 pyjwt
 typing_extensions
 httpx
+pytest
