@@ -96,7 +96,7 @@ class ProjectUpdate(BaseModel):
     - project_tools: list, list of technologues/tools to be used in the project
 
     """
-    title: Optional[str] = Field(None, min_length=4, max_length=100, default=None)
+    title: Optional[str] = Field(None, min_length=4, max_length=100)
     description: Optional[str] = Field(None, max_length=1000)
     updated_at: str = datetime.now().isoformat()  # potential security issue, user shouldnt be able to manipulate update time
     deadline: Optional[str] = None
