@@ -41,7 +41,7 @@ def create_access_token(data: dict) -> str:
     data_to_encode = data.copy()  # make a copy of the json dict
     expire = datetime.now(timezone.utc) + timedelta(minutes=EXPIRES)  # set the token expiration time
 
-    data_to_encode.update({"exp": expire})  # add the expiration time to the data
+    data_to_encode.update({"expires_in": expire})  # add the expiration time to the data
 
     token = jwt.encode(data_to_encode, JWT_SECRET, algorithm=JWT_ALGORITHM)  # encode the data with the secret and the hashing algorithm
     return token
