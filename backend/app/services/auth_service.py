@@ -67,7 +67,7 @@ class AuthService:
         user_data = user.model_dump(by_alias=True)  # user obj must first transformed into a simple dict, with the use of by_alias=True to use the alias name of _id instead of user_id
         new_id = 'user' + str(uuid4())
         user_data["_id"] = new_id
-        insertion_id = collection.insert_one(user_data).inserted_id 
+        insertion_id = await collection.insert_one(user_data).inserted_id 
 
         return str(insertion_id)  # new_id should now be the the same as insertion_id
 
