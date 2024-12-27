@@ -18,12 +18,16 @@ class NotificationService:
         """
         Creates new notification for a user.
 
-        ATTRIBUTES:
+        Args:
             - user_id: ID of the user
             - notification_type: The type of notification
             - content: The notification content
 
-        RETURN: The inserted notification ID
+        Returns:
+            The inserted notification ID.
+        
+        Raises:
+            RuntimeError: If notification creation fails.
         """
         try:
             notification: Dict[str, any] = {
@@ -43,12 +47,16 @@ class NotificationService:
         """
         Retrieves notifications for a user.
 
-        ATTRIBUTES:
+        Args:
             - user_id: ID of the user
             - unread_only: If to fetch only unread notifications
             - limit: Maximum number of notifications to fetch
 
-        RETURN: A list of notifications
+        Returns:
+            A list of notifications.
+        
+        Raises:
+            RuntimeError: If it fails to retrieve notification.
         """
         try:
             query: Dict[str, any] = {"user_id": ObjectId(user_id)}
@@ -63,10 +71,14 @@ class NotificationService:
         """
         Mark a notification as read.
 
-        ATTRIBUTES:
-            - notification_id = ID of the notification to mark as read
+        Args:
+            - notification_id: ID of the notification to mark as read
         
-        RETURN: True if the update was successful, otherwise False.
+        Returns:
+            True if the update was successful, otherwise False.
+
+        Raises:
+            RuntimeError: Fails to mark a notification as read.
         """
         try:
             result = await self.collection.update_one(
