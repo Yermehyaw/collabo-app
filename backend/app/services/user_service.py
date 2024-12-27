@@ -3,22 +3,19 @@ User Service Module
 Handles all the business logic for the user model
 
 MODULES:
-    - typing: List, Optional, Union
     - datetime: datetime class
-    - models.user: User
+    - models.user: UserUpdate, UserResponse
     - db: get_collection, get collections from db client
+    - bson: ObjectId, validate and create byte ids
 
 """
-from typing import (
-    List,
-    Optional,
-    Union
-)
+from typing import Optional
 from datetime import datetime
 from models.user import (
-    User, UserUpdate, UserResponse
+    UserUpdate, UserResponse
 )
 from db import get_collection
+from bson import ObjectId
 
 
 class UserService:
@@ -33,60 +30,118 @@ class UserService:
     def __init__(self):
         self.collection_name = "users"
 
-
-    async def get_user_by_email(self, email: str) -> Optional[UserResponse]:
-        """
-        Method to get a user by email
-
-        PARAMETERS:
-            - email: str, email of the user
-
-        RETURNS:
-            - User: user object
-
-        """
-        collection = await get_collection(self.collection_name)
-        user = await collection.find_one({"email": email})
-        if user:
-            return User(**user)  # the dict returned from is unpacked and turned into a User object
-        return None
-
     async def get_user_by_id(self, user_id: str) -> Optional[UserResponse]:
         """
         Method to get a user by id
 
         PARAMETERS:
-            - user_id: str, id of the user
+            - user_id: str, unique id of the user
 
         RETURNS:
             - User: user object
 
         """
         collection = await get_collection(self.collection_name)
-        user = await collection.find_one({"user_id": user_id})
+
+        #if not ObjectId.is_valid(user_id):  # validate that the id is first a valid objectid. ObjectId is the type used by mongodb to assign ids to its entries
+        #    return None
+
+        user = await collection.find_one({"_id": user_id}, {"password": 0})
         if user:
-            return User(**user)
+            return UserResponse(**user)
         return None
 
-    async def update_user(self, _id: str, user: UserUpdate) -> Optional[UserResponse]:
+    async def update_user(self, user_id: str, user: UserUpdate) -> Optional[int]:
         """
         Method to update a user
 
         PARAMETERS:
-            - _id: str, db id of the user doc
+            - user_id: str, db id of the user doc
             - user: User, sample user object to be used to update the user in the database
 
         RETURNS:
-            - User: user object
+            - int: no of fields updated
 
         """
         collection = await get_collection(self.collection_name)
+
+        # if not ObjectId.is_valid(user_id):
+        #    return None
+
         user.updated_at = datetime.now().isoformat()
+        update_response = await collection.update_one(
+            {"_id": user_id},
+            {"$set": user.model_dump()},
+        )  # update_one never returns none even if no document was flund with the user_id
+
+        if not update_response.matched_count:
+            return None # document with user_id dosent exist
+
+        return update_response.modified_count
+
+    async def search_users(self, filters: dict) -> list:
+        """
+        Method to search for users
+
+        PARAMETERS:
+            - filters: dict, filter params to be used in the search
+
+        RETURNS:
+            - list: list of user objects
+
+        """
+        collection = await get_collection(self.collection_name)
+
+        # Create custom query dict from the filters dict received
+        if not filters:
+            return []
         
-        updated_user = await collection.find_one_and_update(
-            {"db_id": _id},
-            {"$set": user.dict()},
-            return_document=True
-        )
-        if updated_user:
-            return User(**updated_user)
+        query = {}
+        for key, value in filters.items():
+            if key == "name":
+                query[key] = {"$regex": value, "$options": "i"}
+            
+            if key == "skills":
+                if isinstance(value, str):
+                    query[key] = {"$in": value.split(", ")}
+                else:
+                    query[key] = {"$in": value}
+
+            if key == "interests":
+                if isinstance(value, str):
+                    query[key] = {"$in": value.split(", ")}
+                else:
+                    query[key] = {"$in": value}
+            
+            if key == "location":
+                query[key] = {"$regex": value, "$options": "i"}
+            
+            if key == "language":
+                query[key] = {"$regex": value, "$options": "i"}
+
+            if key == "timezone":
+                query[key] = value
+
+        users = await collection.find(query).to_list(length=None)
+        return [UserResponse(**user) for user in users]
+
+    async def submit_friend_request(self, receipient: str):
+        """
+        Submit a friendship/connect request to a user
+
+        PARAMETERS:
+            - receipient: str, user id of the receipient of the connect request
+
+        """
+        pass
+
+    async def update_friend_request_status(self, sender: str, status: str):
+        """
+        Update the status of a friend request
+
+        PARAMETERS:
+            - sender: str, user id of the sender of the request
+            - status: str, status of the request
+
+        """
+        pass

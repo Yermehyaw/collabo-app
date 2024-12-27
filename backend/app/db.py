@@ -12,7 +12,7 @@ MONGO_URL = os.getenv("MONGO_URL")
 DB_NAME = os.getenv("DB_NAME")
 
 client = AsyncIOMotorClient(MONGO_URL)
-db = client[DB_NAME]  # create database instance from the client
+db = client["Test"]  # create/get database instance from the client, revert to DB_NAME after testing
 
 
 async def get_collection(name: str):

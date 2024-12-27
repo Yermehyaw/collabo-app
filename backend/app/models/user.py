@@ -2,10 +2,11 @@
 User model for fastapi app
 
 MODULES:
-    - typing: Union class
-    - pydantic: BaseModel class
+    - typing: Optional
+    - pydantic: BaseModel, EmailStr, Field, ConfigDict
     - datetime: datetime class
     - uuid: uuid4 class
+    - bson: ObjectId class
 
 """
 from typing import (
@@ -19,12 +20,13 @@ from pydantic import (
 )
 from datetime import datetime
 from uuid import uuid4
+from bson import ObjectId
 
 
-# DEFINTION OF A USER: USED FOR USER CREATION AND RETRIEVAL
+# DEFINTION OF A USER: USED FOR USER CREATION
 class User(BaseModel):
     """
-    Users description class for creating and retrieving a new user. 
+    Users description class for creating a new user. 
     Only non-sensitive data should be included during retrieval.
 
     ATTRIBUTES:
@@ -54,7 +56,7 @@ class User(BaseModel):
     email: EmailStr
     password: str = Field(..., min_length=8)  # hashed password, real password are never stored
     created_at: str = datetime.now().isoformat()
-    updated_at: Optional[str] = None
+    updated_at: Optional[str] = datetime.now().isoformat()
     profile_pic: Optional[bytes] = None
     bio: Optional[str] = None
     skills: Optional[list] = []
@@ -69,7 +71,7 @@ class User(BaseModel):
     location: Optional[str] = None
     timezone: Optional[str] = 'UTC'
     model_config = ConfigDict(
-        populate_by_name=True,  # permit the id alias of user_id to work
+        populate_by_name=True,  # permit the id alias of user_id to be used e.g when inserting into mongodb
         arbitrary_types_allowed=True,
         # Example of expected format with the min req attr in the data supposed to utilize this model
         json_scheme_extra={
@@ -80,6 +82,62 @@ class User(BaseModel):
             }
         }
     )
+
+
+# USER RESPONSE
+class UserResponse(BaseModel):
+    """
+    Users description class for responses. Only non-sensitive data should be included during retrieval.
+
+    ATTRIBUTES:
+        - user_id: str
+        - name: str
+        - email: str
+        - created_at: str
+        - updated_at: str
+        - profile_pic: bytes
+        - bio: str
+        - skills: list
+        - friends: list
+        - collabees: list
+        - objs: list
+        - interests: list
+        - projects: list
+        - followers: list
+        - following: list
+
+    """
+    user_id: Optional[str] # unique user id, same as db insertion id
+    name: str
+    email: EmailStr
+    created_at: str
+    updated_at: Optional[str]
+    profile_pic: Optional[bytes]
+    bio: Optional[str]
+    skills: Optional[list]
+    friends: Optional[list]
+    collabees: Optional[list] # list of users the user is currently collaborating with
+    objs: Optional[list]
+    interests: Optional[list]
+    projects: Optional[list]
+    followers: Optional[list]
+    following: Optional[list]
+    language: Optional[str]
+    location: Optional[str]
+    timezone: Optional[str]
+    model_config = ConfigDict(
+        # Example of expected model format
+        json_scheme_extra={
+            "example": {
+                "name": "John Doe",
+                "email": "jdoe@example.com",
+                "bio": "I am a software developer",
+                "skills": ["Python", "JavaScript", "Django"]
+            }
+        }
+    )
+
+
 
 # UPDATE USER
 class UserUpdate(BaseModel):
@@ -104,8 +162,9 @@ class UserUpdate(BaseModel):
         - timezone: str
 
     """
-    name: Optional[str] = Field(..., min_length=1, max_length=100)
+    name: Optional[str] = Field(None, min_length=1, max_length=100)
     email: Optional[EmailStr]
+    password: Optional[str] = Field(None, min_length=8)
     updated_at: str = datetime.now().isoformat()
     profile_pic: Optional[bytes] = None
     bio: Optional[str] = None
@@ -120,6 +179,19 @@ class UserUpdate(BaseModel):
     language: Optional[str] = 'eng'
     location: Optional[str] = None
     timezone: Optional[str] = 'UTC'
+    model_config = ConfigDict(
+        arbitrary_types_allowed=True,
+        json_encoders={ObjectId: str},
+        # Example of expected format
+        json_scheme_extra={
+            "example": {
+                "name": "John Doe",
+                "email": "jdoe@example.com",
+                "password": "mynewjdoepassword",
+                "bio": "I am a software developer",
+            }
+        }
+    )
 
 
 # USER SIGNUP

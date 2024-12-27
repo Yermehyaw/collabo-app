@@ -9,6 +9,9 @@ MODULES:
     - utils.auth.password_utils: hash_password, verify_password
     - utils.auth.jwt_handler: create_access_token
     - db: get_collection, get collections from db client
+    - pydantic: ValidationError
+    - bson: ObjectId
+    - uuid: uuid4 method
 
 """
 from typing import (
@@ -18,12 +21,14 @@ from typing import (
 )
 from datetime import datetime
 from models.user import (
-    User, UserSignup,
-    UserResponse
+    User, UserSignup, UserResponse, Token
 )
 from utils.auth.password_utils import hash_password, verify_password
 from utils.auth.jwt_handler import create_access_token
 from db import get_collection
+from pydantic import ValidationError
+from bson import ObjectId
+from uuid import uuid4
 
 
 class AuthService:
@@ -38,7 +43,7 @@ class AuthService:
     def __init__(self):
         self.collection_name = "users"
 
-    async def create_user(self, signup: UserSignup) -> User:
+    async def create_user(self, signup: UserSignup) -> str:
         """
         Method to create a new user
 
@@ -46,7 +51,7 @@ class AuthService:
             - user: User, user object
 
         RETURNS:
-            - User: newly created and stored user object
+            - user_id: id of newly created and stored user object
 
         """
         # connect to collection
@@ -55,15 +60,18 @@ class AuthService:
         existing_user = await self.get_user_by_email(signup.email)
         if existing_user:
             raise ValueError("User already exists")
-        
-        user = User()
-        user.password = hash_password(signup.password)
-        db_id = str(collection.insert_one(user.dict()).inserted_id)  # insert user into collection and store the  id as an attr of the user obj
-        user.db_id = db_id
-        
-        return user
 
-    async def authenticate_user(self, email: str, password: str) -> Optional[User]:
+        p_hash = hash_password(signup.password)
+        user = User(name=signup.name, email=signup.email, password=p_hash)
+
+        user_data = user.model_dump(by_alias=True)  # user obj must first transformed into a simple dict, with the use of by_alias=True to use the alias name of _id instead of user_id
+        new_id = 'user' + str(uuid4())
+        user_data["_id"] = new_id
+        insertion_id = await collection.insert_one(user_data).inserted_id 
+
+        return str(insertion_id)  # new_id should now be the the same as insertion_id
+
+    async def authenticate_user(self, email: str, password: str) -> Optional[Token]:
         """
         Method to authenticate/login a user. Generates a unique access token for the user
 
@@ -72,7 +80,7 @@ class AuthService:
             - password: str, password of the user
 
         RETURNS:
-            - user: authenticated user object
+            - Token: token dict of the authenticated user
 
         """
         user = await self.get_user_by_email(email)
@@ -82,7 +90,8 @@ class AuthService:
             return None
         
         access_token = create_access_token(data={"sub": user.user_id, "email": user.email})
-        return {"access_token": access_token, "token_type": "bearer"}
+        token = Token(access_token=access_token, token_type="bearer")
+        return token
 
     async def get_user_by_email(self, email: str) -> Optional[UserResponse]:
         """
@@ -96,28 +105,7 @@ class AuthService:
 
         """
         collection = await get_collection(self.collection_name)
-        user = await collection.find_one({"email": email})
+        user = await collection.find_one({"email": email}, {"pasword": 0})  # get by email but exclude password field from output
         if user:
-            resp = UserResponse()  # the dict returned is used to init a UserResponse obj with mutual keys
-            resp = {key: user[key] for key in user if key in resp} # potential bug here! resp is a UserResponse obj, but we are trying to copy the dict values from user to resp
-            return resp
+            return UserResponse(**user)
         return None
-
-    async def get_user_by_id(self, user_id: str) -> Optional[UserResponse]:
-        """
-        Method to get a user by id
-
-        PARAMETERS:
-            - user_id: str, unique id of the user
-
-        RETURNS:
-            - User: user object
-
-        """
-        collection = await get_collection(self.collection_name)
-        user = await collection.find_one({"user_id": user_id})
-        if user:
-            resp = UserResponse()  # the dict returned is used to init a UserResponse obj with mutual keys
-            resp = {key: user[key] for key in user if key in resp}
-            return resp
-        return None 

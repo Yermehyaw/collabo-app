@@ -27,7 +27,7 @@ from utils.auth.jwt_handler import (
 auth_router = APIRouter()
 auth_service = AuthService()
 
-@auth_router.post("/signup", response_model=dict)
+@auth_router.post("/signup", response_model=dict, status_code=status.HTTP_201_CREATED)
 async def signup(user: UserSignup):
     """
     Route to create a new user
@@ -60,7 +60,7 @@ async def login(user: UserLogin):
 
     """
     token = await auth_service.authenticate_user(user.email, user.password)
-    if not user:
+    if not token:
         failure = {"error": "Invalid email or password", "code": "UNAUTHORIZED"}
         raise HTTPException(status_code=401, detail=failure)
     
