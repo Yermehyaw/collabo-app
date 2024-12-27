@@ -12,6 +12,7 @@ from routes.project_routes import project_router
 from routes.application_routes import application_router
 from routes.invitation_routes import invitation_router
 from routes.search_routes import search_router
+from routes.notifications import router as notifications_router
 
 app = FastAPI()
 
@@ -22,6 +23,7 @@ app.include_router(project_router, prefix='/projects', tags=['Projects'])
 app.include_router(application_router, prefix='/applications', tags=['Applications'])
 app.include_router(invitation_router, prefix='/invitations', tags=['Invitations'])
 app.include_router(search_router, prefix='/search', tags=['Search'])
+app.include_router(notifications_router, prefix="/notifications", tags=["Notifications"])
 
 # Homepage
 app.get('/')
