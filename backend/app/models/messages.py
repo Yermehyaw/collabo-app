@@ -25,14 +25,14 @@ class MessageCreate(BaseModel):
     ATTRIBUTES:
         - conversation_id: str, id of conversation
         - receiver_id: str, id of user receiving the message
-        - message: str, message to be sent
-        - created_at: str, timestamp at when message was sent/created
+        - text: str, text message to be sent
+        - timestamp: str, timestamp at when message was sent/created
 
     """
     conversation_id: Optional[str]  # When starting a new converstion, this attr is None, but to continue an exusuting one it is mandatory
     receiver_id: str
-    message: str
-    created_at: str = datetime.now().isoformat()
+    text: str
+    timestamp: str = datetime.now().isoformat()
 
 
 class MessageResponse(BaseModel):
@@ -43,14 +43,14 @@ class MessageResponse(BaseModel):
         - conversation_id: str, id of conversation
         - sender_id: str, id of user sending the message
         - receiver_id: str, id of user receiving the message
-        - message: str, message to be sent
-        - created_at: str, timestamp at when message was sent/created
+        - text: str, text message that was sent
+        - timestamp: str, timestamp at when message was sent/created
     """
     conversation_id: str
     sender_id: str
     receiver_id: str
-    message: str
-    created_at: str
+    text: str
+    timestamp: str
 
 
 class ConversationResponse(BaseModel):
