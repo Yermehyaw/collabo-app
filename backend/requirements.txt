@@ -8,4 +8,6 @@ pymongo
 bcrypt
 python-dotenv
 pyjwt
-
+httpx
+pytest
+websockets
