@@ -1,20 +1,27 @@
 import React from "react";
 import { FaSearch, FaUsers, FaRegSmileBeam, FaCogs } from "react-icons/fa";
-import { Link } from "react-router-dom";
-import "./Home.css"; // Custom styles for the landing page
+
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./Home.css";
 
 const Home = () => {
   return (
-    <div className="home-container">
-      <div className="text-center">
-        <h1>Welcome to Collabo</h1>
-        <p>
-          Your platform to connect and collaborate with professionals and
-          enthusiasts
-        </p>
-      </div>
+    <main>
+      {/* Hero Section */}
+      <section id="hero">
+        <div>
+          <h1>Collaborate & Grow</h1>
+          <p>
+            Connect with like-minded individuals and work on projects that
+            matter. Join a vibrant community and start building your future
+            today.
+          </p>
+          <button className="btn">Get Started</button>
+        </div>
+      </section>
 
-      <div className="features-section">
+      {/* Features Section */}
+      <section className="features-section">
         <div className="feature-card">
           <FaSearch size={50} />
           <h3>Search Projects</h3>
@@ -22,9 +29,6 @@ const Home = () => {
             Find the best projects to collaborate on with like-minded
             individuals.
           </p>
-          <Link to="/projectdetails" className="btn btn-primary">
-            Explore Projects
-          </Link>
         </div>
 
         <div className="feature-card">
@@ -34,9 +38,6 @@ const Home = () => {
             Connect with professionals, non-professionals, and people who share
             your interests.
           </p>
-          <Link to="/profile" className="btn btn-primary">
-            Meet People
-          </Link>
         </div>
 
         <div className="feature-card">
@@ -45,9 +46,6 @@ const Home = () => {
           <p>
             Be a part of a vibrant community that fosters positivity and growth.
           </p>
-          <Link to="/about" className="btn btn-primary">
-            Learn More
-          </Link>
         </div>
 
         <div className="feature-card">
@@ -57,12 +55,46 @@ const Home = () => {
             Access a variety of tools and resources for personal and
             professional growth.
           </p>
-          <Link to="/services" className="btn btn-primary">
-            Check Tools
-          </Link>
         </div>
-      </div>
-    </div>
+      </section>
+
+      {/* About Section */}
+      <section className="about-section">
+        <div>
+          <h2>About Us</h2>
+          <p>
+            At Collabo, we believe in the power of collaboration. Our mission is
+            to create a platform that connects people from diverse backgrounds,
+            enabling them to share ideas, skills, and resources to achieve their
+            goals.
+          </p>
+        </div>
+        <img src="https://via.placeholder.com/400x300" alt="About Collabo" />
+      </section>
+
+      {/* Services Section */}
+      <section className="services-section">
+        <h2>Our Services</h2>
+        <div className="service-card">
+          <h3>Project Management</h3>
+          <p>Streamline your projects with our easy-to-use management tools.</p>
+        </div>
+        <div className="service-card">
+          <h3>Networking</h3>
+          <p>Meet and connect with like-minded individuals in your field.</p>
+        </div>
+        <div className="service-card">
+          <h3>Resource Sharing</h3>
+          <p>Access a wide range of resources to enhance your productivity.</p>
+        </div>
+      </section>
+
+      {/* Call-to-Action Section */}
+      <section className="cta-section">
+        <h2>Ready to Start Collaborating?</h2>
+        <button className="btn">Join Now</button>
+      </section>
+    </main>
   );
 };
 
