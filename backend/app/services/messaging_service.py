@@ -3,96 +3,161 @@ Mesaging websocket services
 This module contains the services for the messaging websocket. It contains the logic to create, update, and delete messages and conversations.
 
 MODULES:
+    - fastapi: WebSocket, WebSocketDisconnect, WebSocketException
+    - websockets.exceptions: ConnectionClosedError
     - typing: List
-    - bson: ObjectId
+    - uuid: uuid4
     - models.messages: MessageCreate, MessageResponse, ConversationResponse
 
 """
-from typing import List
-from bson import ObjectId
+from fastapi import (
+    WebSocket, WebSocketDisconnect, WebSocketException
+)
+from websockets.exceptions import ConnectionClosedError
+from typing import (
+    List, Dict
+)
+from uuid import uuid4
 from models.messages import (
     MessageCreate, MessageResponse, ConversationResponse
 )
-from user_service import UserService
 from db import get_collection
 
 
 class MessagingService:
     """
     Messaging websocket services class
-    Contains the logic to create, update, and delete messages and conversations
+    Contains the logic to send and receive messages and conversations
 
     ATTRIBUTES:
         - collection: str, name of the collection in the database
-        - user_service: UserService, instance of the user service class
+        - active_connections: dict, a dict of active connections, key is the user_id and value is the websocket connection
+
+    FUTURE IMPROVEMENTS:
+        - Add a method to notify a user when he receives a message    
+        - Add a method to delete a message
     
     """
     def __init__(self):
-        self.collection = "messages"
-        self.user_service = UserService()
+        self.active_connections: Dict[str, WebSocket] = {}  #  A dict of active connections, key is the user_id and value is the websocket connection
+        self.collection = "conversations"
 
-    async def messages_collection(self):
-       """Retrieves an instance of the messages collection
-       """
-       return await get_collection(self.collection)
-
-    async def receive_websocket_request(websocket):
+    async def connect(self, user_id: str, websocket):
         """
-        Receives a message request
+        Connects a user to a websocket connection and stores the connection as an active connection
 
         PARAMETERS:
+            - user_id: str, id of the user
             - websocket: WebSocket, websocket connection
 
-        RETURNS:
-            - data: dict, request data received from the client
         """
-        try:
-            data = await websocket.receive_text()
-            return data
-        except Exception:
-            return {}
+        await websocket.accept()
+        self.active_connections[user_id] = websocket
+
+    async def disconnect(self, user_id: str):
+        """
+        Disconnects a user from a websocket connection by removing the user from the active connections dict
+
+        PARAMETERS:
+            - user_id: str, id of the user
+        """
+        self.active_connections.pop(user_id, None)  # remove the user from the active connections but if the user wasnt even connected the pop method will return None (KeyError silenced)
+
+    async def send_message(self, message: MessageCreate, user_id: str):
+        """
+        Sends a message via a websocket connection to a receiver
+
+        PARAMETERS:
+            - message: dict, obj with the req attr of MessageCreate model, contains the text message to be sent
+            - user_id: str, id of the user sending the message
         
-    async def send_websocket_response(websocket, response):
         """
-        Sends a response to the client
+        message = message.dict()
+        message["sender_id"] = user_id
+        
+        text = message.get("text")
+        receiver_id = message.get("receiver_id")
+        
+        if receiver_id in self.active_connections:
+            message["status"] = "delivered"
+            await self.active_connections[receiver_id].send_json(text)
+        else:       
+            message["status"] = "sent"
+            await self.store_message(message)
+
+    async def receive_message(self, websocket: WebSocket):
+        """
+        Receives a message from a websocket connection
 
         PARAMETERS:
             - websocket: WebSocket, websocket connection
-            - response: dict, response data to be sent to the client
 
-        RETURNS:
-            - Boolean, True if response was sent successfully, False otherwise
         """
         try:
-            await websocket.send_text(response)
-            return True
-        except Exception:
-            return False
+            message = await websocket.receive_json()
+            message["status"] = "delivered"
+            
+            await self.store_message(message)
+        
+        except (ConnectionClosedError, WebSocketException):
+            raise WebSocketDisconnect
     
-    async def create_message(self, message: MessageCreate, conversation_id: str = None) -> str:
+    async def store_message(self, message: dict):
         """
-        Creates a new message in the database
+        Stores a message in the database
 
-        ATTRIBUTES:
-            - message: MessageCreate, obj with the req attr of MessageCreate model
-            - converstion_id: str, id of conversation
+        PARAMETERS:
+            - message: dict, obj with the req attr of MessageCreate model, contains the text message to be stored
+
+        """
+        collection = await get_collection(self.collection)
+
+        sender_id = message["sender_id"]
+        receiver_id = message["receiver_id"]
+        conversation_id = "conv" + str(uuid4())
+
+        # Update the conversation with the new message
+        updated = await collection.update_one(
+            {"users": {"$all": [sender_id, receiver_id]}},  # Doc that contains both users as sending/receiving parties
+            {"$push": {"messages": message}},
+        )
+        
+        # If the conversation never existed
+        if updated.matched_count == 0 and updated.modified_count == 0:
+            # Create a new conversation
+            conversation = ConversationResponse(
+                conversation_id=conversation_id,
+                users=[message["sender_id"], message["receiver_id"]],
+                messages=[MessageResponse(**message)],  # redundant
+                created_at=message["timestamp"]
+            )
+            await collection.insert_one(conversation.dict(by_alias=True))
+
+    async def get_conversation(self, user_id: str, receiver_id: str) -> dict:
+        """
+        Get the conversation between two user
+
+        PARAMETERS:
+            - user_id: str, id of user who is also the sender
+            - receiver_id: str, id of receipient
 
         RETURNS:
-            - message_id: str, id of the created message
-
+            - dict, conversation dict
+        
         """
-        if not conversation_id:
-            conversation_id = str(ObjectId())
-        message = message.dict()
-        message["_id"] = conversation_id
+        collection = await get_collection(self.collection)
+        conversation = await collection.find_one({"users": {"$all": [user_id, receiver_id]}})  # _id is what is here, not a valid ConversationResponse
 
-        collection = await self.messages_collection()
-        await collection.insert_one(message)
+    async def get_user_conversation_history(self, user_id: str) -> List[dict]:
+        """
+        Get all the conversations of a user
 
-        return conversation_id
-    
-    async def get_conversation(self, conversation_id: str) -> List[MessageResponse]:
+        PARAMETERS:
+            - user_id: str, id of a user
+
+        RETURNS:
+            - List: list, list of conversations from db
+        
         """
-        """
-        pass
-    
+        collection = await get_collection(self.collection)
+        return await collection.find({"users": user_id}).to_list()
