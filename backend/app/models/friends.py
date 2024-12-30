@@ -20,10 +20,10 @@ class FriendRequestCreate(BaseModel):
     Model to send a friend request to a user
 
     ATTRIBUTES:
-         - receipient_id: str, id of the user the request is sent to
+         - recipient_id: str, id of the user the request is sent to
 
     """
-    receipient_id: str
+    recipient_id: str
 
 
 class FriendRequestResponse(BaseModel):
@@ -33,14 +33,14 @@ class FriendRequestResponse(BaseModel):
     ATTRIBUTES:
         - id: id, unique id of a request
         - sender_id: str, id of the user who sent the request
-        - receipient_id: str, id of the receipient
+        - recipient_id: str, id of the receipient
         - status: literal str, status of the request i.e pending, accepted or refused
         - created_at: str, datetime when the request was sent/created
 
     """
     id: str
     sender_id: str
-    receipient_id: str
+    recipient_id: str
     status: Literal["pending", "accepted", "refused"] = "pending"
     created_at: str = datetime.now().isoformat()
 
@@ -51,7 +51,9 @@ class FriendshipResponse(BaseModel):
 
     ATTRIBUTED:
          - user_id: str, id of the user in the friendship
+         - name: str, name of friend
          - created_at: str, datetime
     """
     user_id: str
+    name: Optional[str]
     created_at: str
