@@ -52,6 +52,11 @@ class FriendServices:
         request_id = str(insertion.inserted_id)
         return request_id
 
+    async def get_request_by_id(self, request_id: str):
+        """
+        """
+        pass
+
 
     async def update_friend_request_status(self, request_id: str, status: str ):
         """
@@ -59,19 +64,19 @@ class FriendServices:
 
         PARAMETERS:
             - request_id: str, id of a friend request
-            - status: str, new status of tge update
+            - status: str, new status of the update
 
         RETURNS:
            - int: no of obj in db updated, expected = 1
         
         """
         if not ObjectId.is_valid(request_id):
-            return None  # 403 err
+            return None  # 404 err - obfuscate
 
         collection = await get_collection(self.requests_collection)
         request = await collection.find_one({"_id": ObjectId(request_id)})
         if not request:  # id is valid but dosent match any request in the db
-            return None  # 403 err - obfuscate
+            return None  # 404 err
         
         if status == "accepted":  # create a friendship
             collection = await get_collection(self.friendship_collection)
@@ -103,5 +108,5 @@ class FriendServices:
         collection = await get_collection(self.friendship_collection)
         friends = await collection.find(
             {"$or": [{"user1_id": user_id}, {"user2_id": user_id}]}
-        ).to_list()
+        ).to_list()  # a length arg can be passed to to_list() for pagination
         return friends
