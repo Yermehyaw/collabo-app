@@ -41,7 +41,7 @@ class FriendRequestResponse(BaseModel):
     id: str
     sender_id: str
     recipient_id: str
-    status: Literal["pending", "accepted", "refused"] = "pending"
+    status: Literal["pending", "accepted", "rejected"] = "pending"
     created_at: str = datetime.now().isoformat()
 
 
