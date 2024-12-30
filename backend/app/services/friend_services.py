@@ -54,8 +54,21 @@ class FriendServices:
 
     async def get_request_by_id(self, request_id: str):
         """
+        Get friend request by id
+
+        PARAMETERS:
+           - request_id: str, id of the request
+
+        RETURNS:
+           - request: dict, format of FriendResponse but with a _id attr
+
         """
-        pass
+        if not ObjectId.is_valid(request_id):
+            return None
+
+        collection = await get_collection(self.requests_collection)
+        request = await collection.find_one({"_id": ObjectId(request_id)})
+        return request
 
 
     async def update_friend_request_status(self, request_id: str, status: str ):
@@ -70,11 +83,7 @@ class FriendServices:
            - int: no of obj in db updated, expected = 1
         
         """
-        if not ObjectId.is_valid(request_id):
-            return None  # 404 err - obfuscate
-
-        collection = await get_collection(self.requests_collection)
-        request = await collection.find_one({"_id": ObjectId(request_id)})
+        request = self.get_request_by_id(request_id)
         if not request:  # id is valid but dosent match any request in the db
             return None  # 404 err
         
