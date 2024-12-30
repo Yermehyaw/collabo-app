@@ -48,7 +48,7 @@ class MessageResponse(BaseModel):
     sender_id: str
     receiver_id: str
     text: str
-    status: Optional[Literal["sent", "delivered"]]  # It is optional because the status is set by the server after a message has been created. A "read" can be added in future improvements
+    status: Literal["sent", "delivered"] = "sent"  # It is optional because the status is set by the server after a message has been created. A "read" can be added in future improvements
     timestamp: str
 
 
