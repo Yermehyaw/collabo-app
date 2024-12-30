@@ -1,0 +1,103 @@
+"""
+Friends Routes
+Routes to handle sending and receiving friend requests and getting the list of friends of a user
+
+MODULES:
+   - fastapi: APIRouter, Depends, HTTPException, status
+   - typing: Literal, List
+   - services.friend_services: FriendServices
+   - models.friends: FriendCreate, FriendshipResponse
+   - utils.auth.jwt_handler: verify_access_token
+
+"""
+from fastapi import (
+    APIRouter, Depends
+    HTTPException, status
+)
+from typing import (
+    Literal, List
+)
+from services.friend_services import FriendServices
+from services.user_service import UserService
+from models.friends import (
+    FriendCreate, FriendshipResponse
+)
+from utils.auth.jwt_handler import verify_access_token
+
+
+friend_router = APIRouter()
+user_service = UserService()
+friend_services = FriendServices()
+
+
+@friend_services.post("/requests", response_model=dict, status_code=status.HTTP_201_CREATED)
+async def send_request(request: FriendCreate, token: str = Depends(verify_access_token)):
+    """
+    Send a request to a user
+
+    PARAMETERS:
+       - request: FriendCreate, holds the recipient id
+       - token: str, auth token
+
+    RETURNS:
+       - message: JSON dict, response message or error
+
+    """
+    user_id = token["sub"]
+    request_id = await friend_services.send_friend_request(user_id, request.recipient_id)
+
+    if not request_id:
+        failure = {"error": "Request exists already", "code": "BAD_REQUEST"}
+        raise HTTPException(status_code=400, detail=failure)
+
+    success = {"message": "Request sent successfully", "request_id": request_id}
+    return success
+
+
+@friend_router.put("/requests/{request_id}", response_model=dict)
+async def respond_to_request(request_id: str, status: Literal["accepted", "rejected"], token: str = Depends(verify_access_token)):
+    """
+    Respond to a friend request
+
+    PARAMETRS:
+       - request_id: str, id of request
+       - status: str, new status of request. Can either be "accepted" or "rejected"
+
+    RETURNS:
+       - message: JSON dict, response message or error
+
+    """
+    # Validate the update request was sent by one to whom the request was sent
+    user_id = token["sub"]
+    result = await friend_services.get_request_by_id(request_id)
+    if not result or result.recipient_id != user_id:
+        failure = {"error": "You are not permitted to update this request", "code": "PERMISSION_DENIED"}  # To improve security, this should be obfuscated as a 404 err
+        raise HTTPException(status_code=403, detail=failure)
+
+    updated_response = await friend_services.update_friend_request_status(request_id, status)
+    if not updated_response:
+        failure = {"error": "Request not found", "NOT_FOUND"}
+        raise HTTPException(status_code=404, detail=failure)
+
+    success = {"message": f"Request status updated successfully: {status}"}
+    return success
+
+
+@friend_router.get("/", response_model=List[FriendResponse])
+async def get_friends(token: str = Depends(verify_access_token)):
+    """
+    """
+    user_id = token["user_id"]
+    friends = await friend_services.get_friend_list(user_id)  # returns both ids of the users in the friendship
+
+    friends = [  # Im sorry . . . 
+        {
+            "user_id": friend["user1_id"] if friend["user2_id"] == user_id else friend["user2_id"]  # id shouldnt be the user_id, its the id of the second user in friendship with the user
+            "name": await user_service.get_user_by_id(
+                friend["user1_id"] if friend["user2_id"] == user_id else friend["user2_id"]
+            ).name,   # get the nane of the second user
+            "created_at": friend["created_at"]
+         }
+        for friend in friends  # This is a list comprehension
+    ]
+    return friends
