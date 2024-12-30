@@ -6,14 +6,14 @@ MODULES:
    - db: get_collection
    - bson: ObjectId
    - datetime: datetime class
-   - models.friends: FriendResponse, FriendshipResponse
+   - models.friends: FriendRequestResponse, FriendshipResponse
 
 """
 from db import get_collection
 from bson import ObjectId
 from datetime import datetime
 from models.friends import (
-    FriendResponse, FriendshipResponse
+    FriendRequestResponse, FriendshipResponse
 )
 
 
@@ -47,7 +47,7 @@ class FriendServices:
         if existing_request:
             return None  # Avoid sending multiple requests
 
-        request = FriendResponse(sender_id=sender_id, recipient_id=recipient_id)
+        request = FriendRequestResponse(sender_id=sender_id, recipient_id=recipient_id)
         insertion = await collection.insert_one(request.to_dict())
         request_id = str(insertion.inserted_id)
         return request_id
@@ -60,7 +60,7 @@ class FriendServices:
            - request_id: str, id of the request
 
         RETURNS:
-           - request: dict, format of FriendResponse but with a _id attr
+           - request: dict, format of FriendRequestResponse but with a _id attr
 
         """
         if not ObjectId.is_valid(request_id):

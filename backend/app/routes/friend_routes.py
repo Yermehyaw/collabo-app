@@ -6,7 +6,7 @@ MODULES:
    - fastapi: APIRouter, Depends, HTTPException, status
    - typing: Literal, List
    - services.friend_services: FriendServices
-   - models.friends: FriendCreate, FriendshipResponse
+   - models.friends: FriendRequestCreate, FriendshipResponse
    - utils.auth.jwt_handler: verify_access_token
 
 """
@@ -20,7 +20,7 @@ from typing import (
 from services.friend_services import FriendServices
 from services.user_service import UserService
 from models.friends import (
-    FriendCreate, FriendshipResponse
+    FriendRequestCreate, FriendshipResponse
 )
 from utils.auth.jwt_handler import verify_access_token
 
@@ -31,12 +31,12 @@ friend_services = FriendServices()
 
 
 @friend_services.post("/requests", response_model=dict, status_code=status.HTTP_201_CREATED)
-async def send_request(request: FriendCreate, token: str = Depends(verify_access_token)):
+async def send_request(request: FriendRequestCreate, token: str = Depends(verify_access_token)):
     """
     Send a request to a user
 
     PARAMETERS:
-       - request: FriendCreate, holds the recipient id
+       - request: FriendRequestCreate, holds the recipient id
        - token: str, auth token
 
     RETURNS:
@@ -83,7 +83,7 @@ async def respond_to_request(request_id: str, status: Literal["accepted", "rejec
     return success
 
 
-@friend_router.get("/", response_model=List[FriendResponse])
+@friend_router.get("/", response_model=List[FriendshipResponse])
 async def get_friends(token: str = Depends(verify_access_token)):
     """
     """
