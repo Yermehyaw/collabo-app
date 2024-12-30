@@ -7,6 +7,7 @@ MODULES:
     - websockets.exceptions: ConnectionClosedError
     - typing: List
     - uuid: uuid4
+    - datetime: datetime
     - models.messages: MessageCreate, MessageResponse, ConversationResponse
 
 """
@@ -18,6 +19,7 @@ from typing import (
     List, Dict
 )
 from uuid import uuid4
+from datetime import datetime
 from models.messages import (
     MessageCreate, MessageResponse, ConversationResponse
 )
@@ -36,6 +38,7 @@ class MessagingService:
     FUTURE IMPROVEMENTS:
         - Add a method to notify a user when he receives a message    
         - Add a method to delete a message
+        - Pagination support for conversation history
     
     """
     def __init__(self):
@@ -54,16 +57,18 @@ class MessagingService:
         await websocket.accept()
         self.active_connections[user_id] = websocket
 
-    async def disconnect(self, user_id: str):
+    async def disconnect(self, user_id: str, websocket: WebSocket):
         """
         Disconnects a user from a websocket connection by removing the user from the active connections dict
 
         PARAMETERS:
             - user_id: str, id of the user
+            - websocket: WebSocket, websocket connection
         """
         self.active_connections.pop(user_id, None)  # remove the user from the active connections but if the user wasnt even connected the pop method will return None (KeyError silenced)
+        websocket.close()  # close the websocket connection
 
-    async def send_message(self, message: MessageCreate, user_id: str):
+    async def send_message(self, message: dict, user_id: str):
         """
         Sends a message via a websocket connection to a receiver
 
@@ -72,17 +77,17 @@ class MessagingService:
             - user_id: str, id of the user sending the message
         
         """
-        message = message.dict()
         message["sender_id"] = user_id
         
         text = message.get("text")
         receiver_id = message.get("receiver_id")
         
-        if receiver_id in self.active_connections:
-            message["status"] = "delivered"
+        if text and receiver_id in self.active_connections:
+            message["status"] = "delivered"  # message was sent and seen by receipient
+            await self.store_message(message)
             await self.active_connections[receiver_id].send_json(text)
         else:       
-            message["status"] = "sent"
+            message["status"] = "sent" # message was sent but not yet seen by receipient
             await self.store_message(message)
 
     async def receive_message(self, websocket: WebSocket):
@@ -92,13 +97,17 @@ class MessagingService:
         PARAMETERS:
             - websocket: WebSocket, websocket connection
 
+        RETURNS:
+            - message: json dict, message to be sent
         """
         try:
             message = await websocket.receive_json()
-            message["status"] = "delivered"
             
-            await self.store_message(message)
-        
+            # Store the message in the database
+            message["status"] = "delivered"
+            message["timestamp"] = datetime.now().isoformat()
+            return message
+
         except (ConnectionClosedError, WebSocketException):
             raise WebSocketDisconnect
     
@@ -114,7 +123,6 @@ class MessagingService:
 
         sender_id = message["sender_id"]
         receiver_id = message["receiver_id"]
-        conversation_id = "conv" + str(uuid4())
 
         # Update the conversation with the new message
         updated = await collection.update_one(
@@ -125,6 +133,7 @@ class MessagingService:
         # If the conversation never existed
         if updated.matched_count == 0 and updated.modified_count == 0:
             # Create a new conversation
+            conversation_id = "conv" + str(uuid4())
             conversation = ConversationResponse(
                 conversation_id=conversation_id,
                 users=[message["sender_id"], message["receiver_id"]],
@@ -146,7 +155,7 @@ class MessagingService:
         
         """
         collection = await get_collection(self.collection)
-        conversation = await collection.find_one({"users": {"$all": [user_id, receiver_id]}})  # _id is what is here, not a valid ConversationResponse
+        conversation = await collection.find_one({"users": {"$all": [user_id, receiver_id]}})  # _id is the id attr name rather than conversation_id, not a valid ConversationResponse
 
     async def get_user_conversation_history(self, user_id: str) -> List[dict]:
         """
