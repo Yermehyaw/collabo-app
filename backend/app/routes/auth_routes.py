@@ -4,28 +4,25 @@ Authentication routes
 MODULES:
     - fastapi: APIRouter, Depends, HTTPException, status
     - services.auth_service: AuthService
-    - models.user: UserSignup, UserLogin, Token
-    - utils.auth.jwt_handler: create_access_token  
+    - models.users: UserSignup, UserLogin, Token
 
 """
 from fastapi import (
     APIRouter, 
-    Depends, 
     HTTPException, 
     status
 )
 from services.auth_service import AuthService
-from models.user import (
+from backend.app.models.users import (
     UserSignup,
     UserLogin,
     Token
 )
-from utils.auth.jwt_handler import (
-    create_access_token
-)
+
 
 auth_router = APIRouter()
 auth_service = AuthService()
+
 
 @auth_router.post("/signup", response_model=dict, status_code=status.HTTP_201_CREATED)
 async def signup(user: UserSignup):
