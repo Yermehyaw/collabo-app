@@ -11,7 +11,7 @@ MODULES:
 
 """
 from fastapi import (
-    APIRouter, Depends
+    APIRouter, Depends,
     HTTPException, status
 )
 from typing import (
@@ -76,7 +76,7 @@ async def respond_to_request(request_id: str, status: Literal["accepted", "rejec
 
     updated_response = await friend_services.update_friend_request_status(request_id, status)
     if not updated_response:
-        failure = {"error": "Request not found", "NOT_FOUND"}
+        failure = {"error": "Request not found", "code": "NOT_FOUND"}
         raise HTTPException(status_code=404, detail=failure)
 
     success = {"message": f"Request status updated successfully: {status}"}
@@ -92,7 +92,7 @@ async def get_friends(token: str = Depends(verify_access_token)):
 
     friends = [  # Im sorry . . . 
         {
-            "user_id": friend["user1_id"] if friend["user2_id"] == user_id else friend["user2_id"]  # id shouldnt be the user_id, its the id of the second user in friendship with the user
+            "user_id": friend["user1_id"] if friend["user2_id"] == user_id else friend["user2_id"],  # id shouldnt be the user_id, its the id of the second user in friendship with the user
             "name": await user_service.get_user_by_id(
                 friend["user1_id"] if friend["user2_id"] == user_id else friend["user2_id"]
             ).name,   # get the nane of the second user

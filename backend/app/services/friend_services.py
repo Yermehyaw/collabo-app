@@ -100,7 +100,7 @@ class FriendServices:
             {"_id": ObjectId(request_id)},
             {"$set": {"status": status}}
         )
-        return update.modified_count
+        return updated.modified_count
 
 
     async def get_friend_list(self, user_id: str):
