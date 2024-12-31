@@ -44,7 +44,7 @@ def test_application_response_model():
     assert app_response.created_at is not None
 
     # Invalid status
-    invalid_status_data ={
+    invalid_status_data = {
         "_id": str(uuid4()),
         "project_id": "projectxxxx",
         "applicant_id": str(uuid4()),
@@ -53,7 +53,7 @@ def test_application_response_model():
     with pytest.raises(ValidationError):
         ApplicationResponse(**invalid_status_data)
 
-    # Edge cases
+    # Edge case: Empty string for project_id
     empty_project_id = {
         "_id": str(uuid4()),
         "project_id": "",
@@ -61,3 +61,22 @@ def test_application_response_model():
     }
     with pytest.raises(ValidationError):
         ApplicationResponse(**empty_project_id)
+
+    # Edge case: Invalid datetime format for `created_at`
+    invalid_datetime_data ={
+        "_id": str(uuid4()),
+        "project_id": "projectxxxx",
+        "status": "approved",
+        "created_at": "not-a-valid-datetime",
+    }
+    with pytest.raises(ValidationError):
+        ApplicationResponse(**invalid_datetime_data)
+
+    # Edge case: Missing `created_at` with `status` set
+    missing_created_at_data = {
+        "_id": str(uuid4()),
+        "project_id": "projectxxxx",
+        "status": "approved",
+    }
+    app_response = ApplicationResponse(**missing_created_at_data)
+    assert app_response.created_at is not None # `created_at` should default to current datetime
