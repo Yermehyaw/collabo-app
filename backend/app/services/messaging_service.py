@@ -6,6 +6,7 @@ MODULES:
     - fastapi: WebSocket, WebSocketDisconnect, WebSocketException
     - websockets.exceptions: ConnectionClosedError
     - typing: List
+    - pydantic: ValidationError
     - uuid: uuid4
     - datetime: datetime
     - models.messages: MessageCreate, MessageResponse, ConversationResponse
@@ -18,6 +19,7 @@ from websockets.exceptions import ConnectionClosedError
 from typing import (
     List, Dict
 )
+from pydantic import ValidationError
 from uuid import uuid4
 from datetime import datetime
 from models.messages import (
@@ -77,11 +79,13 @@ class MessagingService:
             - user_id: str, id of the user sending the message
         
         """
-        message["sender_id"] = user_id
-        
         text = message.get("text")
         receiver_id = message.get("receiver_id")
-        
+
+        message["sender_id"] = user_id
+        if message["sender_id"] == receiver_id:
+            raise ValidationError("Cannot send message to self")
+
         if text and receiver_id in self.active_connections:
             message["status"] = "delivered"  # message was sent and seen by receipient
             await self.store_message(message)
@@ -102,9 +106,10 @@ class MessagingService:
         """
         try:
             message = await websocket.receive_json()
+            if "text" not in message or "receiver_id" not in message:
+                raise ValidationError("Invalid message")
             
             # Store the message in the database
-            message["status"] = "delivered"
             message["timestamp"] = datetime.now().isoformat()
             return message
 
