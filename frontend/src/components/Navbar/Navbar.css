@@ -3,6 +3,7 @@
   display: flex !important; /* Override Bootstrap's display setting */
   align-items: center;
   justify-content: center;
+  color: white;
   border: none; /* Remove the border */
   background: transparent; /* Transparent background */
   padding: 0.25rem 0.5rem; /* Remove padding for cleaner look */
@@ -12,11 +13,25 @@
 /* Other Navbar styles */
 .navbar {
   padding: 0.4rem 1rem !important; /* Adjust padding for better alignment */
-  background-color: #d0dbe9 !important; /* White background */
+  z-index: 1000;
   height: 56px;
   display: flex !important;
+  background-color: #5f8a6e;
   line-height: 1.5;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow */
+  box-shadow: 0 2px 4px rgba(210, 204, 204, 0.1); /* Add shadow */
+}
+
+.navbar-nav {
+  display: flex;
+  gap: 0.5rem;
+  color: white !important;
+  font-weight: bold;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}
+
+.nav-link {
+  /* padding: 0.5rem 1rem; */
+  color: white !important;
 }
 
 .navbar-brand img {
@@ -112,4 +127,21 @@
 
 .search-result-item:hover {
   background-color: #f8f9fa;
+}
+
+#signup {
+  background-color: #2f844f;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: olivedrab;
+  font-size: medium;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+}
+
+#signup:hover {
+  background-color: #093c11;
+  color: white;
+  font-weight: bold;
 }

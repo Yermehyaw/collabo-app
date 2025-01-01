@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-// import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/css/bootstrap.min.css"; // Bootstrap styles
 import {
   FaSearch,
   FaBars,
@@ -89,7 +89,7 @@ const Navbar = () => {
   return (
     <>
       {/* Navbar */}
-      <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+      <nav className="navbar navbar-expand-lg navbar-light  fixed-top">
         <div id="nav-bar" className="container-fluid d-flex align-items-center">
           {/* Hamburger Icon */}
           <button
@@ -178,8 +178,12 @@ const Navbar = () => {
                 )}
               </div>
             )}
-            <Link to="/login" className="btn btn-outline-primary ms-3">
-              Signup
+            <Link
+              to="/login"
+              className="btn btn-outline-primary ms-3"
+              id="signup"
+            >
+              Sign Up
             </Link>
           </div>
         </div>
@@ -195,10 +199,10 @@ const Navbar = () => {
           id="sidebar_header"
           className="sidebar-header d-flex justify-content-between align-items-center"
         >
-          <img src={logo} alt="Collabo Logo" width="80" height="80" />
-          <button className="close-btn" onClick={toggleSidebar}>
-            close
+          <button id="close-btn" onClick={toggleSidebar}>
+            X
           </button>
+          <img src={logo} alt="Collabo Logo" width="80" height="80" />
         </div>
 
         {/* Sidebar Content */}
