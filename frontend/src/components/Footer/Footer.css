@@ -1,0 +1,44 @@
+.footer {
+  background: radial-gradient(
+    #011a0f,
+    rgba(0, 0, 0, 0.735)
+  ); /* Modern blue gradient */
+  color: #e0e0e0; /* Light gray text */
+  font-family: "Roboto", sans-serif;
+}
+
+.footer h5 {
+  color: #bbdefb; /* Light blue for headings */
+}
+
+.footer a {
+  text-decoration: none;
+  color: #bbdefb;
+}
+
+.footer a:hover {
+  color: #42a5f5; /* Vibrant hover effect */
+}
+
+.footer hr {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.footer .btn {
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.footer .btn-warning:hover {
+  background-color: #ffa000; /* Darker shade of gold */
+}
+
+.footer .btn-primary {
+  background-color: #42a5f5;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.footer .btn-primary:hover {
+  background-color: #1e88e5; /* Darker blue */
+}

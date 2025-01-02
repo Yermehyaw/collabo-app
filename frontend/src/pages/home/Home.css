@@ -11,14 +11,21 @@ body {
 
   /* color: #ffffff; */
 }
+
 main {
   display: flex;
-  flex-direction: column;
-  margin-top: 50px;
+  margin: auto;
 }
+
+.hero-content img {
+  width: 100px;
+  height: 100px;
+  position: absolute;
+}
+
 /* Hero Section */
 #hero {
-  height: 100vh;
+  /* height: 100%; */
   width: 100%;
   background-image: url("boxbg.jpg");
   background-position: center;
@@ -33,7 +40,7 @@ main {
 
 .hero-content {
   text-align: left;
-  padding: 10%;
+  padding: 8%;
 
   z-index: 1;
 }
@@ -50,11 +57,9 @@ main {
 }
 
 .hero-content p {
-  font-size: 1rem;
+  font-size: 20px;
   margin-bottom: 2rem;
   max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .hero-buttons {
@@ -101,15 +106,14 @@ main {
   font-size: 2rem;
   font-weight: bold;
   color: chartreuse;
-  margin-top: 100px;
+  margin-top: 5%;
   font-family: Georgia, "Times New Roman", Times, serif;
 }
 
 #welcome {
-  margin-top: 20px;
-  font-style: italic;
+  margin-top: 10%;
   font-weight: bolder;
-  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-family: "Times New Roman", Times, serif;
 }
 
 #logo-name {

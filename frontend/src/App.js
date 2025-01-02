@@ -7,8 +7,10 @@ import "./pages/home/Home.css";
 import "./assets/styles/global.css";
 import "./components/Navbar/Navbar.css";
 import "./components/Navbar/Sidebar.css";
+import Footer from "./components/Footer/Footer";
 
 import Profile from "./pages/profile/Profile";
+import Features from "./components/Features/features";
 
 const App = () => {
   return (
@@ -21,6 +23,8 @@ const App = () => {
           <Route path="/profile" element={<Profile />} />
         </Routes>
       </div>
+      <Features />
+      <Footer />
     </Router>
   );
 };

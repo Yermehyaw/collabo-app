@@ -10,6 +10,7 @@ const Home = () => {
       {/* Hero Section */}
       <section id="hero">
         <div className="hero-content">
+          <div className="hero-image"></div>
           <h1 id="logo-name">COLLABO</h1>
           <p id="welcome">
             Welcome to Collabo — where connections spark creativity! Meet
@@ -19,13 +20,13 @@ const Home = () => {
           <h2>
             <TypingEffect
               text={[
-                "CREATE PROJECTS",
-                "MEET NEW FRIENDS",
                 "CONNECT",
+                "MEET NEW FRIENDS",
+                "CREATE PROJECTS",
                 "COLLABORATE",
                 "GROW",
               ]}
-              speed={100}
+              speed={200}
               eraseDelay={1500}
               typingDelay={500}
             />
