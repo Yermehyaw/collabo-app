@@ -67,6 +67,7 @@ main {
   gap: 5rem;
   /* justify-content: center; */
   float: left;
+
   margin-top: 30%;
 }
 
@@ -118,9 +119,10 @@ main {
 
 #logo-name {
   color: bisque;
+  text-shadow: 0 0 10px #eb510f, 0 0 20px #ff6a00, 0 0 30px #ffd500;
+
   font-size: 5rem;
-  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
-    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 @media only screen and (max-width: 768px) {

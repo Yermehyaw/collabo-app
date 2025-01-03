@@ -39,9 +39,16 @@ const Features = () => {
         {/* Features Intro */}
         <div className="text-center mb-5" id="choose">
           <h2 className="fw-bold">Why Choose Collabo?</h2>
-          <p className="text-muted">
-            Collabo connects people, fosters collaboration, and empowers
-            creativity.
+          <p className="text">
+            Collabo is your ultimate platform for connecting with like-minded
+            individuals. Whether you're a professional seeking to expand your
+            network, a creative mind looking for inspiration, or simply someone
+            eager to meet new friends, Collabo makes it happen. Collaborate
+            seamlessly on projects, share innovative ideas, and grow your skills
+            with others who share your passions. Empower your creativity, build
+            lasting connections, and discover endless possibilities with
+            Collabo. Join today and experience a world where collaboration meets
+            innovation!
           </p>
         </div>
 
