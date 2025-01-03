@@ -23,7 +23,7 @@ from bson import ObjectId
 
 
 # STANDARD PROJECT DEF MODEL
-class Project(BaseModel):
+class ProjectCreate(BaseModel):
     """
     Defines a project obj
 

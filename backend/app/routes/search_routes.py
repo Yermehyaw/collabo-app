@@ -4,8 +4,8 @@ Searching endpoints
 MODULES:
    - fastapi: APIRouter, Depends, HTTPException, status
    - typing: List
-   - models.project: ProjectResponse
-   - models.user: UserResponse
+   - models.projects: ProjectResponse
+   - models.users: UserResponse
    - services.project_service: ProjectService
    - services.user_service: UserService 
    - utils.auth.jwt_handler: verify_access_token
@@ -18,15 +18,15 @@ from fastapi import (
 from typing import (
     Annotated, List, Union
 )
-from models.user import UserResponse
-from models.project import ProjectResponse
-from services.project_service import ProjectService
-from services.user_service import UserService
+from app.models.users import UserResponse
+from app.models.projects import ProjectResponse
+from app.services.project_services import ProjectServices
+from backend.app.services.user_services import UserServices
 from utils.auth.jwt_handler import verify_access_token
 
 search_router = APIRouter()
-project_service = ProjectService()
-user_service = UserService()
+project_services = ProjectServices()
+user_services = UserServices()
 
 
 @search_router.get("/users/", response_model=List[UserResponse])
@@ -65,7 +65,7 @@ async def search_users(
         if param:  # an empty list will return false
             query.update({param_key: param})
 
-    users = await user_service.search_users(query)
+    users = await user_services.search_users(query)
     return users
 
 
@@ -120,5 +120,5 @@ async def search_projects(
         if param:  # an empty list will return false
             query.update({param_key: param})
 
-    projects = await project_service.search_users(query)
+    projects = await project_services.search_users(query)
     return projects

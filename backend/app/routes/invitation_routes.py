@@ -13,8 +13,8 @@ from fastapi import (
     APIRouter, HTTPException,
     status, Depends
 )
-from services.user_service import UserService
-from services.project_service import ProjectService
+from app.services.user_services import UserServices
+from app.services.project_services import ProjectServices
 from services.invitation_service import InvitationServices
 from models.invitations import (
     InvitationCreate, InvitationResponse
@@ -24,8 +24,8 @@ from bson import ObjectId
 
 
 invitation_router = APIRouter()
-user_service = UserService()
-project_service = ProjectService()
+user_services = UserServices()
+project_services = ProjectServices()
 invitation_services = InvitationServices()
 
 
@@ -42,7 +42,7 @@ async def send_invitation(invite: InvitationCreate, token: str = Depends(verify_
 
     """
     # Ensure its the project owner sending the request
-    project = await project_service.get_project(invite.project_id)
+    project = await project_services.get_project(invite.project_id)
 
     if not project or project.creator_id != token["sub"]:
         failure = {"error": "You are not permitted to send invites to other users on this project", "code": "PERMISSION_DENIED"}
@@ -72,7 +72,7 @@ async def get_invitations_to_user(user_id: str):
 
     """
     # Ensure its the user requesting for their own invitations
-    user = await user_service.get_user(user_id)
+    user = await user_services.get_user(user_id)
 
     if not user or user["user_id"] != user_id:
         failure = {"error": "You are not permitted to view these invitations", "code": "PERMISSION_DENIED"}

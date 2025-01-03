@@ -14,7 +14,7 @@ from fastapi import (
     status, Depends
 )
 from typing import List
-from services.project_service import ProjectService
+from backend.app.services.project_services import ProjectService
 from services.application_services import ApplicationServices
 from models.applications import (
     ApplicationCreate, ApplicationResponse

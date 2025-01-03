@@ -2,7 +2,7 @@
 Routes for user endpoints
 
 MODULES:
-    - fastapi: APIRouter, Depends, HTTPException, status
+    - fastapi: APIRouter, Depends, HTTPException
     - services.user_service: UserService
     - models.user: User, UserResponse
     - utils.auth.password_utils: verify_password
@@ -16,18 +16,19 @@ FUTURE IMPROVEMENTS:
 """
 from fastapi import (
     APIRouter, Depends,
-    HTTPException, status
+    HTTPException
 )
-from typing_extensions import Annotated
-from services.user_service import UserService
-from models.user import (
+from backend.app.services.user_services import UserService
+from backend.app.models.users import (
     UserUpdate, UserResponse
 )
 from utils.auth.password_utils import verify_password
 from utils.auth.jwt_handler import verify_access_token
 
+
 user_router = APIRouter()
 user_service = UserService()
+
 
 @user_router.get("/profile/{user_id}", response_model=UserResponse)
 async def get_user_profile(user_id: str, token: str = Depends(verify_access_token)):

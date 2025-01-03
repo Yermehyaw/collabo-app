@@ -5,7 +5,7 @@ MODULES:
     - fastapi: APIRouter, Depends, HTTPException, status
     - typing: List
     - services.suggestion_services: SuggestionServices
-    - models.project: ProjectResponse
+    - models.projects: ProjectResponse
     - models.user: UserResponse
     - utils.auth.jwt_handler: verify_access_token
 
@@ -16,8 +16,8 @@ from fastapi import (
 )
 from typing import List
 from services.suggestion_services import SuggestionServices
-from models.project import ProjectResponse
-from models.user import UserResponse
+from app.models.projects import ProjectResponse
+from app.models.users import UserResponse
 from utils.auth.jwt_handler import verify_access_token
 
 suggestion_router = APIRouter()

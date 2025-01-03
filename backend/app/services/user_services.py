@@ -6,19 +6,17 @@ MODULES:
     - datetime: datetime class
     - models.user: UserUpdate, UserResponse
     - db: get_collection, get collections from db client
-    - bson: ObjectId, validate and create byte ids
 
 """
 from typing import Optional
 from datetime import datetime
-from models.user import (
+from backend.app.models.users import (
     UserUpdate, UserResponse
 )
 from db import get_collection
-from bson import ObjectId
 
 
-class UserService:
+class UserServices:
     """
     User Services Class: Includes methods to update, delete users and retrieve user data
 

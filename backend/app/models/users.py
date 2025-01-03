@@ -1,5 +1,5 @@
 """
-User model for fastapi app
+Users model for fastapi app
 
 MODULES:
     - typing: Optional
@@ -23,8 +23,53 @@ from uuid import uuid4
 from bson import ObjectId
 
 
+# USER SIGNUP/CREATE
+class UserSignup(BaseModel):
+    """
+    Users description class for signing up a new user
+
+    ATTRIBUTES:
+        - name: str
+        - email: str
+        - password: str
+
+    """
+    name: str
+    email: EmailStr
+    password: str = Field(..., min_length=8)
+
+
+# USER LOGIN
+class UserLogin(BaseModel):
+    """
+    Users description class for logging in a user
+
+    ATTRIBUTES:
+        - email: str
+        - password: str
+        - 
+
+    """
+    email: EmailStr
+    password: str = Field(..., min_length=8)
+
+
+# JWT Token RESPONSE
+class Token(BaseModel):
+    """
+    Token description class for responses
+
+    ATTRIBUTES:
+        - access_token: str
+        - token_type: str
+
+    """
+    access_token: str
+    token_type: str = 'bearer' 
+
+
 # DEFINTION OF A USER: USED FOR USER CREATION
-class User(BaseModel):
+class UserCreate(BaseModel):
     """
     Users description class for creating a new user. 
     Only non-sensitive data should be included during retrieval.
@@ -192,47 +237,3 @@ class UserUpdate(BaseModel):
             }
         }
     )
-
-
-# USER SIGNUP
-class UserSignup(User):
-    """
-    Users description class for signing up a new user
-
-    ATTRIBUTES:
-        - name: str
-        - email: str
-        - password: str
-
-    """
-    name: str
-    email: EmailStr
-    password: str = Field(..., min_length=8)
-
-# USER LOGIN
-class UserLogin(BaseModel):
-    """
-    Users description class for logging in a user
-
-    ATTRIBUTES:
-        - email: str
-        - password: str
-        - 
-
-    """
-    email: EmailStr
-    password: str = Field(..., min_length=8)
-
-
-# JWT Token RESPONSE
-class Token(BaseModel):
-    """
-    Token description class for responses
-
-    ATTRIBUTES:
-        - access_token: str
-        - token_type: str
-
-    """
-    access_token: str
-    token_type: str = 'bearer' 

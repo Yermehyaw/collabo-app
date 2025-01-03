@@ -4,34 +4,28 @@ Handles all the business logic for authenticating users
 
 MODULES:
     - typing: List, Optional, Union
-    - datetime: datetime class
-    - models.user: User
+    - models.users: UserCreate
     - utils.auth.password_utils: hash_password, verify_password
     - utils.auth.jwt_handler: create_access_token
     - db: get_collection, get collections from db client
     - pydantic: ValidationError
-    - bson: ObjectId
     - uuid: uuid4 method
 
 """
 from typing import (
-    List,
     Optional,
-    Union
 )
-from datetime import datetime
-from models.user import (
-    User, UserSignup, UserResponse, Token
+from backend.app.models.users import (
+    UserCreate, UserSignup, UserResponse, Token
 )
 from utils.auth.password_utils import hash_password, verify_password
 from utils.auth.jwt_handler import create_access_token
 from db import get_collection
 from pydantic import ValidationError
-from bson import ObjectId
 from uuid import uuid4
 
 
-class AuthService:
+class AuthServices:
     """
     Auth Services Class: Includes methods create/signup or login/authenticate users
 
@@ -43,12 +37,12 @@ class AuthService:
     def __init__(self):
         self.collection_name = "users"
 
-    async def create_user(self, signup: UserSignup) -> str:
+    async def create_user(self, signup: dict) -> str:
         """
         Method to create a new user
 
         PARAMETERS:
-            - user: User, user object
+            - user: dict, with params to build a user object
 
         RETURNS:
             - user_id: id of newly created and stored user object
@@ -57,18 +51,20 @@ class AuthService:
         # connect to collection
         collection = await get_collection(self.collection_name)
 
-        existing_user = await self.get_user_by_email(signup.email)
+        # Check if user already exists
+        existing_user = await self.get_user_by_email(signup["email"])
         if existing_user:
             raise ValueError("User already exists")
 
-        p_hash = hash_password(signup.password)
-        user = User(name=signup.name, email=signup.email, password=p_hash)
-
-        user_data = user.model_dump(by_alias=True)  # user obj must first transformed into a simple dict, with the use of by_alias=True to use the alias name of _id instead of user_id
-        new_id = 'user' + str(uuid4())
-        user_data["_id"] = new_id
+        # Building user obj for insertion into the DB
+        p_hash = hash_password(signup["password"])
+        user = UserCreate(name=signup["name"], email=signup["email"], password=p_hash)
+        
+        user_data = user.model_dump(by_alias=True)  # user obj must first transformed into a simple dict, with the use of by_alias=True to use the alias name of user_id
+        user_data["_id"] = 'user' + str(uuid4()) # optimise retrieval by setting user_id to the indexed _id
+        
+        
         insertion_id = await collection.insert_one(user_data).inserted_id 
-
         return str(insertion_id)  # new_id should now be the the same as insertion_id
 
     async def authenticate_user(self, email: str, password: str) -> Optional[Token]:

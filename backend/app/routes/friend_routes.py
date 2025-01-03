@@ -18,7 +18,7 @@ from typing import (
     Literal, List
 )
 from services.friend_services import FriendServices
-from services.user_service import UserService
+from app.services.user_services import UserServices
 from models.friends import (
     FriendRequestCreate, FriendshipResponse
 )
@@ -26,7 +26,7 @@ from utils.auth.jwt_handler import verify_access_token
 
 
 friend_router = APIRouter()
-user_service = UserService()
+user_services = UserServices()
 friend_services = FriendServices()
 
 
@@ -93,7 +93,7 @@ async def get_friends(token: str = Depends(verify_access_token)):
     friends = [  # Im sorry . . . 
         {
             "user_id": friend["user1_id"] if friend["user2_id"] == user_id else friend["user2_id"],  # id shouldnt be the user_id, its the id of the second user in friendship with the user
-            "name": await user_service.get_user_by_id(
+            "name": await user_services.get_user_by_id(
                 friend["user1_id"] if friend["user2_id"] == user_id else friend["user2_id"]
             ).name,   # get the nane of the second user
             "created_at": friend["created_at"]

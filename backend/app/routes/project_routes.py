@@ -3,9 +3,8 @@ Routes for project endpoints
 
 MODULES:
     - fastapi: APIRouter, Depends, HTTPException, status
-    - services.project_service: ProjectService
+    - services.project_services: ProjectServices
     - models.project: Project, ProjectUpdate, ProjectResponse
-    - utils.auth.password_utils: verify_password
     - utils.auth.jwt_handler: verify_access_token
 
 FUTURE IMPROVEMENTS:
@@ -18,30 +17,31 @@ from fastapi import (
     APIRouter, HTTPException,
     status, Depends
 )
-from typing_extensions import Annotated
-from services.project_service import ProjectService
-from models.project import (
-    Project, ProjectResponse, ProjectUpdate
+from backend.app.services.project_services import ProjectServices
+from backend.app.models.projects import (
+    ProjectCreate, ProjectResponse, ProjectUpdate
 )
 from utils.auth.jwt_handler import verify_access_token
 
+
 project_router = APIRouter()
-project_service = ProjectService()
+project_services = ProjectServices()
 
 
 @project_router.post("/create", response_model=ProjectResponse, status_code=status.HTTP_201_CREATED)
-async def create_project(project: Project, token: str = Depends(verify_access_token)):
+async def create_project(project: ProjectCreate, token: str = Depends(verify_access_token)):
     """
     Create a new project
 
     ATTRIBUTES:
         - project: Project, model request
+        - token: str, jwt auth token
 
     RETURNS:
         - message: JSON dict, response message or error
 
     """
-    project_id = await project_service.create_project(project)
+    project_id = await project_services.create_project(project)
 
     if not project_id:
         failure = {"error": "Project creation failed", "code": "BAD_REQUEST"}
@@ -63,7 +63,7 @@ async def get_project(project_id: str):
         - project: ProjectResponse, project object
     
     """
-    project = await project_service.get_project_by_id(project_id)
+    project = await project_services.get_project_by_id(project_id)
 
     if not project:
         failure = {"error": "Project not found", "code": "NOT_FOUND"}
@@ -84,7 +84,7 @@ async def update_project(project_id: str, project: ProjectUpdate, token: str = D
         - message: JSON dict, response message or error
     
     """
-    fields_updated = await project_service.update_project(project_id, project)
+    fields_updated = await project_services.update_project(project_id, project)
 
     if fields_updated is None:
         failure = {"error": "Project not found", "code": "BAD_REQUEST"}
@@ -109,7 +109,7 @@ async def delete_project(project_id: str, token: str = Depends(verify_access_tok
         - message: JSON dict, response message or error
     
     """
-    deleted_project = await project_service.delete_project(project_id)
+    deleted_project = await project_services.delete_project(project_id)
 
     if not deleted_project:
         failure = {"error": "Project not found", "code": "BAD_REQUEST"}
@@ -131,7 +131,7 @@ async def get_all_projects_by_user_id(user_id: str, token: str = Depends(verify_
         - projects: List[ProjectResponse], list of project objects
     
     """
-    projects = await project_service.get_all_projects_by_user_id(user_id)
+    projects = await project_services.get_all_projects_by_user_id(user_id)
 
     if not projects:
         failure = {"error": "No projects found", "code": "NOT_FOUND"}

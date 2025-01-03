@@ -3,7 +3,7 @@ Project Services Module
 Handles business logic for Projects
 
 MODULES:
-    - typing: List, Optional, Union, Dict 
+    - typing: List, Optional
     - datetime: datetime method
     - models.project: project models
     - services.user: user manipulation mthds
@@ -15,11 +15,10 @@ MODULES:
 from typing import (
     List,
     Optional,
-    Union, Dict
 )
 from datetime import datetime
-from models.project import (
-    Project, ProjectUpdate, ProjectResponse
+from backend.app.models.projects import (
+    ProjectCreate, ProjectUpdate, ProjectResponse
 )
 from services.user import UserService
 from utils.auth.jwt_handler import verify_access_token
@@ -30,7 +29,7 @@ from uuid import uuid4
 user_service = UserService()
 
 
-class ProjectService:
+class ProjectServices:
     """
     Project Services class: Includes methods to create, update, search, retrueve and delete a project from the db
 
@@ -52,7 +51,7 @@ class ProjectService:
         """
         return await get_collection(self.collection_name)
 
-    async def create_project(self, project: Project) -> str:
+    async def create_project(self, project: ProjectCreate) -> str:
         """
         Create a new project
 
@@ -65,13 +64,10 @@ class ProjectService:
         """
         # convert project to a dict ready for insertion
         project_data = project.model_dump(by_alias=True)
-        new_id = 'project' + str(uuid4())
-        project_data['_id'] = new_id
-        
+        project_data['_id'] = 'project' + str(uuid4())  # Specify what I want the insertion and return id to be
+
         # insert project into db
-        insertion_id = self.projects_collection().insert_one(
-            project_data
-        ).inserted_id
+        insertion_id = await self.projects_collection().insert_one(project_data).inserted_id
         
 
         # insert new project into the projects attr of its creator
