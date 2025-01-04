@@ -23,6 +23,7 @@ app = FastAPI()
 # Map routes the fastAPI routes module
 app.include_router(auth_router, prefix='/auth', tags=['Auth'])
 app.include_router(user_router, prefix='/users', tags=['Users'])
+"""
 app.include_router(project_router, prefix='/projects', tags=['Projects'])
 app.include_router(friend_router, prefix='/friends', tags=['Friends'])
 app.include_router(application_router, prefix='/applications', tags=['Applications'])
@@ -31,7 +32,7 @@ app.include_router(search_router, prefix='/search', tags=['Search'])
 app.include_router(suggestion_router, prefix='/suggestions', tags=['Suggestions'])
 app.include_router(message_router, prefix='/messages', tags=['Messages'])
 app.include_router(conversation_router, prefix='/conversations', tags=['Conversations'])
-
+"""
 # Homepage
 app.get('/')
 async def root():
