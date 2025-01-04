@@ -103,7 +103,7 @@ class AuthServices:
         """
         collection = await get_collection(self.collection_name)
         user = await collection.find_one({"email": email})
-        user["user_id"] = user.pop("_id")
         if user:
+            user["user_id"] = user.pop("_id")
             return user
         return None
