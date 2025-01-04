@@ -20,7 +20,12 @@ from routes.message_routes import conversation_router
 # Initialize the FastAPI app
 app = FastAPI()
 
-# Map routes the fastAPI routes module
+# Homepage
+app.get('/')
+async def root():
+    return {"message": "Welcome to the Collabo app"}
+
+# Map other routes to the fastAPI app
 app.include_router(auth_router, prefix='/auth', tags=['Auth'])
 app.include_router(user_router, prefix='/users', tags=['Users'])
 """
@@ -33,10 +38,6 @@ app.include_router(suggestion_router, prefix='/suggestions', tags=['Suggestions'
 app.include_router(message_router, prefix='/messages', tags=['Messages'])
 app.include_router(conversation_router, prefix='/conversations', tags=['Conversations'])
 """
-# Homepage
-app.get('/')
-async def root():
-    return {"message": "Welcome to the Collabo app"}
 
 # Run the app via uvicorn in a shell terminal
 # uvicorn main:app --reload
