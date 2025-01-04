@@ -3,6 +3,7 @@ Routes for user endpoints
 
 MODULES:
     - fastapi: APIRouter, Depends, HTTPException
+    - fastapi.security: OAuth2PasswordBearer
     - services.user_service: UserService
     - models.user: User, UserResponse
     - utils.auth.jwt_handler: verify_access_token
@@ -17,6 +18,7 @@ from fastapi import (
     APIRouter, Depends,
     HTTPException
 )
+from fastapi.security import OAuth2PasswordBearer
 from services.user_services import UserServices
 from models.users import (
     UserUpdate, UserResponse
@@ -26,10 +28,11 @@ from utils.auth.jwt_handler import verify_access_token
 
 user_router = APIRouter()
 user_services = UserServices()
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 @user_router.get("/profile/{user_id}", response_model=UserResponse)
-async def get_user_profile(user_id: str, token: str = Depends(verify_access_token)):
+async def get_user_profile(user_id: str, token: str = Depends(oauth2_scheme)):
     """
     Route to get a user profile
 
@@ -41,7 +44,12 @@ async def get_user_profile(user_id: str, token: str = Depends(verify_access_toke
         - UserResponse: user object
 
     """
-    user = await user_services.get_user_by_id(user_id)
+    payload = verify_access_token(token)
+    if not payload:
+        failure = {"error": "Invalid token", "code": "UNAUTHORIZED"}
+        raise HTTPException(status_code=401, detail=failure)
+
+    user = await user_services.get_user_by_id(user_id)  # Returns a UserResponse obj
     if not user:
         failure = {"error": "User not found", "code": "NOT_FOUND"}
         raise HTTPException(status_code=404, detail=failure)
@@ -50,7 +58,7 @@ async def get_user_profile(user_id: str, token: str = Depends(verify_access_toke
 
 
 @user_router.put("/profile/{user_id}", response_model=dict)
-async def update_user_profile(user_id: str, user: UserUpdate, token: str = Depends(verify_access_token)):
+async def update_user_profile(user_id: str, user: UserUpdate, token: str = Depends(oauth2_scheme)):
     """
     Route to update a user profile
 
@@ -62,6 +70,11 @@ async def update_user_profile(user_id: str, user: UserUpdate, token: str = Depen
         - dict: update message
 
     """
+    token = verify_access_token(token)  # Decoded token
+    if not token:
+        failure = {"error": "Invalid token", "code": "UNAUTHORIZED"}
+        raise HTTPException(status_code=401, detail=failure)
+    
     if str(token["sub"]) != user_id:
         failure = {"error": "Permission denied", "code": "PERMISSION_DENIED"}
         raise HTTPException(status_code=403, detail=failure)
