@@ -64,6 +64,7 @@ async def update_user_profile(user_id: str, user: UserUpdate, token: str = Depen
 
     PARAMETERS:
         - user_id: str, user id
+        - user: UserUpdate, json object with fields to be updated
         - token: str, access token
 
     RETURNS:
@@ -85,9 +86,5 @@ async def update_user_profile(user_id: str, user: UserUpdate, token: str = Depen
         failure = {"error": "User not found", "code": "NOT_FOUND"}
         raise HTTPException(status_code=400, detail=failure)
 
-    if fields_updated == 0:  # user_id found, but no change
-        success = {"message": "No data entries updated/created"}
-    else:
-        success = {"message": "profile updated successfully"}
-
+    success = {"message": "profile updated successfully"}
     return success
