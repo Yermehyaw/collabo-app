@@ -70,7 +70,7 @@ class UserServices:
         user.updated_at = datetime.now().isoformat()
         update_response = await collection.update_one(
             {"_id": user_id},
-            {"$set": user.model_dump()},
+            {"$set": user.model_dump(exclude_unset=True)},  # exclide fields which are None
         )  # update_one never returns none even if no document was flund with the user_id
 
         if not update_response.matched_count:
