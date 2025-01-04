@@ -37,8 +37,8 @@ async def signup(user: UserSignup):
 
     """
     try:
-        user = await auth_services.create_user(user)
-        success = {"message": "User registered successfully", "user": user.user_id}
+        user_id = await auth_services.create_user(user)
+        success = {"message": "User registered successfully", "user": user_id}
         return success
     except ValueError:
         failure = {"error": "User already exists", "code": "BAD_REQUEST"}
