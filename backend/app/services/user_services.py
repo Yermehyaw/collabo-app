@@ -73,7 +73,7 @@ class UserServices:
             {"$set": user.model_dump(exclude_unset=True)},  # exclide fields which are None
         )  # update_one never returns none even if no document was flund with the user_id
 
-        if not update_response.matched_count:
+        if update_response.matched_count == 0:
             return None # document with user_id dosent exist
 
         return update_response.modified_count
