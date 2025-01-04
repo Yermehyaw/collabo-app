@@ -46,6 +46,7 @@ class UserServices:
 
         user = await collection.find_one({"_id": user_id}, {"password": 0})
         if user:
+            user["user_id"] = user.pop("_id")
             return UserResponse(**user)
         return None
 
