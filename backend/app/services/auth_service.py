@@ -52,20 +52,21 @@ class AuthServices:
         collection = await get_collection(self.collection_name)
 
         # Check if user already exists
-        existing_user = await self.get_user_by_email(signup["email"])
+        existing_user = await self.get_user_by_email(signup.email)
         if existing_user:
             raise ValueError("User already exists")
 
         # Building user obj for insertion into the DB
-        p_hash = hash_password(signup["password"])
-        user = UserCreate(name=signup["name"], email=signup["email"], password=p_hash)
+        p_hash = hash_password(signup.password)
+        user = UserCreate(name=signup.name, email=signup.email, password=p_hash)
         
         user_data = user.model_dump(by_alias=True)  # user obj must first transformed into a simple dict, with the use of by_alias=True to use the alias name of user_id
         user_data["_id"] = 'user' + str(uuid4()) # optimise retrieval by setting user_id to the indexed _id
         
         
-        insertion_id = await collection.insert_one(user_data).inserted_id 
-        return str(insertion_id)  # new_id should now be the the same as insertion_id
+        insertion = await collection.insert_one(user_data)
+
+        return str(insertion.inserted_id)  # new_id should now be the the same as insertion_id
 
     async def authenticate_user(self, email: str, password: str) -> Optional[Token]:
         """
