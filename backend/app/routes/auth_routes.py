@@ -13,7 +13,7 @@ from fastapi import (
     status
 )
 from services.auth_service import AuthServices
-from backend.app.models.users import (
+from models.users import (
     UserSignup,
     UserLogin,
     Token
