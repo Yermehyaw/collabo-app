@@ -67,12 +67,23 @@ class UserServices:
         # if not ObjectId.is_valid(user_id):
         #    return None
 
-        user.updated_at = datetime.now().isoformat()
+        update_data = user.model_dump(exclude_unset=True)  # exclude fields which are None
+
+        list_fields = {}
+        other_fields = {}
+        for key, value in update_data.items():
+            if isinstance(key, list):
+                list_fields.update({key: value})
+            else:  # key is a string, int or any other type
+                other_fields.update({key: value})
+
+        # Update list and string values fields separately
         update_response = await collection.update_one(
             {"_id": user_id},
-            {"$set": user.model_dump(exclude_unset=True)},  # exclide fields which are None
+            {"$addToSet": list_fields},  # addToSet adds the value to the array field only if its not already present
+            {"$set": other_fields}
         )  # update_one never returns none even if no document was flund with the user_id
-
+        
         if update_response.matched_count == 0:
             return None # document with user_id dosent exist
 
