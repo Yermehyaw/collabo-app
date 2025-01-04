@@ -15,7 +15,7 @@ MODULES:
 from typing import (
     Optional,
 )
-from app.models.users import (
+from models.users import (
     UserCreate, UserSignup, UserResponse, Token
 )
 from utils.auth.password_utils import hash_password, verify_password
