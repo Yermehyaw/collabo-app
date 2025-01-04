@@ -1,5 +1,5 @@
 """
-Auth Service Module
+Auth Services Module
 Handles all the business logic for authenticating users
 
 MODULES:
@@ -83,14 +83,14 @@ class AuthServices:
         user = await self.get_user_by_email(email)
         if not user:
             return None
-        if not verify_password(password, user.password):
+        if not verify_password(password, user["password"]):
             return None
         
-        access_token = create_access_token(data={"sub": user.user_id, "email": user.email})
+        access_token = create_access_token(data={"sub": user["user_id"], "email": user["email"]})
         token = Token(access_token=access_token, token_type="bearer")
         return token
 
-    async def get_user_by_email(self, email: str) -> Optional[UserResponse]:
+    async def get_user_by_email(self, email: str) -> Optional[dict]:
         """
         Method to get a user by email
 
@@ -98,12 +98,12 @@ class AuthServices:
             - email: str, email of the user
 
         RETURNS:
-            - User: user object
+            - dict: dict of user object
 
         """
         collection = await get_collection(self.collection_name)
-        user = await collection.find_one({"email": email}, {"pasword": 0})  # get by email but exclude password field from output
+        user = await collection.find_one({"email": email})
         user["user_id"] = user.pop("_id")
         if user:
-            return UserResponse(**user)
+            return user
         return None

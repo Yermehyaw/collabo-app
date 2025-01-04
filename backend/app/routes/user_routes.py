@@ -49,7 +49,7 @@ async def get_user_profile(user_id: str, token: str = Depends(verify_access_toke
     return user
 
 
-@user_router.put("/profile/{user_id}", response_model=UserResponse)
+@user_router.put("/profile/{user_id}", response_model=dict)
 async def update_user_profile(user_id: str, user: UserUpdate, token: str = Depends(verify_access_token)):
     """
     Route to update a user profile
@@ -59,7 +59,7 @@ async def update_user_profile(user_id: str, user: UserUpdate, token: str = Depen
         - token: str, access token
 
     RETURNS:
-        - UserResponse: updated user object
+        - dict: update message
 
     """
     if str(token["sub"]) != user_id:
