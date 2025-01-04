@@ -12,7 +12,7 @@ from fastapi import (
     HTTPException, 
     status
 )
-from services.auth_service import AuthServices
+from services.auth_services import AuthServices
 from models.users import (
     UserSignup,
     UserLogin,
