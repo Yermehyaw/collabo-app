@@ -17,8 +17,8 @@ from fastapi import (
     APIRouter, Depends,
     HTTPException
 )
-from app.services.user_services import UserServices
-from app.models.users import (
+from services.user_services import UserServices
+from models.users import (
     UserUpdate, UserResponse
 )
 from utils.auth.jwt_handler import verify_access_token

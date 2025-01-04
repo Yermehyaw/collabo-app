@@ -10,7 +10,7 @@ MODULES:
 """
 from typing import Optional
 from datetime import datetime
-from backend.app.models.users import (
+from models.users import (
     UserUpdate, UserResponse
 )
 from db import get_collection
