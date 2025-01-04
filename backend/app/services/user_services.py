@@ -80,8 +80,10 @@ class UserServices:
         # Update list and string values fields separately
         update_response = await collection.update_one(
             {"_id": user_id},
-            {"$addToSet": list_fields},  # addToSet adds the value to the array field only if its not already present
-            {"$set": other_fields}
+            {
+                "$addToSet": list_fields,  # addToSet adds the value to the array field only if its not already present
+                "$set": other_fields
+            }
         )  # update_one never returns none even if no document was flund with the user_id
         
         if update_response.matched_count == 0:
