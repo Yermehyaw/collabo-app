@@ -12,7 +12,7 @@ from fastapi import (
     HTTPException, 
     status
 )
-from services.auth_service import AuthService
+from services.auth_service import AuthServices
 from backend.app.models.users import (
     UserSignup,
     UserLogin,
@@ -21,7 +21,7 @@ from backend.app.models.users import (
 
 
 auth_router = APIRouter()
-auth_service = AuthService()
+auth_services = AuthServices()
 
 
 @auth_router.post("/signup", response_model=dict, status_code=status.HTTP_201_CREATED)
@@ -37,7 +37,7 @@ async def signup(user: UserSignup):
 
     """
     try:
-        user = await auth_service.create_user(user)
+        user = await auth_services.create_user(user)
         success = {"message": "User registered successfully", "user": user.user_id}
         return success
     except ValueError:
@@ -56,7 +56,7 @@ async def login(user: UserLogin):
         - Token: access token
 
     """
-    token = await auth_service.authenticate_user(user.email, user.password)
+    token = await auth_services.authenticate_user(user.email, user.password)
     if not token:
         failure = {"error": "Invalid email or password", "code": "UNAUTHORIZED"}
         raise HTTPException(status_code=401, detail=failure)
