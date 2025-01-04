@@ -5,7 +5,6 @@ MODULES:
     - fastapi: APIRouter, Depends, HTTPException
     - services.user_service: UserService
     - models.user: User, UserResponse
-    - utils.auth.password_utils: verify_password
     - utils.auth.jwt_handler: verify_access_token
 
 FUTURE IMPROVEMENTS:
@@ -18,16 +17,15 @@ from fastapi import (
     APIRouter, Depends,
     HTTPException
 )
-from backend.app.services.user_services import UserService
-from backend.app.models.users import (
+from app.services.user_services import UserServices
+from app.models.users import (
     UserUpdate, UserResponse
 )
-from utils.auth.password_utils import verify_password
 from utils.auth.jwt_handler import verify_access_token
 
 
 user_router = APIRouter()
-user_service = UserService()
+user_services = UserServices()
 
 
 @user_router.get("/profile/{user_id}", response_model=UserResponse)
@@ -43,7 +41,7 @@ async def get_user_profile(user_id: str, token: str = Depends(verify_access_toke
         - UserResponse: user object
 
     """
-    user = await user_service.get_user_by_id(user_id)
+    user = await user_services.get_user_by_id(user_id)
     if not user:
         failure = {"error": "User not found", "code": "NOT_FOUND"}
         raise HTTPException(status_code=404, detail=failure)
@@ -68,7 +66,7 @@ async def update_user_profile(user_id: str, user: UserUpdate, token: str = Depen
         failure = {"error": "Permission denied", "code": "PERMISSION_DENIED"}
         raise HTTPException(status_code=403, detail=failure)
 
-    fields_updated = await user_service.update_user(user_id, user)
+    fields_updated = await user_services.update_user(user_id, user)
 
     if fields_updated is None:  # user_id not found
         failure = {"error": "User not found", "code": "NOT_FOUND"}
