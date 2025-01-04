@@ -8,6 +8,7 @@ MODULES:
 from fastapi import FastAPI
 from routes.auth_routes import auth_router
 from routes.user_routes import user_router
+"""
 from routes.project_routes import project_router
 from routes.friend_routes import friend_router
 from routes.application_routes import application_router
@@ -16,7 +17,7 @@ from routes.search_routes import search_router
 from routes.suggestion_routes import suggestion_router
 from routes.message_routes import message_router
 from routes.message_routes import conversation_router
-
+"""
 # Initialize the FastAPI app
 app = FastAPI()
 
