@@ -117,7 +117,6 @@ class UserCreate(BaseModel):
     timezone: Optional[str] = 'UTC'
     model_config = ConfigDict(
         populate_by_name=True,  # permit the id alias of user_id to be used e.g when inserting into mongodb
-        arbitrary_types_allowed=True,
         # Example of expected format with the min req attr in the data supposed to utilize this model
         json_scheme_extra={
             "example": {
@@ -225,7 +224,7 @@ class UserUpdate(BaseModel):
     location: Optional[str] = None
     timezone: Optional[str] = 'UTC'
     model_config = ConfigDict(
-        arbitrary_types_allowed=True,
+        # arbitrary_types_allowed=True,
         json_encoders={ObjectId: str},
         # Example of expected format
         json_scheme_extra={
