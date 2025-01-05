@@ -6,7 +6,7 @@ MODULES:
     - typing: List, Optional
     - datetime: datetime method
     - models.project: project models
-    - services.user: user manipulation mthds
+    - services.user_services: user manipulation mthds
     - utils.auth.jwt_handler: verify_access_token
     - db: get_collection, get collections from db client
     - uuid: uuid4 method
@@ -17,16 +17,16 @@ from typing import (
     Optional,
 )
 from datetime import datetime
-from backend.app.models.projects import (
+from models.projects import (
     ProjectCreate, ProjectUpdate, ProjectResponse
 )
-from services.user import UserService
+from services.user_services import UserServices
 from utils.auth.jwt_handler import verify_access_token
 from db import get_collection
 from uuid import uuid4
 
 
-user_service = UserService()
+user_services = UserServices()
 
 
 class ProjectServices:
@@ -71,7 +71,7 @@ class ProjectServices:
         
 
         # insert new project into the projects attr of its creator
-        user = await user_service.get_user_by_id(project_data["created_by"])
+        user = await user_services.get_user_by_id(project_data["created_by"])
         if not user:  # Faulty user_id was passed in the dict used to create a project
             return None
         user_data = user.dict()  # dont use alias
@@ -79,7 +79,7 @@ class ProjectServices:
 
         # update the user object in the db
         project_data["project_id"] = project_data.pop("_id")  # replace alias by original name
-        user_service.update_user(user_data["user_id"], user_data)  # the sub key of token holds the user_id
+        user_services.update_user(user_data["user_id"], user_data)  # the sub key of token holds the user_id
 
         # return new project id
         return new_id if str(insertion_id) == new_id else None # insertion_id should be the same as new_id, just me playing around ;)
