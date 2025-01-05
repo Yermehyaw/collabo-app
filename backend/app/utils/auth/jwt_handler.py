@@ -55,5 +55,5 @@ def verify_access_token(token: str) -> Union[dict, None]:
     try:
         payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])  # decode the token
         return payload
-    except jwt.pyJWTError:  # catch any jwt error
+    except jwt.PyJWTError:  # catch any jwt error
         return
