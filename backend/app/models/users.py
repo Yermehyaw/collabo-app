@@ -37,6 +37,7 @@ class UserSignup(BaseModel):
     name: str
     email: EmailStr
     password: str = Field(..., min_length=8)
+    model_config = ConfigDict(extra="forbid")
 
 
 # USER LOGIN
@@ -52,6 +53,7 @@ class UserLogin(BaseModel):
     """
     email: EmailStr
     password: str = Field(..., min_length=8)
+    model_config = ConfigDict(extra="forbid")
 
 
 # JWT Token RESPONSE
@@ -65,7 +67,8 @@ class Token(BaseModel):
 
     """
     access_token: str
-    token_type: str = 'bearer' 
+    token_type: str = 'bearer'
+    model_config = ConfigDict(extra="forbid")
 
 
 # DEFINTION OF A USER: USED FOR USER CREATION
@@ -117,6 +120,7 @@ class UserCreate(BaseModel):
     timezone: Optional[str] = 'UTC'
     model_config = ConfigDict(
         populate_by_name=True,  # permit the id alias of user_id to be used e.g when inserting into mongodb
+        extra="forbid",
         # Example of expected format with the min req attr in the data supposed to utilize this model
         json_scheme_extra={
             "example": {
@@ -170,6 +174,7 @@ class UserResponse(BaseModel):
     location: Optional[str]
     timezone: Optional[str]
     model_config = ConfigDict(
+        extra="forbid",
         # Example of expected model format
         json_scheme_extra={
             "example": {
@@ -225,7 +230,8 @@ class UserUpdate(BaseModel):
     timezone: Optional[str] = 'UTC'
     model_config = ConfigDict(
         # arbitrary_types_allowed=True,
-        json_encoders={ObjectId: str},
+        # json_encoders={ObjectId: str},
+        extra="forbid",
         # Example of expected format
         json_scheme_extra={
             "example": {
