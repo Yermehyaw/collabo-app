@@ -67,7 +67,7 @@ class ProjectCreate(BaseModel):
     location: Optional[str] = None
     model_config = ConfigDict(
         populate_by_name=True,  # permit the original name of a field to be used in creating instances of the model rather than its alias
-        arbitrary_types_allowed=True,  # permit the use of non-native types in model
+        extra="forbid",
         # Example of expected format with the min req attr in the data supposed to utilize this model
         json_scheme_extra={
             "example": {
@@ -98,14 +98,15 @@ class ProjectUpdate(BaseModel):
     """
     title: Optional[str] = Field(None, min_length=4, max_length=100)
     description: Optional[str] = Field(None, max_length=1000)
-    updated_at: str = datetime.now().isoformat()  # potential security issue, user shouldnt be able to manipulate update time
+    # updated_at: str = datetime.now().isoformat()  # potential security issue, user shouldnt be able to manipulate update time
     deadline: Optional[str] = None
     type: Optional[str] = None
     skills_required: List[str] = []  # skills required by any intending collaborator/collabee
     collaborators: List[str] = []
     location: Optional[str] = None
     model_config = ConfigDict(
-        arbitrary_types_allowed=True,
+        # arbitrary_types_allowed=True,
+        extra="forbid",
         json_encoders={ObjectId: str},  # permit the use of ObjectId type in model but serialize/deserialize it as a str
         # Example of expected format
         json_scheme_extra={
@@ -152,7 +153,8 @@ class ProjectResponse(BaseModel):
     project_tools: Optional[List[str]]
     location: Optional[str]
     model_config = ConfigDict(
-        # Example of expected format
+        # Example of expected format,
+        extra="forbid",
         json_scheme_extra={
             "example": {
                 "project_id": "project1",

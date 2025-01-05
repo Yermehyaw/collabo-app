@@ -214,7 +214,7 @@ class UserUpdate(BaseModel):
     name: Optional[str] = Field(None, min_length=1, max_length=100)
     email: Optional[EmailStr] = None
     password: Optional[str] = Field(None, min_length=8)
-    updated_at: str = datetime.now().isoformat()
+    # updated_at: str = datetime.now().isoformat()
     profile_pic: Optional[bytes] = None
     bio: Optional[str] = None
     skills: Optional[list] = []
