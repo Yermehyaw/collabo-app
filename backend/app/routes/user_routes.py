@@ -73,7 +73,7 @@ async def update_user_profile(user_id: str, user: UserUpdate, token: str = Depen
     NOTE:
     There is a "bug" in this implementation 🙃, the db storing users gets updated inspite no new data was passed innthe request.
     For example, a user could pass the same data twice or even the original data stored in the user and still get a update successful message. 
-    So . . . .  🌚 whomever is readjng this, Its yr turn to ensyre that only requests with a change in data gets processsed or a diff message is sent like, "No data entries updated". Be of good faith soldier  😂❤️
+    So . . . .  🌚 whomever is reading this, Its yr turn to ensyre that only requests with a change in data gets processsed and a diff message e.g "No data entries updated" when this happens. Be of good faith soldier  😂❤️
 
     """
     token = verify_access_token(token)  # Decoded token
