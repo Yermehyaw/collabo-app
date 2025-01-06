@@ -67,7 +67,7 @@ class ProjectServices:
 
         # insert project into db
         insertion = await collection.insert_one(project_data)
-        insertion_id = insertion.insertion_id
+        insertion_id = insertion.inserted_id
 
         # Add the newly created project to user obj attrs
         user.projects.append(insertion_id)  # insertion_id is the same as the project_id
