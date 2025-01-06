@@ -3,6 +3,7 @@ Routes for project endpoints
 
 MODULES:
     - fastapi: APIRouter, Depends, HTTPException, status
+    - fastapi.security: OAuth2PasswordBearer
     - services.project_services: ProjectServices
     - models.project: Project, ProjectUpdate, ProjectResponse
     - utils.auth.jwt_handler: verify_access_token
@@ -17,6 +18,7 @@ from fastapi import (
     APIRouter, HTTPException,
     status, Depends
 )
+from fastapi.security import OAuth2PasswordBearer
 from services.project_services import ProjectServices
 from models.projects import (
     ProjectCreate, ProjectResponse, ProjectUpdate
@@ -26,10 +28,11 @@ from utils.auth.jwt_handler import verify_access_token
 
 project_router = APIRouter()
 project_services = ProjectServices()
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 @project_router.post("/create", response_model=ProjectResponse, status_code=status.HTTP_201_CREATED)
-async def create_project(project: ProjectCreate, token: str = Depends(verify_access_token)):
+async def create_project(project: ProjectCreate, token: str = Depends(oauth2_scheme)):
     """
     Create a new project
 
@@ -41,7 +44,13 @@ async def create_project(project: ProjectCreate, token: str = Depends(verify_acc
         - message: JSON dict, response message or error
 
     """
-    project_id = await project_services.create_project(project)
+    token = verify_access_token(token)  # Decode and further verify token
+    if not token:
+        failure = {"error": "Invalid token", "code": "UNAUTHORIZED"}
+        raise HTTPException(status_code=401, detail=failure)
+
+    user_id = token.get("sub")  # Get user_id from token
+    project_id = await project_services.create_project(project, user_id)
 
     if not project_id:
         failure = {"error": "Project creation failed", "code": "BAD_REQUEST"}
