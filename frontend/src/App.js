@@ -13,6 +13,7 @@ import "./components/Navbar/Navbar.css";
 import "./components/Navbar/Sidebar.css";
 import Layout from "./components/Layout/Layout";
 import Profile from "./pages/profile/Profile";
+import ProjectPage from "./pages/projectDetails/ProjectDetails";
 
 const App = () => {
   const isAuthenticated = !!localStorage.getItem("token"); // Check if user is authenticated
@@ -24,9 +25,10 @@ const App = () => {
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} /> {/* Home page */}
           <Route
-            path="/Profile"
+            path="/profile"
             element={isAuthenticated ? <Profile /> : <Navigate to="/Login" />}
           />{" "}
+          <Route path="/ProjectDetails" element={<ProjectPage />} />{" "}
           {/* Add more routes here for other pages */}
         </Route>
         <Route path="/login" element={<Login />} />
