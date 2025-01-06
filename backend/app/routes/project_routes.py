@@ -17,8 +17,8 @@ from fastapi import (
     APIRouter, HTTPException,
     status, Depends
 )
-from backend.app.services.project_services import ProjectServices
-from backend.app.models.projects import (
+from services.project_services import ProjectServices
+from models.projects import (
     ProjectCreate, ProjectResponse, ProjectUpdate
 )
 from utils.auth.jwt_handler import verify_access_token
@@ -34,7 +34,7 @@ async def create_project(project: ProjectCreate, token: str = Depends(verify_acc
     Create a new project
 
     ATTRIBUTES:
-        - project: Project, model request
+        - project: ProjectCreate, model request
         - token: str, jwt auth token
 
     RETURNS:
