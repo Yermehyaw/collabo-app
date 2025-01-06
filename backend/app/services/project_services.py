@@ -63,13 +63,10 @@ class ProjectServices:
             - project_id: id of newly created and stored project object
 
         """
-        # This was commebyed to reduce db calls but will be useful for improved security
-        """
         # Assert the user_id is valid
         user = await user_services.get_user_by_id(user_id)
         if not user:  # Faulty user_id was passed in the dict used to create a project
             return None
-        """
 
         # convert project to a dict ready for insertion
         project_data = project.model_dump(by_alias=True)
