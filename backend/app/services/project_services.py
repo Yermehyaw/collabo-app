@@ -77,8 +77,8 @@ class ProjectServices:
         insertion = await self.projects_collection().insert_one(project_data)
         insertion_id = insertion.insertion_id
 
-        # Add the newly created prphect to user
-        user.projects = insertion_id  # Same as project_id
+        # Add the newly created project to user obj attrs
+        user.projects.append(insertion_id)  # insertion_id is the same as the project_id
         user_services.update_user(user_id, user)
 
         # return new project id
