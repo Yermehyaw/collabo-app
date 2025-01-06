@@ -118,28 +118,34 @@ async def update_project(project_id: str, project: ProjectUpdate, token: str = D
     return success
 
 @project_router.delete("/{project_id}", response_model=dict)
-async def delete_project(project_id: str, token: str = Depends(verify_access_token)):
+async def delete_project(project_id: str, token: str = Depends(oauth2_scheme)):
     """
     Delete a project
 
     ATTRIBUTES:
         - project_id: str, unique id of project
+        - token: str, jwt auth token
     
     RETURNS:
         - message: JSON dict, response message or error
     
     """
+    token = verify_access_token(token)  # Decode and further verify token
+    if not token:
+        failure = {"error": "Invalid token", "code": "UNAUTHORIZED"}
+        raise HTTPException(status_code=401, detail=failure)
+
     deleted_project = await project_services.delete_project(project_id)
 
     if not deleted_project:
-        failure = {"error": "Project not found", "code": "BAD_REQUEST"}
+        failure = {"error": "Project not found", "code": "NOT_FOUND"}
         raise HTTPException(status_code=404, detail=failure)
     
     success = {"message": "Project deleted successfully"}
     return success
 
 @project_router.get("/{user_id}", response_model=list)
-async def get_all_projects_by_user_id(user_id: str, token: str = Depends(verify_access_token)):
+async def get_all_projects_by_user_id(user_id: str, token: str = Depends(oauth2_scheme)):
     """
     Get all projects by a user
 
@@ -151,6 +157,11 @@ async def get_all_projects_by_user_id(user_id: str, token: str = Depends(verify_
         - projects: List[ProjectResponse], list of project objects
     
     """
+    token = verify_access_token(token)  # Decode and further verify token
+    if not token:
+        failure = {"error": "Invalid token", "code": "UNAUTHORIZED"}
+        raise HTTPException(status_code=401, detail=failure)
+
     projects = await project_services.get_all_projects_by_user_id(user_id)
 
     if not projects:
