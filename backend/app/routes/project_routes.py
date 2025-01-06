@@ -61,17 +61,23 @@ async def create_project(project: ProjectCreate, token: str = Depends(oauth2_sch
 
 
 @project_router.get("/{project_id}", response_model=ProjectResponse)
-async def get_project(project_id: str):
+async def get_project(project_id: str, token: str = Depends(oauth2_scheme)):
     """
     Get a projects by its project_id
 
     ATTRIBUTES:
         - project_id: str, unique id of project
+        - token: str, jwt auth token
     
     RETURNS:
         - project: ProjectResponse, project object
     
     """
+    token = verify_access_token(token)  # Decode and further verify token
+    if not token:
+        failure = {"error": "Invalid token", "code": "UNAUTHORIZED"}
+        raise HTTPException(status_code=401, detail=failure)
+    
     project = await project_services.get_project_by_id(project_id)
 
     if not project:
@@ -81,18 +87,24 @@ async def get_project(project_id: str):
     return project
 
 @project_router.put("/{project_id}", response_model=dict)
-async def update_project(project_id: str, project: ProjectUpdate, token: str = Depends(verify_access_token)):
+async def update_project(project_id: str, project: ProjectUpdate, token: str = Depends(oauth2_scheme)):
     """
     Update a project
 
     ATTRIBUTES:
         - project_id: str, unique id of project
         - project: ProjectUpdate, model request
+        - token: str, jwt auth token
     
     RETURNS:
         - message: JSON dict, response message or error
     
     """
+    token = verify_access_token(token)  # Decode and further verify token
+    if not token:
+        failure = {"error": "Invalid token", "code": "UNAUTHORIZED"}
+        raise HTTPException(status_code=401, detail=failure)
+
     fields_updated = await project_services.update_project(project_id, project)
 
     if fields_updated is None:
