@@ -67,7 +67,7 @@ class ProjectServices:
         project_data['_id'] = 'project' + str(uuid4())  # Specify what I want the insertion and return id to be
 
         # insert project into db
-        insertion_id = await self.projects_collection().insert_one(project_data).inserted_id
+        insertion = await self.projects_collection().insert_one(project_data)
         
 
         # insert new project into the projects attr of its creator
@@ -82,7 +82,7 @@ class ProjectServices:
         user_services.update_user(user_data["user_id"], user_data)  # the sub key of token holds the user_id
 
         # return new project id
-        return new_id if str(insertion_id) == new_id else None # insertion_id should be the same as new_id, just me playing around ;)
+        return str(insertion.insertion_id)
     
     async def get_project_by_id(self, project_id: str) -> Optional[ProjectResponse]:
         """
