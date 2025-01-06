@@ -63,6 +63,7 @@ class ProjectServices:
             - project_id: id of newly created and stored project object
 
         """
+        # This was commebyed to reduce db calls but will be useful for improved security
         """
         # Assert the user_id is valid
         user = await user_services.get_user_by_id(user_id)
@@ -77,18 +78,14 @@ class ProjectServices:
 
         # insert project into db
         insertion = await self.projects_collection().insert_one(project_data)
-        
+        insertion_id = insertion.insertion_id
 
-        
-        user_data = user.dict()  # dont use alias
-        user_data["projects"] = project_data
-
-        # update the user object in the db
-        project_data["project_id"] = project_data.pop("_id")  # replace alias by original name
-        user_services.update_user(user_data["user_id"], user_data)  # the sub key of token holds the user_id
+        # Add the newly created prphect to user
+        user.projects = insertion_id  # Same as project_id
+        user_services.update_user(user_id, user)
 
         # return new project id
-        return str(insertion.insertion_id)
+        return insertion_id
     
     async def get_project_by_id(self, project_id: str) -> Optional[ProjectResponse]:
         """
