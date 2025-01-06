@@ -98,7 +98,7 @@ class ProjectUpdate(BaseModel):
     """
     title: Optional[str] = Field(None, min_length=4, max_length=100)
     description: Optional[str] = Field(None, max_length=1000)
-    # updated_at: str = datetime.now().isoformat()  # potential security issue, user shouldnt be able to manipulate update time
+    updated_at: Optional[str] = datetime.now().isoformat()  # potential security issue, user shouldnt be able to manipulate update time
     deadline: Optional[str] = None
     type: Optional[str] = None
     skills_required: List[str] = []  # skills required by any intending collaborator/collabee
