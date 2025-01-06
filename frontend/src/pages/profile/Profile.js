@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Profile.css";
+import { fetch } from "whatwg-fetch";
+import chatApp from "../../components/chatApp/chat";
 
 const Profile = () => {
   const [userData, setUserData] = useState(null);
@@ -89,6 +91,7 @@ const Profile = () => {
         <button className="btn btn-primary">Connect</button>
         <button className="btn btn-secondary">Message</button>
       </div>
+      <chatApp />
     </div>
   );
 };
