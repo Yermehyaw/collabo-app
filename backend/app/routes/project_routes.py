@@ -98,7 +98,10 @@ async def update_project(project_id: str, project: ProjectUpdate, token: str = D
     
     RETURNS:
         - message: JSON dict, response message or error
-    
+
+    NOTE:
+        - Irrespective of whether or not the fields in the project are actually updated, the updated_at field is always updated and a success message is returned
+
     """
     token = verify_access_token(token)  # Decode and further verify token
     if not token:
@@ -111,11 +114,7 @@ async def update_project(project_id: str, project: ProjectUpdate, token: str = D
         failure = {"error": "Project not found", "code": "BAD_REQUEST"}
         raise HTTPException(status_code=404, detail=failure)
     
-    if fields_updated == 0:
-        success = {"message": "No data entries updated/created"}
-    else:
-        success = {"message": "Project updated successfully"}
-    
+    success = {"message": "Project updated successfully"}
     return success
 
 @project_router.delete("/{project_id}", response_model=dict)
