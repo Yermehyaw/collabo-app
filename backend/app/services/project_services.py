@@ -131,16 +131,28 @@ class ProjectServices:
             - int: no of fields updated
 
         """
-        project.updated_at = datetime.now().isoformat()
+        update_data = project.model_dump(exclude_unset=True)  # exclude fields which are None
+
+        list_fields = {}
+        other_fields = {}
+        for key, value in update_data.items():
+            if isinstance(key, list):
+                list_fields.update({key: value})
+            else:  # key is a string, int or any other type
+                other_fields.update({key: value})
+
         update_response = await self.projects_collection().update_one(
             {"_id": project_id},
-            {"$set": project.model_dump()}
+            {
+                "$addToSet": list_fields,
+                "$set": other_fields
+            }
         )
 
-        if not update_response.matched_count:
-            return None # a document with req project_id was not found, 404
+        if update_response.matched_count == 0:
+            return None # a document with req project_id was not found
 
-        return update_response.modified_count  # no of fields changed in the modified document, 200
+        return update_response.modified_count  # no of fields changed in the modified document
 
     async def delete_project(self, project_id: str) -> Optional[int]:
         """
