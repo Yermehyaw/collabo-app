@@ -31,7 +31,7 @@ project_services = ProjectServices()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
-@project_router.post("/create", response_model=ProjectResponse, status_code=status.HTTP_201_CREATED)
+@project_router.post("/create", response_model=dict, status_code=status.HTTP_201_CREATED)
 async def create_project(project: ProjectCreate, token: str = Depends(oauth2_scheme)):
     """
     Create a new project
