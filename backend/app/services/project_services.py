@@ -41,16 +41,6 @@ class ProjectServices:
         """Object initializing method"""
         self.collection_name = 'projects'
 
-    async def projects_collection(self):
-        """
-        Get the project collection
-
-        RETURNS:
-            - collection: collection object
-
-        """
-        return await get_collection(self.collection_name)
-
     async def create_project(self, project: ProjectCreate, user_id: str) -> str:
         """
         Create a new project
@@ -63,6 +53,8 @@ class ProjectServices:
             - project_id: id of newly created and stored project object
 
         """
+        collection = await get_collection(self.collection_name)
+        
         # Assert the user_id is valid
         user = await user_services.get_user_by_id(user_id)
         if not user:  # Faulty user_id was passed in the dict used to create a project
@@ -74,7 +66,7 @@ class ProjectServices:
         project_data["created_by"] = user_id
 
         # insert project into db
-        insertion = await self.projects_collection().insert_one(project_data)
+        insertion = await collection.insert_one(project_data)
         insertion_id = insertion.insertion_id
 
         # Add the newly created project to user obj attrs
@@ -95,7 +87,9 @@ class ProjectServices:
             - Project: coresponding project object
         
         """
-        project = await self.projects_collection().find_one({"_id": project_id})
+        collection = await get_collection(self.collection_name)
+
+        project = await collection.find_one({"_id": project_id})
 
         if project:
             return ProjectResponse(**project)
@@ -113,8 +107,9 @@ class ProjectServices:
         RETURNS:
             - List[Project]: list of project objects
         """
+        collection = await get_collection(self.collection_name)
 
-        projects = await self.projects_collection().find({"created_by": user_id}).to_list(length=None)
+        projects = await collection.find({"created_by": user_id}).to_list(length=None)
 
         return [ProjectResponse(**project) for project in projects]
 
@@ -130,6 +125,8 @@ class ProjectServices:
             - int: no of fields updated
 
         """
+        collection = await get_collection(self.collection_name)
+
         update_data = project.model_dump(exclude_unset=True)  # exclude fields which are None
 
         list_fields = {}
@@ -140,7 +137,7 @@ class ProjectServices:
             else:  # key is a string, int or any other type
                 other_fields.update({key: value})
 
-        update_response = await self.projects_collection().update_one(
+        update_response = await collection.update_one(
             {"_id": project_id},
             {
                 "$addToSet": list_fields,
@@ -164,7 +161,9 @@ class ProjectServices:
             - int: no of projrct doc deleted
         
         """
-        delete_response = await self.projects_collection().delete_one({"_id": project_id})
+        collection = await get_collection(self.collection_name)
+
+        delete_response = await collection.delete_one({"_id": project_id})
 
         return delete_response.deleted_count if delete_response.deleted_count == 1 else None  # every project has a unique id, so only one project should be deleted
     
@@ -179,6 +178,8 @@ class ProjectServices:
             - List[Project]: list of project objects
 
         """
+        collection = await get_collection(self.collection_name)
+
         # create a custom query from the filters dict received
         query = {}
         for key, value in filters.items():
@@ -232,7 +233,7 @@ class ProjectServices:
 
             # Search by invitations and applications can be implemented in the future
 
-        projects = await self.projects_collection().find(query).to_list(length=None)
+        projects = await collection.find(query).to_list(length=None)
 
         return [ProjectResponse(**project) for project in projects]
 
@@ -247,6 +248,8 @@ class ProjectServices:
             - list: list of project objects
 
         """
+        collection = await get_collection(self.collection_name)
+
         # create a custom query from the filters dict received
         query = {}
         for key, value in filters.items():
@@ -294,5 +297,5 @@ class ProjectServices:
                 else:
                     query[key] = {"$in": value}
 
-        projects = await self.projects_collection().find(query).to_list(length=None)
+        projects = await collection.find(query).to_list(length=None)
         return [ProjectResponse(**prj) for prj in projects]
