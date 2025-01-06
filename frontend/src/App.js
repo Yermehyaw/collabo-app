@@ -1,30 +1,36 @@
 import React from "react";
-import Navbar from "./components/Navbar/Navbar";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
 import Home from "./pages/home/Home";
-import Login from "./pages/login/Login";
+import Login from "./pages/Login/Login";
 import "./pages/home/Home.css";
 import "./assets/styles/global.css";
 import "./components/Navbar/Navbar.css";
 import "./components/Navbar/Sidebar.css";
-import Footer from "./components/Footer/Footer";
-
+import Layout from "./components/Layout/Layout";
 import Profile from "./pages/profile/Profile";
-import Features from "./components/Features/features";
 
 const App = () => {
+  const isAuthenticated = !!localStorage.getItem("token"); // Check if user is authenticated
+
   return (
     <Router>
-      <Navbar />
-      <div className="container mt-4">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/profile" element={<Profile />} />
-        </Routes>
-      </div>
-      <Features />
-      <Footer />
+      <Routes>
+        {/* All routes inside Layout will have the Navbar and Footer */}
+        <Route element={<Layout />}>
+          <Route path="/" element={<Home />} /> {/* Home page */}
+          <Route
+            path="/Profile"
+            element={isAuthenticated ? <Profile /> : <Navigate to="/Login" />}
+          />{" "}
+          {/* Add more routes here for other pages */}
+        </Route>
+        <Route path="/login" element={<Login />} />
+      </Routes>
     </Router>
   );
 };

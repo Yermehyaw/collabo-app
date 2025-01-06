@@ -6,30 +6,79 @@ import {
   FaGraduationCap,
   FaHandshake,
   FaChartLine,
-} from "react-icons/fa"; // Icons
+  FaLightbulb,
+} from "react-icons/fa"; // Icons for feature cards
 import "./features.css";
 
 const Features = () => {
-  const people = [
+  const featureCards = [
     {
-      name: "Akor Jerimiah",
-      profession: "Project Manager",
-      image: "https://via.placeholder.com/150", // Placeholder for user image
+      icon: <FaUsers className="icon text-primary" />,
+      title: "Connect with Peers",
+      description:
+        "Find like-minded individuals to collaborate with and grow together.",
     },
     {
-      name: "Eyakeno Umana",
-      profession: "Backend Developer",
-      image: "https://via.placeholder.com/150", // Placeholder for user image
+      icon: <FaTools className="icon text-success" />,
+      title: "Collaborative Tools",
+      description:
+        "Use our modern tools to manage projects, communicate, and succeed.",
     },
     {
-      name: "Asmiyen",
-      profession: "UX/UI Designer",
-      image: "https://via.placeholder.com/150", // Placeholder for user image
+      icon: <FaGraduationCap className="icon text-warning" />,
+      title: "Professional Growth",
+      description:
+        "Take your skills to the next level by learning and sharing with others.",
     },
     {
-      name: "Whilz Abel",
-      profession: "Frontend Developer",
-      image: "https://via.placeholder.com/150", // Placeholder for user image
+      icon: <FaHandshake className="icon text-info" />,
+      title: "Trusted Partnerships",
+      description:
+        "Build strong, lasting relationships through trust and collaboration.",
+    },
+    {
+      icon: <FaChartLine className="icon text-danger" />,
+      title: "Result-Oriented Solutions",
+      description:
+        "Achieve measurable success through efficient teamwork and tools.",
+    },
+    {
+      icon: <FaLightbulb className="icon text-secondary" />,
+      title: "Innovative Ideas",
+      description:
+        "Bring your creativity to life by sharing ideas and collaborating with others.",
+    },
+  ];
+
+  const peopleCards = [
+    {
+      name: "John Doe",
+      title: "Team Leader",
+      image: "https://via.placeholder.com/150",
+      quote:
+        "Collabo transformed the way I work. It's the best platform for collaboration and teamwork!",
+    },
+    {
+      name: "Jane Smith",
+      title: "Product Manager",
+      image: "https://via.placeholder.com/150",
+      quote:
+        "With Collabo, I was able to find amazing collaborators and build something truly special.",
+    },
+    {
+      name: "Samuel Green",
+      title: "Creative Designer",
+      image: "https://via.placeholder.com/150",
+      quote:
+        "The tools and connections I've made on Collabo have been nothing short of amazing!",
+    },
+
+    {
+      name: "Emily White",
+      title: "Marketing Specialist",
+      image: "https://via.placeholder.com/150",
+      quote:
+        "Collabo has helped me grow my skills, connect with others, and achieve great results!",
     },
   ];
 
@@ -41,107 +90,50 @@ const Features = () => {
           <h2 className="fw-bold">Why Choose Collabo?</h2>
           <p className="text">
             Collabo is your ultimate platform for connecting with like-minded
-            individuals. Whether you're a professional seeking to expand your
-            network, a creative mind looking for inspiration, or simply someone
-            eager to meet new friends, Collabo makes it happen. Collaborate
-            seamlessly on projects, share innovative ideas, and grow your skills
-            with others who share your passions. Empower your creativity, build
-            lasting connections, and discover endless possibilities with
-            Collabo. Join today and experience a world where collaboration meets
-            innovation!
+            individuals. Collaborate seamlessly on projects, share innovative
+            ideas, and grow your skills with others who share your passions.
+            Empower your creativity, build lasting connections, and discover
+            endless possibilities with Collabo!
           </p>
         </div>
 
         {/* Features Grid */}
-        <div className="row mb-5">
-          <div className="col-md-4">
-            <div className="feature-card card shadow-sm border-0 p-4 text-center">
-              <div className="icon mb-3 text-primary">
-                <FaUsers />
-              </div>
-              <h5 className="fw-bold">Connect with Peers</h5>
-              <p className="text-muted">
-                Find like-minded individuals to collaborate with and grow
-                together.
-              </p>
-            </div>
-          </div>
-          <div className="col-md-4">
-            <div className="feature-card card shadow-sm border-0 p-4 text-center">
-              <div className="icon mb-3 text-success">
-                <FaTools />
-              </div>
-              <h5 className="fw-bold">Collaborative Tools</h5>
-              <p className="text-muted">
-                Use our modern tools to manage projects, communicate, and
-                succeed.
-              </p>
-            </div>
-          </div>
-          <div className="col-md-4">
-            <div className="feature-card card shadow-sm border-0 p-4 text-center">
-              <div className="icon mb-3 text-warning">
-                <FaGraduationCap />
-              </div>
-              <h5 className="fw-bold">Professional Growth</h5>
-              <p className="text-muted">
-                Take your skills to the next level by learning and sharing with
-                others.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Services Section */}
-        <div className="row mb-5">
-          <div className="col-md-6">
-            <div className="service-card card shadow-sm border-0 p-4 text-center">
-              <div className="icon mb-3 text-info">
-                <FaHandshake />
-              </div>
-              <h5 className="fw-bold">Trusted Partnerships</h5>
-              <p className="text-muted">
-                Build strong, lasting relationships through trust and
-                collaboration.
-              </p>
-            </div>
-          </div>
-          <div className="col-md-6">
-            <div className="service-card card shadow-sm border-0 p-4 text-center">
-              <div className="icon mb-3 text-danger">
-                <FaChartLine />
-              </div>
-              <h5 className="fw-bold">Result-Oriented Solutions</h5>
-              <p className="text-muted">
-                Achieve measurable success through efficient teamwork and tools.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* People Cards */}
-        <div className="text-center mb-4">
-          <h3 className="fw-bold">Meet Our Community</h3>
-          <p className="text-muted">
-            Join a growing network of amazing people.
-          </p>
-        </div>
-        <div className="row justify-content-center">
-          {people.map((person, index) => (
-            <div className="col-md-4 col-sm-6 mb-4" key={index}>
-              <div className="card shadow-sm border-0 text-center p-4">
-                <img
-                  src={person.image}
-                  alt={person.name}
-                  className="rounded-circle mx-auto mb-3"
-                  width="100"
-                  height="100"
-                />
-                <h5 className="fw-bold">{person.name}</h5>
-                <p className="text-muted">{person.profession}</p>
+        <div className="row g-4">
+          {featureCards.map((card, index) => (
+            <div className="col-lg-4 col-md-6" key={index}>
+              <div className="feature-card card shadow-sm border-0 p-4 text-center">
+                <div className="mb-3">{card.icon}</div>
+                <h5 className="fw-bold">{card.title}</h5>
+                <p className="text-muted">{card.description}</p>
               </div>
             </div>
           ))}
+        </div>
+
+        {/* People Section */}
+        <div className="people-section text-center">
+          <h3 className="fw-bold mb-4">What People Are Saying</h3>
+          <div className="row g-1">
+            {peopleCards.map((person, index) => (
+              <div className="col-lg-4 col-md-4" key={index}>
+                <div className="people-card card shadow-sm border-0 p-4">
+                  <img
+                    src={person.image}
+                    alt={person.name}
+                    className="rounded-circle mb-3"
+                    style={{
+                      width: "80px",
+                      height: "80px",
+                      objectFit: "cover",
+                    }}
+                  />
+                  <h5 className="fw-bold">{person.name}</h5>
+                  <p className="text-muted">{person.title}</p>
+                  <p className="quote">"{person.quote}"</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

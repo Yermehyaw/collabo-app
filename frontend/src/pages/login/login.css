@@ -1,0 +1,40 @@
+.auth-container {
+  background-color: #f9f9f9;
+}
+
+.auth-card {
+  background-color: white;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  justify-self: center;
+}
+
+h3 {
+  font-weight: 600;
+  color: #333;
+}
+
+button {
+  border-radius: 5px;
+}
+
+button.toggle-password-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+input.form-control {
+  border-radius: 5px;
+  box-shadow: none;
+}
+
+input.form-control:focus {
+  border-color: #007bff;
+}

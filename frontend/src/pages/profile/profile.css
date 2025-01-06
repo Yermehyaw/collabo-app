@@ -1,0 +1,53 @@
+.profile-container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+}
+
+.profile-cover {
+  background: linear-gradient(to right, #0052cc, #00aaff);
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.profile-avatar img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 5px solid white;
+  position: absolute;
+  bottom: -75px;
+}
+
+.profile-details {
+  text-align: center;
+  margin-top: 100px;
+}
+
+.profile-sections {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.profile-sections > div {
+  flex: 1;
+  padding: 10px;
+  background: #f8f9fa;
+  margin: 0 10px;
+  border-radius: 8px;
+}
+
+.profile-statistics {
+  display: flex;
+  justify-content: space-around;
+  margin: 20px 0;
+}
+
+.profile-actions {
+  text-align: center;
+  margin: 20px 0;
+}

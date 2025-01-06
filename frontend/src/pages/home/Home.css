@@ -13,7 +13,7 @@ body {
 }
 
 main {
-  display: flex;
+  display: block;
   margin: auto;
 }
 
@@ -25,7 +25,6 @@ main {
 
 /* Hero Section */
 #hero {
-  /* height: 100%; */
   width: 100%;
   background-image: url("boxbg.jpg");
   background-position: center;
@@ -68,7 +67,7 @@ main {
   /* justify-content: center; */
   float: left;
 
-  margin-top: 30%;
+  margin-top: 20%;
 }
 
 .btn {
@@ -119,7 +118,7 @@ main {
 
 #logo-name {
   color: bisque;
-  text-shadow: 0 0 10px #eb510f, 0 0 20px #ff6a00, 0 0 30px #ffd500;
+  text-shadow: 0 0 10px #eb510f, 0 0 20px #ff6a00, 0 0 30px #1d1904;
 
   font-size: 5rem;
   font-family: Verdana, Geneva, Tahoma, sans-serif;

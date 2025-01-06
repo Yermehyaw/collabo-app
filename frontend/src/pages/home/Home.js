@@ -3,6 +3,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import TypingEffect from "react-typing-effect"; // Import the typing effect component
 
 import "./Home.css";
+import { Link } from "react-router-dom";
+import Features from "../../components/Features/features";
 
 const Home = () => {
   return (
@@ -32,11 +34,15 @@ const Home = () => {
             />
           </h2>{" "}
           <div className="hero-buttons">
-            <button className="btn primary">Try Now</button>
-            <button className="btn secondary">Contact Us</button>
+            <Link to="/login">
+              <button className="btn primary">Get Started</button>
+            </Link>
+            <button className="btn secondary">Learn More</button>
           </div>
         </div>
       </section>
+
+      <Features />
     </main>
   );
 };
