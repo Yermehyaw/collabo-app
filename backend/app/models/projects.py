@@ -53,7 +53,7 @@ class ProjectCreate(BaseModel):
     project_id: Optional[str] = Field(None, alias='_id')
     title: str = Field(..., min_length=4, max_length=100)
     description: Optional[str] = Field(max_length=1000)
-    created_by: str
+    created_by: str = None
     created_at: str = datetime.now().isoformat()
 
     # Optional attr
