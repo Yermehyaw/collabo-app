@@ -51,29 +51,35 @@ class ProjectServices:
         """
         return await get_collection(self.collection_name)
 
-    async def create_project(self, project: ProjectCreate) -> str:
+    async def create_project(self, project: ProjectCreate, user_id: str) -> str:
         """
         Create a new project
 
         PARAMETERS:
-             - project: Project, project object
+             - project: Project, ProjectCreate object
+             - user_id: str, id of the user creating the project
 
         RETURNS:
             - project_id: id of newly created and stored project object
 
         """
+        """
+        # Assert the user_id is valid
+        user = await user_services.get_user_by_id(user_id)
+        if not user:  # Faulty user_id was passed in the dict used to create a project
+            return None
+        """
+
         # convert project to a dict ready for insertion
         project_data = project.model_dump(by_alias=True)
-        project_data['_id'] = 'project' + str(uuid4())  # Specify what I want the insertion and return id to be
+        project_data["_id"] = 'project' + str(uuid4())  # Specify what I want the insertion and return id to be
+        project_data["created_by"] = user_id
 
         # insert project into db
         insertion = await self.projects_collection().insert_one(project_data)
         
 
-        # insert new project into the projects attr of its creator
-        user = await user_services.get_user_by_id(project_data["created_by"])
-        if not user:  # Faulty user_id was passed in the dict used to create a project
-            return None
+        
         user_data = user.dict()  # dont use alias
         user_data["projects"] = project_data
 
