@@ -2,16 +2,10 @@
 User feed suggestions service
 
 MODULES:
-    - typing: List, Optional
-    - models.project: ProjectResponse
-    - models.user: UserResponse
     - services.project_services: ProjectServices
     - services.user_services: UserServices
 
 """
-from typing import List, Optional
-from models.projects import ProjectResponse
-from models.users import UserResponse
 from services.user_services import UserServices
 from services.project_services import ProjectServices
 
@@ -44,7 +38,7 @@ class SuggestionServices:
             - List[ProjectResponse]: list of project objects
         """
         # Get the user to whom the project suggestions are to be made
-        user = self.user_services.get_user_by_id(user_id)
+        user = await self.user_services.get_user_by_id(user_id)
         if not user:
             return []
         
@@ -55,7 +49,7 @@ class SuggestionServices:
         }
         
         # Get projects that match the user's skills, interests and location
-        projects = self.project_services.search_projects(filters)
+        projects = await self.project_services.search_projects(filters)
 
         return projects
 
@@ -71,7 +65,7 @@ class SuggestionServices:
         
         """
         # Get the user to whom the suggestions are to be made
-        user = self.user_services.get_user_by_id(user_id)
+        user = await self.user_services.get_user_by_id(user_id)
         if not user:
             return []
         
@@ -83,6 +77,6 @@ class SuggestionServices:
         }
         
         # Get users that match the user's skills, interests and location
-        users = self.user_services.search_users(filters)
+        users = await self.user_services.search_users(filters)
 
         return users
