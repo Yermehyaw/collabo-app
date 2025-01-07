@@ -156,7 +156,7 @@ class ProjectResponse(BaseModel):
     location: Optional[str]
     model_config = ConfigDict(
         # Example of expected format,
-        extra="forbid",
+        # extra="forbid",
         json_scheme_extra={
             "example": {
                 "project_id": "project1",
