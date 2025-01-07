@@ -135,6 +135,11 @@ class UserServices:
                 query[key] = value
 
         users = await collection.find(query).to_list(length=None)
+
+        for user in users:
+            user.pop("password")
+            user["user_id"] = user.pop("_id")
+
         return [UserResponse(**user) for user in users]
 
     async def submit_friend_request(self, receipient: str):
