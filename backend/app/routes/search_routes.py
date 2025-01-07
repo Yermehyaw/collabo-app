@@ -141,5 +141,5 @@ async def search_projects(
         if param:  # an empty list will return false
             query.update({param_key: param})
 
-    projects = await project_services.search_users(query)
+    projects = await project_services.search_projects(query)
     return projects
