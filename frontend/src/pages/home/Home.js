@@ -1,7 +1,6 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import TypingEffect from "react-typing-effect"; // Import the typing effect component
-
 import "./Home.css";
 import { Link } from "react-router-dom";
 import Features from "../../components/Features/features";

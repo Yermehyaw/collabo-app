@@ -14,9 +14,11 @@
   position: fixed;
   bottom: 70px;
   right: 20px;
-  width: 350px;
+  width: 60vw;
   height: 500px;
-  background-color: #f8f9fa;
+  background: url("./lst-bg.jpeg");
+  background-size: cover;
+  background-position: center;
   border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -28,7 +30,7 @@
 
 /* Header */
 .messaging-header {
-  background-color: #007bff;
+  background-color: #24d09f;
   color: white;
   padding: 10px;
   display: flex;

@@ -12,6 +12,7 @@ import {
 import logo from "./logo.png";
 import "./Navbar.css"; // Navbar styles
 import "./Sidebar.css"; // Sidebar styles
+import MessagingApp from "../MessagingApp/MessagingApp";
 
 const Navbar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -84,6 +85,15 @@ const Navbar = () => {
     navigate(path);
     setSearchQuery("");
     setSearchResults([]);
+  };
+
+  const [isChatVisible, setIsChatVisible] = useState(false);
+  const [hasNewMessages, setHasNewMessages] = useState(true); // Indicates new messages
+
+  // Toggle chat visibility
+  const toggleChat = () => {
+    setIsChatVisible(!isChatVisible);
+    setHasNewMessages(false); // Mark messages as read when chat is opened
   };
 
   return (
@@ -178,6 +188,12 @@ const Navbar = () => {
                 )}
               </div>
             )}
+
+            <div className="chat-icon-container" onClick={toggleChat}>
+              <i className="fa fa-comments chat-icon"></i>
+              {hasNewMessages && <span className="red-dot"></span>}
+            </div>
+
             <Link
               to="/login"
               className="btn btn-outline-primary ms-3"
@@ -253,6 +269,7 @@ const Navbar = () => {
       {isSidebarOpen && (
         <div className="sidebar-overlay" onClick={toggleSidebar}></div>
       )}
+      {isChatVisible && <MessagingApp />}
     </>
   );
 };
