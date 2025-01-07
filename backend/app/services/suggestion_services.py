@@ -10,10 +10,10 @@ MODULES:
 
 """
 from typing import List, Optional
-from backend.app.models.projects import ProjectResponse
-from app.models.users import UserResponse
-from app.services.user_services import UserServices
-from app.services.project_services import ProjectServices
+from models.projects import ProjectResponse
+from models.users import UserResponse
+from services.user_services import UserServices
+from services.project_services import ProjectServices
 
 
 class SuggestionServices:
@@ -35,7 +35,7 @@ class SuggestionServices:
 
     async def get_project_suggestions(self, user_id: str):
         """
-        Get project suggestions for a user. This is a simple implementation of an alogorithm to generate user feed, a true alogorithm would be more intuitive and deep
+        Get project suggestions for a user. This is a simple abstract implementation of an alogorithm to generate user feed, a true alogorithm would be more intuitive and deep
 
         PARAMETERS:
             - user_id: str, user id
@@ -43,14 +43,14 @@ class SuggestionServices:
         RETURNS:
             - List[ProjectResponse]: list of project objects
         """
-        # Get the user to whom the suggestions are to be made
+        # Get the user to whom the project suggestions are to be made
         user = self.user_services.get_user_by_id(user_id)
         if not user:
             return []
         
-        # Make a query using the  user's skills, interests and location. 
+        # Make a query using the  user's skills, interests and location.
         filters = {
-            "skills": user.skills.extend(user.interests), # Fuse users and interests in a singlle list. user's skills and interests are  almost analogous.
+            "skills": user.skills.extend(user.interests), # Fuse users skills and interests in a single list. user's skills and interests are  almost analogous.
             "location": user.location
         }
         
@@ -78,7 +78,7 @@ class SuggestionServices:
         # Make a query using the  user's skills, interests and location. 
         filters = {  # more filters e.g mutual friends, followers, followings, collabees etc can be added to make the suggestions more accurate
             "skills": user.skills,
-            "interests": (user.interests),
+            "interests": user.interests,
             "location": user.location
         }
         
