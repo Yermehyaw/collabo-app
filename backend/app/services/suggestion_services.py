@@ -10,6 +10,10 @@ from services.user_services import UserServices
 from services.project_services import ProjectServices
 
 
+user_services = UserServices()
+project_services = ProjectServices()
+
+
 class SuggestionServices:
     """
     Suggestion Services class: Includes methods to get user feed suggestions
@@ -23,8 +27,7 @@ class SuggestionServices:
     def __init__(self):
         """Attributes initializer
         """
-        user_services = UserServices()
-        project_services = ProjectServices()
+        pass
 
 
     async def get_project_suggestions(self, user_id: str):
@@ -38,7 +41,7 @@ class SuggestionServices:
             - List[ProjectResponse]: list of project objects
         """
         # Get the user to whom the project suggestions are to be made
-        user = await self.user_services.get_user_by_id(user_id)
+        user = await user_services.get_user_by_id(user_id)
         if not user:
             return []
         
@@ -49,7 +52,7 @@ class SuggestionServices:
         }
         
         # Get projects that match the user's skills, interests and location
-        projects = await self.project_services.search_projects(filters)
+        projects = await project_services.search_projects(filters)
 
         return projects
 
@@ -65,7 +68,7 @@ class SuggestionServices:
         
         """
         # Get the user to whom the suggestions are to be made
-        user = await self.user_services.get_user_by_id(user_id)
+        user = await user_services.get_user_by_id(user_id)
         if not user:
             return []
         
@@ -77,6 +80,6 @@ class SuggestionServices:
         }
         
         # Get users that match the user's skills, interests and location
-        users = await self.user_services.search_users(filters)
+        users = await user_services.search_users(filters)
 
         return users
