@@ -232,4 +232,6 @@ class ProjectServices:
                     query[key] = {"$in": value}
 
         projects = await collection.find(query).to_list(length=None)
+        for project in projects:
+            project["project_id"] = project.pop("_id")
         return [ProjectResponse(**prj) for prj in projects]
