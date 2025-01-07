@@ -4,7 +4,8 @@ Searching endpoints
 MODULES:
    - fastapi: APIRouter, Depends, HTTPException, status
     - fastapi.security: OAuth2PasswordBearer
-   - typing: List
+   - typing: List, Union
+   - typing_extensions: Annotated
    - models.projects: ProjectResponse
    - models.users: UserResponse
    - services.project_service: ProjectService
@@ -18,8 +19,9 @@ from fastapi import (
 )
 from fastapi.security import OAuth2PasswordBearer
 from typing import (
-    Annotated, List, Union
+    List, Union
 )
+from typing_extensions import Annotated
 from models.users import UserResponse
 from models.projects import ProjectResponse
 from services.project_services import ProjectServices
