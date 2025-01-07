@@ -92,6 +92,7 @@ class ProjectServices:
         project = await collection.find_one({"_id": project_id})
 
         if project:
+            project["project_id"] = project.pop("_id")
             return ProjectResponse(**project)
         return None
 
