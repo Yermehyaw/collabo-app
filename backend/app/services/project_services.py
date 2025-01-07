@@ -110,8 +110,11 @@ class ProjectServices:
         """
         collection = await get_collection(self.collection_name)
 
-        projects = await collection.find({"created_by": user_id}).to_list(length=None)
+        cursor = collection.find({"created_by": user_id})
+        projects = await cursor.to_list(length=None)
 
+        for project in projects:
+            project["project_id"] = project.pop("_id")
         return [ProjectResponse(**project) for project in projects]
 
     async def update_project(self, project_id: str, project: ProjectUpdate) -> Optional[int]:
