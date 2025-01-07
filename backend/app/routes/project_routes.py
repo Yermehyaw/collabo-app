@@ -144,7 +144,7 @@ async def delete_project(project_id: str, token: str = Depends(oauth2_scheme)):
     success = {"message": "Project deleted successfully"}
     return success
 
-@project_router.get("/{user_id}", response_model=list)
+@project_router.get("/me/{user_id}", response_model=list)
 async def get_all_projects_by_user_id(user_id: str, token: str = Depends(oauth2_scheme)):
     """
     Get all projects by a user
@@ -167,5 +167,5 @@ async def get_all_projects_by_user_id(user_id: str, token: str = Depends(oauth2_
     if not projects:
         failure = {"error": "No projects found", "code": "NOT_FOUND"}
         raise HTTPException(status_code=404, detail=failure)
-    
+
     return projects
