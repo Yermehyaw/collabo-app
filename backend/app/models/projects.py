@@ -148,11 +148,11 @@ class ProjectResponse(BaseModel):
     updated_at: Optional[str]
     deadline: Optional[str]
     type: Optional[str]
-    skills: Optional[List]
+    #skills: Optional[List]
     tags: Optional[list]  # List[str] is almost analogous to Optional[list] but the former is more explicit
     collaborators: Optional[List[str]]
     followers: Optional[List[str]]
-    project_tools: Optional[List[str]]
+    #project_tools: Optional[List[str]]
     location: Optional[str]
     model_config = ConfigDict(
         # Example of expected format,
