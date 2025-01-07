@@ -12,3 +12,4 @@ pyjwt
 httpx
 pytest
 websockets
+typing_extensions
