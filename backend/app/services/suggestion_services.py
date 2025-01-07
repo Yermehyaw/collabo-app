@@ -23,13 +23,6 @@ class SuggestionServices:
         - project_service: ProjectService, project service object
     
     """
-
-    def __init__(self):
-        """Attributes initializer
-        """
-        pass
-
-
     async def get_project_suggestions(self, user_id: str):
         """
         Get project suggestions for a user. This is a simple abstract implementation of an alogorithm to generate user feed, a true alogorithm would be more intuitive and deep
