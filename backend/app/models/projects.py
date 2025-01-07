@@ -60,10 +60,11 @@ class ProjectCreate(BaseModel):
     updated_at: Optional[str] = None
     deadline: Optional[str] = None
     type: Optional[str] = None
-    skills_required: List[str] = []  # skills required from intending collaborator/collabee
+    skills: List[str] = []  # skills required from intending collaborator/collabee
     tags: List[str] = ["#creative", "#innovative"]  # keywords used to aid recommendation/feed/suggestions
     collaborators: List[str] = []
     followers: List[str] = []
+    project_tools: List[str] = []
     location: Optional[str] = None
     model_config = ConfigDict(
         populate_by_name=True,  # permit the original name of a field to be used in creating instances of the model rather than its alias
@@ -147,6 +148,7 @@ class ProjectResponse(BaseModel):
     updated_at: Optional[str]
     deadline: Optional[str]
     type: Optional[str]
+    skills: Optional[List]
     tags: Optional[list]  # List[str] is almost analogous to Optional[list] but the former is more explicit
     collaborators: Optional[List[str]]
     followers: Optional[List[str]]
