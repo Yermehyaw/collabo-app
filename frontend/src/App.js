@@ -4,7 +4,7 @@ import Layout from './components/Layout/Layout';
 import Home from './pages/home/Home';
 import Login from './pages/login/Login';
 import Profile from './pages/profile/Profile';
-import ProjectDetails from './pages/projectdetails/ProjectDetails';
+import ProjectDetails from './pages/projectdetails/projectDetails';
 
 function App() {
   return (
@@ -20,3 +20,4 @@ function App() {
     </Router>
   );
 }
+export default App;
