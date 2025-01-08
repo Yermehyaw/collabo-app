@@ -187,29 +187,29 @@ class ProjectServices:
         # create a custom query from the filters dict received
         query = {}
         for key, value in filters.items():
-            if key == "title":
-                query[key] = {"$regex": value, "$options": "i"}
+            if key == "title" and value is not None:
+                    query[key] = {"$regex": value, "$options": "i"}
 
-            if key == "created_by":
+            if key == "created_by" and value is not None:
                 query[key] = value
 
-            if key == "deadline":
+            if key == "deadline" and value is not None:
                 query[key] = {"$lte": value}
 
-            if key == "ending":
+            if key == "ending" and value is not None:
                 query[key] = {"$lte": value}
 
-            if key == "created_at":
+            if key == "created_at" and value is not None:
                 query[key] = {"$gte": value}
 
-            if key == "starting":
+            if key == "starting" and value is not None:
                 query[key] = {"$gte": value}
 
-            if key == "type":
+            if key == "type" and value is not None:
                 query[key] = value
 
             # Can be made case-insensitive in future improvements
-            if key == "tags":
+            if key == "tags":  # Fields containing Lists are almost never None ::fingers-crossed::, pls verify from models/projects.py
                 if isinstance(value, str):
                     query[key] = {"$in": value.split(', ')}
                 else:
@@ -221,7 +221,7 @@ class ProjectServices:
                 else:
                     query[key] = {"$in": value}
 
-            if key == "location":
+            if key == "location" and value is not None:
                 query[key] = {"$regex": value, "$options": "i"}
 
             # Can be made case-inssnsitive in future improvements
