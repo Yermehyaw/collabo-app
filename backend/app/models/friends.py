@@ -38,7 +38,7 @@ class FriendRequestResponse(BaseModel):
         - created_at: str, datetime when the request was sent/created
 
     """
-    id: str
+    id: Optional[str]
     sender_id: str
     recipient_id: str
     status: Literal["pending", "accepted", "rejected"] = "pending"
@@ -50,10 +50,12 @@ class FriendshipResponse(BaseModel):
     Model to define and display a friendship relationship between users
 
     ATTRIBUTED:
-         - user_id: str, id of the user in the friendship
+         - user1_id: str, id of the sender in the friendship
+         - user2_id: str, id of the receiver in the friendship
          - name: str, name of friend
          - created_at: str, datetime
     """
-    user_id: str
+    user1_id: str
+    user2_id: str
     name: Optional[str]
     created_at: str
