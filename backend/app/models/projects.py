@@ -11,7 +11,7 @@ MODULES:
 """
 from typing import (
     Optional, List,
-    Literal, Any
+    Union
 )
 from pydantic import (
     BaseModel,
@@ -29,7 +29,6 @@ class ProjectCreate(BaseModel):
 
     ATTRIBUTES:
     - project_id: str, unique id of project
-    - db_id: str
     - title: str
     - description: str
     - created_at: str
@@ -37,16 +36,19 @@ class ProjectCreate(BaseModel):
     - created_by: str, id of user
     - deadline: str
     - collaborators: list
+    - skills: str
     - type: str
     - tags: list, keywords used to aid recommendation/feed/siggestions
+    - project_tools: list
     - location: str
     - followers: list
-    
+
     FUTURE IMPROVEMENTS:
+    - starting: datetime str, date project started
+    - ending: datetime str, date project will end
     - status: Literal['ongoing', 'completed', 'paused'], describes the current state of the project
     - applications: list, list of application objs
     - invitations: list, list of invitation objs
-    - project_tools: list, list of technologies/tools to be used in the project
 
     """
     # Required attr
@@ -64,7 +66,7 @@ class ProjectCreate(BaseModel):
     tags: List[str] = ["#creative", "#innovative"]  # keywords used to aid recommendation/feed/suggestions
     collaborators: List[str] = []
     followers: List[str] = []
-    project_tools: List[str] = []
+    project_tools: List[str] = [] # list of technologies/tools to be used in the project
     location: Optional[str] = None
     model_config = ConfigDict(
         populate_by_name=True,  # permit the original name of a field to be used in creating instances of the model rather than its alias
@@ -89,12 +91,15 @@ class ProjectUpdate(BaseModel):
     - title: str
     - description: str
     - updated_at: str
-    - starting: str
-    - ending: str
     - collaborators: list
     - type: str
+    - skills: list
     - project_location
     - project_tools: list, list of technologues/tools to be used in the project
+
+    FUTURE IMPROVEMENTS:
+        - starting
+        - ending
 
     """
     title: Optional[str] = Field(None, min_length=4, max_length=100)
@@ -102,8 +107,9 @@ class ProjectUpdate(BaseModel):
     updated_at: Optional[str] = datetime.now().isoformat()  # potential security issue, user shouldnt be able to manipulate update time
     deadline: Optional[str] = None
     type: Optional[str] = None
-    skills_required: List[str] = []  # skills required by any intending collaborator/collabee
-    collaborators: List[str] = []
+    skills: Optional[Union[List[str], str]] = []  # skills required by any intending collaborator/collabee
+    collaborators: Optional[List[str]] = []
+    project_tools: Optional[Union[List[str], str]] = []
     location: Optional[str] = None
     model_config = ConfigDict(
         # arbitrary_types_allowed=True,
@@ -132,12 +138,17 @@ class ProjectResponse(BaseModel):
     - updated_at: str
     - created_by: str
     - deadline: str
+    - skills: list
     - collaborators: list
     - type: str
     - tags: list, keywords used to aid recommendation/feed/siggestions
     - project_location
     - project_tools: list, list of technologies/tools to be used in the project
     - followers: list
+
+    FUTURE IMPROVEMENTS:
+        - starting
+        - ending
 
     """
     project_id: str
