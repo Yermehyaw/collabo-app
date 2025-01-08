@@ -37,13 +37,15 @@ class SuggestionServices:
         user = await user_services.get_user_by_id(user_id)
         if not user:
             return []
-        
+
         # Make a query using the  user's skills, interests and location.
+        user_involvements = user.skills.extend(user.interests), # Fuse users skills and interests in a single list. user's skills and interests are  almost analogous.
         filters = {
-            "skills": user.skills.extend(user.interests), # Fuse users skills and interests in a single list. user's skills and interests are  almost analogous.
+            "skills": user_involvements,
+            "project_tools": user_involvements,
             "location": user.location
         }
-        
+
         # Get projects that match the user's skills, interests and location
         projects = await project_services.search_projects(filters)
 
