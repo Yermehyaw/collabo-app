@@ -1,6 +1,6 @@
 """
 Friend services
-Hadles logic to send, receive and respons to firend requests
+Handles logic to send, receive and response to friend requests
 
 MODULES:
    - db: get_collection
@@ -50,6 +50,7 @@ class FriendServices:
         request = FriendRequestResponse(sender_id=sender_id, recipient_id=recipient_id)
         insertion = await collection.insert_one(request.to_dict())
         request_id = str(insertion.inserted_id)
+
         return request_id
 
     async def get_request_by_id(self, request_id: str):
@@ -68,6 +69,7 @@ class FriendServices:
 
         collection = await get_collection(self.requests_collection)
         request = await collection.find_one({"_id": ObjectId(request_id)})
+
         return request
 
 
