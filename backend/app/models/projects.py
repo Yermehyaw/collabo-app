@@ -47,8 +47,6 @@ class ProjectCreate(BaseModel):
     - starting: datetime str, date project started
     - ending: datetime str, date project will end
     - status: Literal['ongoing', 'completed', 'paused'], describes the current state of the project
-    - applications: list, list of application objs
-    - invitations: list, list of invitation objs
 
     """
     # Required attr
