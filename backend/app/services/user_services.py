@@ -111,7 +111,8 @@ class UserServices:
         query = {}
         for key, value in filters.items():
             if key == "name":
-                query[key] = {"$regex": value, "$options": "i"}
+                if value:
+                    query[key] = {"$regex": value, "$options": "i"}
             
             if key == "skills":
                 if isinstance(value, str):
@@ -126,13 +127,16 @@ class UserServices:
                     query[key] = {"$in": value}
             
             if key == "location":
-                query[key] = {"$regex": value, "$options": "i"}
+                if value:  # Location is non-null
+                    query[key] = {"$regex": value, "$options": "i"}
             
             if key == "language":
-                query[key] = {"$regex": value, "$options": "i"}
+                if value:
+                    query[key] = {"$regex": value, "$options": "i"}
 
             if key == "timezone":
-                query[key] = value
+                if value:
+                    query[key] = {"$regex": value, "$options": "i"}
 
         users = await collection.find(query).to_list(length=None)
 
