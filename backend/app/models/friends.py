@@ -10,7 +10,7 @@ MODULES:
 """
 from pydantic import BaseModel
 from typing import (
-    List, Optional
+    Literal, Optional
 )
 from datetime import datetime
 

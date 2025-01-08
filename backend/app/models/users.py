@@ -5,8 +5,6 @@ MODULES:
     - typing: Optional
     - pydantic: BaseModel, EmailStr, Field, ConfigDict
     - datetime: datetime class
-    - uuid: uuid4 class
-    - bson: ObjectId class
 
 """
 from typing import (
@@ -19,8 +17,6 @@ from pydantic import (
     ConfigDict
 )
 from datetime import datetime
-from uuid import uuid4
-from bson import ObjectId
 
 
 # USER SIGNUP/CREATE

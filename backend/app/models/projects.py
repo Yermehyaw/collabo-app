@@ -5,7 +5,6 @@ MODULES:
     - typing: custom types
     - pydantic: BaseModel, Field, ConfigDict
     - datetime: datetime class
-    - uuid: uuid4 class
     - bson: ObjectId
 
 """
