@@ -1,0 +1,103 @@
+/* General Features Section Styling */
+.features {
+  background: radial-gradient(
+    circle,
+    #e3f2fd,
+    #6ccea5
+  ); /* Vibrant gradient background */
+  color: #212529; /* Base text color */
+  padding: 3rem 1rem; /* Padding for the section */
+}
+
+/* Feature Card Styling */
+.features .feature-card {
+  border: none;
+  background: #ffffff; /* White background for cards */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effects */
+}
+
+/* Hover Effects for Feature Cards */
+.features .feature-card:hover {
+  transform: translateY(-5px); /* Lift the card slightly */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Stronger shadow on hover */
+}
+
+/* Icon Styling */
+.features .icon {
+  font-size: 3rem; /* Large icon size */
+}
+
+/* Title Styling */
+.features h5 {
+  color: #343a40; /* Darker text color for headings */
+  font-weight: bold;
+  margin-top: 1rem;
+}
+
+/* Description Styling */
+.features .text-muted {
+  color: #6c757d !important; /* Muted text for descriptions */
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* Intro Section Styling */
+.features #choose h2 {
+  font-size: 2.5rem;
+  color: #212529;
+  margin-bottom: 1rem;
+}
+
+.features #choose p {
+  font-size: 1.2rem;
+  color: #495057;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.people-section {
+  /* background-color: #ffffff; */
+  padding: 2rem 1rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effects */
+}
+
+.people-card {
+  /* background: #f8f9fa; */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 2rem 1rem;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.people-card img {
+  border: 3px solid #e3f2fd;
+}
+
+.people-card .quote {
+  font-style: italic;
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+/* Responsive Spacing */
+@media (max-width: 768px) {
+  .features {
+    padding: 2rem 1rem;
+  }
+
+  .features #choose h2 {
+    font-size: 2rem;
+  }
+
+  .features #choose p {
+    font-size: 1rem;
+  }
+}

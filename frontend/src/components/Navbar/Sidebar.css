@@ -1,0 +1,78 @@
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -250px; /* Initially hidden */
+  width: 250px;
+  height: 100%;
+  background-color: #5f8a6e;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  transition: left 0.3s ease-in-out;
+  z-index: 1050;
+  padding: 15px;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.sidebar-header img {
+  height: 40px; /* Adjust logo size in the sidebar */
+}
+
+.sidebar-toggle:hover {
+  font-weight: bolder;
+  color: black;
+}
+
+.sidebar.open {
+  left: 0; /* Slide-in effect */
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  margin: 10px 0;
+}
+
+.sidebar ul li a {
+  text-decoration: none;
+  color: #070000; /* Default color for sidebar links */
+}
+
+.sidebar ul li a:hover {
+  color: rgb(23, 102, 121);
+  font-weight: bolder;
+}
+
+#close-btn {
+  border-radius: 100px;
+  width: 30px;
+  color: white;
+  cursor: pointer;
+  background: black;
+  font-weight: bold;
+}
+
+#close-btn:hover {
+  color: white; /* Highlight color on hover */
+  font-weight: lighter;
+  background-color: rgb(35, 28, 28);
+}
+
+/* Overlay for Sidebar */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.19);
+  z-index: 1049;
+}
