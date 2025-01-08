@@ -4,6 +4,7 @@ Routes to handle sending and receiving friend requests and getting the list of f
 
 MODULES:
    - fastapi: APIRouter, Depends, HTTPException, status
+   - fastapi.security: OAuthPasswordBearer
    - typing: Literal, List
    - services.friend_services: FriendServices
    - models.friends: FriendRequestCreate, FriendshipResponse
@@ -14,11 +15,12 @@ from fastapi import (
     APIRouter, Depends,
     HTTPException, status
 )
+from fastapi.security import OAuthPasswordBearer
 from typing import (
     Literal, List
 )
 from services.friend_services import FriendServices
-from app.services.user_services import UserServices
+from services.user_services import UserServices
 from models.friends import (
     FriendRequestCreate, FriendshipResponse
 )
@@ -28,10 +30,11 @@ from utils.auth.jwt_handler import verify_access_token
 friend_router = APIRouter()
 user_services = UserServices()
 friend_services = FriendServices()
+oauth2_scheme = OAuthPasswordBearer(tokenUrl="token")
 
 
 @friend_services.post("/requests", response_model=dict, status_code=status.HTTP_201_CREATED)
-async def send_request(request: FriendRequestCreate, token: str = Depends(verify_access_token)):
+async def send_request(request: FriendRequestCreate, token: str = Depends(oauth2_scheme)):
     """
     Send a request to a user
 
@@ -43,6 +46,11 @@ async def send_request(request: FriendRequestCreate, token: str = Depends(verify
        - message: JSON dict, response message or error
 
     """
+    token = verify_access_token(token)  # Decoded token
+    if not token:
+        failure = {"error": "Invalid token", "code": "UNAUTHORIZED"}
+        raise HTTPException(status_code=401, detail=failure)
+    
     user_id = token["sub"]
     request_id = await friend_services.send_friend_request(user_id, request.recipient_id)
 
