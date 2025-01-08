@@ -4,7 +4,7 @@ Routes to handle sending and receiving friend requests and getting the list of f
 
 MODULES:
    - fastapi: APIRouter, Depends, HTTPException, status
-   - fastapi.security: OAuthPasswordBearer
+   - fastapi.security: OAuth2PasswordBearer
    - typing: Literal, List
    - services.friend_services: FriendServices
    - models.friends: FriendRequestCreate, FriendshipResponse
@@ -15,7 +15,7 @@ from fastapi import (
     APIRouter, Depends,
     HTTPException, status
 )
-from fastapi.security import OAuthPasswordBearer
+from fastapi.security import OAuth2PasswordBearer
 from typing import (
     Literal, List
 )
@@ -30,10 +30,10 @@ from utils.auth.jwt_handler import verify_access_token
 friend_router = APIRouter()
 user_services = UserServices()
 friend_services = FriendServices()
-oauth2_scheme = OAuthPasswordBearer(tokenUrl="token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
-@friend_services.post("/requests", response_model=dict, status_code=status.HTTP_201_CREATED)
+@friend_router.post("/requests", response_model=dict, status_code=status.HTTP_201_CREATED)
 async def send_request(request: FriendRequestCreate, token: str = Depends(oauth2_scheme)):
     """
     Send a request to a user

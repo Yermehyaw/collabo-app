@@ -3,7 +3,7 @@ Routes for invitation endpoints
 
 MODULES:
     - fastapi: APIRouter, Depends, HTTPException, status
-    - fastapi.security: OAuthPasswordBearer
+    - fastapi.security: OAuth2PasswordBearer
     - services.invitation_service: InvitationService
     - models.invitations: InvitationCreate, InvitationResponse
     - utils.auth.jwt_handler: verify_access_token
@@ -14,10 +14,10 @@ from fastapi import (
     APIRouter, HTTPException,
     status, Depends
 )
-from fastapi.security import OAuthPasswordBearer
+from fastapi.security import OAuth2PasswordBearer
 from services.user_services import UserServices
 from services.project_services import ProjectServices
-from services.invitation_service import InvitationServices
+from services.invitation_services import InvitationServices
 from models.invitations import (
     InvitationCreate, InvitationResponse
 )
@@ -29,7 +29,7 @@ invitation_router = APIRouter()
 user_services = UserServices()
 project_services = ProjectServices()
 invitation_services = InvitationServices()
-oauth2_scheme = OAuthPasswordBearer(tokenUrl="token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 @invitation_router.post("/", response_model=dict, status_code=status.HTTP_201_CREATED)
