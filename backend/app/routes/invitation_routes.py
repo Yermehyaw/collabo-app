@@ -3,6 +3,7 @@ Routes for invitation endpoints
 
 MODULES:
     - fastapi: APIRouter, Depends, HTTPException, status
+    - fastapi.security: OAuthPasswordBearer
     - services.invitation_service: InvitationService
     - models.invitations: InvitationCreate, InvitationResponse
     - utils.auth.jwt_handler: verify_access_token
@@ -13,8 +14,9 @@ from fastapi import (
     APIRouter, HTTPException,
     status, Depends
 )
-from app.services.user_services import UserServices
-from app.services.project_services import ProjectServices
+from fastapi.security import OAuthPasswordBearer
+from services.user_services import UserServices
+from services.project_services import ProjectServices
 from services.invitation_service import InvitationServices
 from models.invitations import (
     InvitationCreate, InvitationResponse
@@ -27,10 +29,11 @@ invitation_router = APIRouter()
 user_services = UserServices()
 project_services = ProjectServices()
 invitation_services = InvitationServices()
+oauth2_scheme = OAuthPasswordBearer(tokenUrl="token")
 
 
 @invitation_router.post("/", response_model=dict, status_code=status.HTTP_201_CREATED)
-async def send_invitation(invite: InvitationCreate, token: str = Depends(verify_access_token)):
+async def send_invitation(invite: InvitationCreate, token: str = Depends(oauth2_scheme)):
     """
     Send an invitation to a user to join a project
 
@@ -41,6 +44,11 @@ async def send_invitation(invite: InvitationCreate, token: str = Depends(verify_
         - message: JSON dict, response message or error
 
     """
+    token = verify_access_token(token)  # Decoded token
+    if not token:
+        failure = {"error": "Invalid token", "code": "UNAUTHORIZED"}
+        raise HTTPException(status_code=401, detail=failure)
+
     # Ensure its the project owner sending the request
     project = await project_services.get_project(invite.project_id)
 
@@ -60,17 +68,23 @@ async def send_invitation(invite: InvitationCreate, token: str = Depends(verify_
 
 
 @invitation_router.get("/{user_id}", response_model=InvitationResponse)
-async def get_invitations_to_user(user_id: str):
+async def get_invitations_to_user(user_id: str, token: str = Depends(oauth2_scheme)):
     """
     Get all invitations to a user
 
     ATTRIBUTES:
         - user_id: str, id of user
+        - token: str, jwt auth token
 
     RETURNS:
         - invitations: list of InvitationResponse objects
 
     """
+    token = verify_access_token(token)  # Decoded token
+    if not token:
+        failure = {"error": "Invalid token", "code": "UNAUTHORIZED"}
+        raise HTTPException(status_code=401, detail=failure)
+
     # Ensure its the user requesting for their own invitations
     user = await user_services.get_user(user_id)
 
@@ -84,7 +98,7 @@ async def get_invitations_to_user(user_id: str):
     return invitations
 
 @invitation_router.put("/{invitation_id}", response_model=dict)
-async def update_invitation_status(status: str, invitation_id: str, token: str = Depends(verify_access_token)):
+async def update_invitation_status(status: str, invitation_id: str, token: str = Depends(oauth2_scheme)):
     """
     Update the status of an invitation
 
@@ -97,6 +111,11 @@ async def update_invitation_status(status: str, invitation_id: str, token: str =
         - dict: json, message response
 
     """
+    token = verify_access_token(token)  # Decoded token
+    if not token:
+        failure = {"error": "Invalid token", "code": "UNAUTHORIZED"}
+        raise HTTPException(status_code=401, detail=failure)
+
     # validate its invitation_id and the request was sent by the invitee
     invitation = invitation_services.get_invitation_by_id(invitation_id)
 
