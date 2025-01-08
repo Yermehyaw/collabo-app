@@ -51,7 +51,7 @@ async def send_request(request: FriendRequestCreate, token: str = Depends(oauth2
         failure = {"error": "Invalid token", "code": "UNAUTHORIZED"}
         raise HTTPException(status_code=401, detail=failure)
     
-    user_id = token["sub"]
+    user_id = token.get("sub")
     request_id = await friend_services.send_friend_request(user_id, request.recipient_id)
 
     if not request_id:
@@ -63,7 +63,7 @@ async def send_request(request: FriendRequestCreate, token: str = Depends(oauth2
 
 
 @friend_router.put("/requests/{request_id}", response_model=dict)
-async def respond_to_request(request_id: str, status: Literal["accepted", "rejected"], token: str = Depends(verify_access_token)):
+async def respond_to_request(request_id: str, status: Literal["accepted", "rejected"], token: str = Depends(oauth2_scheme)):
     """
     Respond to a friend request
 
@@ -75,8 +75,13 @@ async def respond_to_request(request_id: str, status: Literal["accepted", "rejec
        - message: JSON dict, response message or error
 
     """
+    token = verify_access_token(token)  # Decoded token
+    if not token:
+        failure = {"error": "Invalid token", "code": "UNAUTHORIZED"}
+        raise HTTPException(status_code=401, detail=failure)
+
     # Validate the update request was sent by one to whom the request was sent
-    user_id = token["sub"]
+    user_id = token.get("sub")
     result = await friend_services.get_request_by_id(request_id)
     if not result or result.recipient_id != user_id:
         failure = {"error": "You are not permitted to update this request", "code": "PERMISSION_DENIED"}  # To improve security, this should be obfuscated as a 404 err
@@ -92,10 +97,22 @@ async def respond_to_request(request_id: str, status: Literal["accepted", "rejec
 
 
 @friend_router.get("/", response_model=List[FriendshipResponse])
-async def get_friends(token: str = Depends(verify_access_token)):
+async def get_friends(token: str = Depends(oauth2_scheme)):
     """
+    Retrieve the list of friends of a user
+
+    ATTRIBUTES:
+        - token: str, jwt auth token
+
+    RETURNS:
+        - list: list of friend objects
     """
-    user_id = token["user_id"]
+    token = verify_access_token(token)  # Decoded token
+    if not token:
+        failure = {"error": "Invalid token", "code": "UNAUTHORIZED"}
+        raise HTTPException(status_code=401, detail=failure)
+
+    user_id = token.get("sub")
     friends = await friend_services.get_friend_list(user_id)  # returns both ids of the users in the friendship
 
     friends = [  # Im sorry . . . 
@@ -108,4 +125,5 @@ async def get_friends(token: str = Depends(verify_access_token)):
          }
         for friend in friends  # This is a list comprehension
     ]
+
     return friends
