@@ -224,8 +224,14 @@ class ProjectServices:
             if key == "location" and value is not None:
                 query[key] = {"$regex": value, "$options": "i"}
 
-            # Can be made case-inssnsitive in future improvements
-            if key == "project_tools" or key == "tools" or key == "skills":
+            # Can be made case-insensitive in future improvements
+            if key == "project_tools" or key == "tools":
+                if isinstance(value, str):
+                    query[key] = {"$in": value.split(', ')}
+                else:
+                    query[key] = {"$in": value}
+            
+            if key == "skills":
                 if isinstance(value, str):
                     query[key] = {"$in": value.split(', ')}
                 else:
