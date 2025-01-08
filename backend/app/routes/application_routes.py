@@ -4,6 +4,7 @@ Allow usrrs to apply to become a collabee/ colloborator on a project
 
 MODULES:
     - fastapi: APIRouter, Depends, HTTPException, status
+    - fastapi.security: OAuth2PasswordBearer
     - services.application_services: ApplicationServices
     - models.applications: ApplicationCreate, ApplicationResponse
     - utils.auth.jwt_handler: verify_access_token
@@ -13,8 +14,9 @@ from fastapi import (
     APIRouter, HTTPException,
     status, Depends
 )
+from fastapi.security import OAuth2PasswordBearer
 from typing import List
-from backend.app.services.project_services import ProjectService
+from services.project_services import ProjectService
 from services.application_services import ApplicationServices
 from models.applications import (
     ApplicationCreate, ApplicationResponse
@@ -25,10 +27,11 @@ from utils.auth.jwt_handler import verify_access_token
 application_router = APIRouter()
 application_services = ApplicationServices()
 project_service = ProjectService()
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 @application_router.post("/", response_model=dict, status_code=status.HTTP_201_CREATED)
-async def submit_application(application: ApplicationCreate, token: str = Depends(verify_access_token)):
+async def submit_application(application: ApplicationCreate, token: str = Depends(oauth2_scheme)):
     """
     Submit an application to a project
 
@@ -39,6 +42,11 @@ async def submit_application(application: ApplicationCreate, token: str = Depend
         - message: JSON dict, response message or error
 
     """
+    token = verify_access_token(token)  # Decoded token
+    if not token:
+        failure = {"error": "Invalid token", "code": "UNAUTHORIZED"}
+        raise HTTPException(status_code=401, detail=failure)
+
     project = await project_service.get_project_by_id(application.project_id)
 
     if not project:
@@ -56,7 +64,7 @@ async def submit_application(application: ApplicationCreate, token: str = Depend
     return success
 
 @application_router.get("/{project_id}", response_model=List[ApplicationResponse])
-async def get_applications_to_project(project_id: str, token: str = Depends(verify_access_token)):
+async def get_applications_to_project(project_id: str, token: str = Depends(oauth2_scheme)):
     """
     Get a list of applications to a project
 
@@ -67,6 +75,11 @@ async def get_applications_to_project(project_id: str, token: str = Depends(veri
         - list: list of applications to a project
     
     """
+    token = verify_access_token(token)  # Decoded token
+    if not token:
+        failure = {"error": "Invalid token", "code": "UNAUTHORIZED"}
+        raise HTTPException(status_code=401, detail=failure)
+
     project = await project_service.get_project_by_id(project_id)
 
     if not project or project["created_by"] != token["sub"]:
@@ -78,7 +91,7 @@ async def get_applications_to_project(project_id: str, token: str = Depends(veri
     return applications
 
 @application_router.put("/{application_id}", response_model=dict)
-async def update_application_status(status: str, application_id: str, token: str = Depends(verify_access_token)):
+async def update_application_status(status: str, application_id: str, token: str = Depends(oauth2_scheme)):
     """
     Update the status of an application
 
@@ -91,6 +104,11 @@ async def update_application_status(status: str, application_id: str, token: str
         - dict: json, message response
 
     """
+    token = verify_access_token(token)  # Decoded token
+    if not token:
+        failure = {"error": "Invalid token", "code": "UNAUTHORIZED"}
+        raise HTTPException(status_code=401, detail=failure)
+
     # validate its application_id and the request was sent by the applicant
     application = application_services.get_application_by_id(application_id)
 
