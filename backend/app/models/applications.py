@@ -26,13 +26,13 @@ class ApplicationCreate(BaseModel):
     Request model to create an application
 
     ATTRUBUTES:
+       - application_id: str, stringified ObjectId
        - project_id: str
-       NOTE: There is no applicant_id, as this can be retrieved from the token and poses a security risk 
-        whereby users with the ids of other users can make a request on their behalf without their consent
 
        FUTURE IMPROVEMENETS:
           - message: str, message by applicant to project owner. Muar be Optional
     """
+    application_id: Optional[str] = Field(None, alias="_id")
     project_id: str
     model_config = ConfigDict(
         json_scheme_extra={  # example of expected model of a json request body
@@ -58,7 +58,7 @@ class ApplicationResponse(BaseModel):
         - message: str, message by applicant to project owner
 
     """
-    application_id: str = Field(None, alias="_id")
+    application_id: str
     project_id: str
     applicant_id: str
     status: Literal["pending", "approved", "rejected"] = "pending"
