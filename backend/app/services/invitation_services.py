@@ -25,16 +25,6 @@ class InvitationServices:
         """Object initializing method"""
         self.collection_name = 'invitations'
 
-    async def invitations_collection(self):
-        """
-        Get the invitations collection
-
-        RETURNS:
-            - collection: collection object
-
-        """
-        return 
-
     async def send_invitation(self, invite: dict) -> str:
         """
         Send an invitation to a user
@@ -66,13 +56,16 @@ class InvitationServices:
             - invitation_id: str
 
         RETURNS:
-            - invitation: invitation obj
+            - invitation: dict, with the format of a InvitationResponse obj
 
         """
+        collection = await get_collection(self.collection_name)
+
         if not ObjectId.is_valid(invitation_id):
             return None
 
-        invitation = await self.invitations_collection().find_one({"_id": ObjectId(invitation_id)})
+        invitation = await collection.find_one({"_id": ObjectId(invitation_id)})
+        invitation["invitation_id"] = invitation.pop("_id")
 
         return invitation
 
@@ -88,7 +81,9 @@ class InvitationServices:
             - list: invitation objs
 
         """
-        cursor = self.invitations_collection().find({"invitee_id": user_id})
+        collection = await get_collection(self.collection_name)
+
+        cursor = collection.find({"invitee_id": user_id})
         invitations = await cursor.to_list(length=None)
 
         for invitation in invitations:
