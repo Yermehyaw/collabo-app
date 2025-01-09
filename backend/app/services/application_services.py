@@ -25,16 +25,6 @@ class ApplicationServices:
         """Object initializing method"""
         self.collection_name = 'applications'
 
-    async def applications_collection(self):
-        """
-        Get the applications collection
-
-        RETURNS:
-            - collection: collection object
-
-        """
-        return await get_collection(self.collection_name)
-
     async def submit_application(self, apply: dict) -> str:
         """
         Submits an application to join a project
@@ -46,13 +36,15 @@ class ApplicationServices:
             - application_id: stringified ObjectId, id of newly created and stored project object
 
         """
+        collection = await get_collection(self.collection_name)
+
         # Add the additional params req to create an ApplicationResponse during response creation
         apply["created_at"] = datetime.now().isoformat()
         apply["status"] = "pending"
 
         # Insert the dict into the db, the 3 other attrs req to create a valid ApplicationResponse namely, application_id, project_id and applicant_id are still missing
-        insertion_id = self.applications_collection().insert_one(apply.model_dump(by_alias=True)).insertion_id  # the application_id is aliased to _id so that the db auto assigns it
-        application_id = str(insertion_id)
+        insertion_id = collection.insert_one(apply.model_dump(by_alias=True))  # the application_id is aliased to _id so that the db auto assigns it
+        application_id = str(insertion_id.inserted_id)
 
         return application_id  # this is the application_id to be used in creating the obj in the corresp. route
 
@@ -64,13 +56,16 @@ class ApplicationServices:
             - application_id: str
 
         RETURNS:
-            - application: application obj
+            - application: dict, with format of an ApplicationResponse obj
 
         """
+        collection = await get_collection(self.collection_name)
+        
         if not ObjectId.is_valid(application_id):
             return None
 
-        application = await self.applications_collection().find_one({"_id": ObjectId(application_id)})
+        application = await collection().find_one({"_id": ObjectId(application_id)})
+        application["application_id"] = application.pop("_id")
 
         return application
 
@@ -85,7 +80,13 @@ class ApplicationServices:
             - list: application objs
 
         """
-        applications = await self.applications_collection().find({"project_id": project_id}).to_list()
+        collection = await get_collection(self.collection_name)
+
+        cursor = collection().find({"project_id": project_id})
+        applications = await cursor.to_list(length=None)
+
+        for application in applications:
+            application["application_id"] = application.pop("_id")
 
         return applications
 
@@ -101,7 +102,7 @@ class ApplicationServices:
           - None
         """
         if not ObjectId.is_valid(application_id):
-            return None  # 403 err
+            return None
 
         update_response = await self.applications_collection().update_one(
             {"_id": ObjectId(application_id)},
@@ -109,6 +110,6 @@ class ApplicationServices:
         )
 
         if not update_response.matched_count:
-            return None  # 403 error
+            return None
 
         return update_response.modified_count
