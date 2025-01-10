@@ -55,7 +55,7 @@ async def send_request(request: FriendRequestCreate, token: str = Depends(oauth2
     request_id = await friend_services.send_friend_request(user_id, request.recipient_id)
 
     if not request_id:
-        failure = {"error": "Request exists already", "code": "BAD_REQUEST"}
+        failure = {"error": "Request exists already/Bad request", "code": "BAD_REQUEST"}
         raise HTTPException(status_code=400, detail=failure)
 
     success = {"message": "Request sent successfully", "request_id": request_id}

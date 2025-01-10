@@ -53,7 +53,7 @@ class FriendServices:
             return None  # Avoid sending multiple requests
 
         # Validate the receipoent exists
-        user = user_services.get_user_by_id(recipient_id)
+        user = await user_services.get_user_by_id(recipient_id)
         if not user:
             return None
 
