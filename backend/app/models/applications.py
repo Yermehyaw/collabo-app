@@ -61,7 +61,7 @@ class ApplicationResponse(BaseModel):
     application_id: str
     project_id: str
     applicant_id: str
-    status: Literal["pending", "approved", "rejected"] = "pending"
+    status: Literal["pending", "accepted", "rejected"] = "pending"
     created_at: str = datetime.now().isoformat()
     model_config = ConfigDict(
         # populate_by_name=True,  # Not sure if this is necessary, but it allows an instance to be created with the name insteead of its alias
