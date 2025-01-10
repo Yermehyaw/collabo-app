@@ -38,7 +38,7 @@ class FriendRequestResponse(BaseModel):
         - created_at: str, datetime when the request was sent/created
 
     """
-    id: Optional[str]
+    id: Optional[str] = None
     sender_id: str
     recipient_id: str
     status: Literal["pending", "accepted", "rejected"] = "pending"

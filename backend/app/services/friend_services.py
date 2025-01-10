@@ -48,7 +48,7 @@ class FriendServices:
             return None  # Avoid sending multiple requests
 
         request = FriendRequestResponse(sender_id=sender_id, recipient_id=recipient_id)
-        insertion = await collection.insert_one(request.to_dict())
+        insertion = await collection.insert_one(request.model_dump())
         request_id = str(insertion.inserted_id)
 
         return request_id
