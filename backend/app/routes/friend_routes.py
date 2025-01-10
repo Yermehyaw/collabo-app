@@ -81,7 +81,7 @@ async def respond_to_request(
 
     PARAMETRS:
        - request_id: str, id of request
-       - status: str, new status of request. Can either be "accepted" or "rejected"
+       - status: Status, new status of request. Can either be "accepted" or "rejected"
 
     RETURNS:
        - message: JSON dict, response message or error
