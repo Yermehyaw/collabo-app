@@ -23,7 +23,7 @@ from typing import (
 from typing_extensions import (
     Annotated, TypedDict
 )
-from services.project_services import ProjectService
+from services.project_services import ProjectServices
 from services.application_services import ApplicationServices
 from models.applications import (
     ApplicationCreate, ApplicationResponse
@@ -33,7 +33,7 @@ from utils.auth.jwt_handler import verify_access_token
 
 application_router = APIRouter()
 application_services = ApplicationServices()
-project_service = ProjectService()
+project_services = ProjectServices()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 Status = TypedDict("Status", {"status": Literal["accepted", "rejected"]})
 
@@ -55,7 +55,7 @@ async def submit_application(application: ApplicationCreate, token: str = Depend
         failure = {"error": "Invalid token", "code": "UNAUTHORIZED"}
         raise HTTPException(status_code=401, detail=failure)
 
-    project = await project_service.get_project_by_id(application.project_id)
+    project = await project_services.get_project_by_id(application.project_id)
 
     if not project:
         failure = {"error": "Project not found", "code": "NOT_FOUND"}
@@ -88,7 +88,7 @@ async def get_applications_to_project(project_id: str, token: str = Depends(oaut
         failure = {"error": "Invalid token", "code": "UNAUTHORIZED"}
         raise HTTPException(status_code=401, detail=failure)
 
-    project = await project_service.get_project_by_id(project_id)
+    project = await project_services.get_project_by_id(project_id)
 
     if not project or project["created_by"] != token["sub"]:
         failure = {"error": "You are not allowed to view the applications to this project", "code": "PERMISSION_DENIED"}
