@@ -7,6 +7,7 @@ MODULES:
    - bson: ObjectId
    - datetime: datetime class
    - models.friends: FriendRequestResponse, FriendshipResponse
+   - services.user_services: UserServices
 
 """
 from db import get_collection
@@ -15,6 +16,10 @@ from datetime import datetime
 from models.friends import (
     FriendRequestResponse, FriendshipResponse
 )
+from services.user_services import UserServices
+
+
+user_services = UserServices()
 
 
 class FriendServices:
@@ -46,6 +51,11 @@ class FriendServices:
         existing_request = await collection.find_one({"sender_id": sender_id, "recipient_id": recipient_id})
         if existing_request:
             return None  # Avoid sending multiple requests
+
+        # Validate the receipoent exists
+        user = user_services.get_user_by_id(recipient_id)
+        if not user:
+            return None
 
         request = FriendRequestResponse(sender_id=sender_id, recipient_id=recipient_id)
         insertion = await collection.insert_one(request.model_dump())
