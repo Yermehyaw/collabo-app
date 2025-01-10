@@ -57,7 +57,7 @@ async def send_invitation(invite: InvitationCreate, token: str = Depends(oauth2_
         raise HTTPException(status_code=401, detail=failure)
 
     # Ensure its the project owner sending the request
-    project = await project_services.get_project(invite.project_id)
+    project = await project_services.get_project_by_id(invite.project_id)
 
     if not project or project["creator_id"] != token["sub"]:
         failure = {"error": "You are not permitted to send invites to other users on this project", "code": "PERMISSION_DENIED"}
