@@ -2,8 +2,10 @@
 Routes for invitation endpoints
 
 MODULES:
-    - fastapi: APIRouter, Depends, HTTPException, status
+    - fastapi: APIRouter, Depends, HTTPException, status, Body
     - fastapi.security: OAuth2PasswordBearer
+    - typing: Literal
+    - typing_extensions: Annotated, TypedDict
     - services.invitation_service: InvitationService
     - models.invitations: InvitationCreate, InvitationResponse
     - utils.auth.jwt_handler: verify_access_token
@@ -12,9 +14,13 @@ MODULES:
 """
 from fastapi import (
     APIRouter, HTTPException,
-    status, Depends
+    status, Depends, Body
 )
 from fastapi.security import OAuth2PasswordBearer
+from typing import Literal
+from typing_extensions import (
+    Annotated, TypedDict
+)
 from services.user_services import UserServices
 from services.project_services import ProjectServices
 from services.invitation_services import InvitationServices
@@ -30,6 +36,7 @@ user_services = UserServices()
 project_services = ProjectServices()
 invitation_services = InvitationServices()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+Status = TypedDict("Status", {"status": Literal["accepted", "rejected"]})
 
 
 @invitation_router.post("/", response_model=dict, status_code=status.HTTP_201_CREATED)
@@ -98,12 +105,12 @@ async def get_invitations_to_user(user_id: str, token: str = Depends(oauth2_sche
     return invitations
 
 @invitation_router.put("/{invitation_id}", response_model=dict)
-async def update_invitation_status(status: str, invitation_id: str, token: str = Depends(oauth2_scheme)):
+async def update_invitation_status(status: Annotated[Status, Body()], invitation_id: str, token: str = Depends(oauth2_scheme)):
     """
     Update the status of an invitation
 
     PARAMETERS:
-        - status: str, new status of the invitation
+        - status: Status, new status of the invitation
         - application_id: str, id of the invitation
         - token: str, jwt token
 
@@ -119,7 +126,7 @@ async def update_invitation_status(status: str, invitation_id: str, token: str =
     # validate its invitation_id and the request was sent by the invitee
     invitation = invitation_services.get_invitation_by_id(invitation_id)
 
-    if not invitation or invitation.invitee_id != token["sub"]:
+    if not invitation or invitation["invitee_id"] != token["sub"]:
         failure = {"error": "You are not permitted to update this invitation", "code": "PERMISSION_DENIED"}
         raise HTTPException(status_code=403, detail=failure)
 
