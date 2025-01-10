@@ -3,9 +3,10 @@ Friends Routes
 Routes to handle sending and receiving friend requests and getting the list of friends of a user
 
 MODULES:
-   - fastapi: APIRouter, Depends, HTTPException, status
+   - fastapi: APIRouter, Depends, HTTPException, status, Body
    - fastapi.security: OAuth2PasswordBearer
    - typing: Literal, List
+   - typing_extensions: Annotated, TypedDict
    - services.friend_services: FriendServices
    - models.friends: FriendRequestCreate, FriendshipResponse
    - utils.auth.jwt_handler: verify_access_token
@@ -13,11 +14,14 @@ MODULES:
 """
 from fastapi import (
     APIRouter, Depends,
-    HTTPException, status
+    HTTPException, status, Body
 )
 from fastapi.security import OAuth2PasswordBearer
 from typing import (
     Literal, List
+)
+from typing_extensions import (
+    Annotated, TypedDict
 )
 from services.friend_services import FriendServices
 from services.user_services import UserServices
@@ -31,6 +35,7 @@ friend_router = APIRouter()
 user_services = UserServices()
 friend_services = FriendServices()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+Status = TypedDict('Status', {"status": Literal["accepted", "rejected"]})
 
 
 @friend_router.post("/requests", response_model=dict, status_code=status.HTTP_201_CREATED)
@@ -63,7 +68,14 @@ async def send_request(request: FriendRequestCreate, token: str = Depends(oauth2
 
 
 @friend_router.put("/requests/{request_id}", response_model=dict)
-async def respond_to_request(request_id: str, status: Literal["accepted", "rejected"], token: str = Depends(oauth2_scheme)):
+async def respond_to_request(
+        request_id: str,
+        status: Annotated[
+            Status,
+            Body()
+        ],
+        token: str = Depends(oauth2_scheme)
+):
     """
     Respond to a friend request
 
@@ -83,7 +95,7 @@ async def respond_to_request(request_id: str, status: Literal["accepted", "rejec
     # Validate the update request was sent by one to whom the request was sent
     user_id = token.get("sub")
     result = await friend_services.get_request_by_id(request_id)
-    if not result or result.recipient_id != user_id:
+    if not result or result["recipient_id"] != user_id:
         failure = {"error": "You are not permitted to update this request", "code": "PERMISSION_DENIED"}  # To improve security, this should be obfuscated as a 404 err
         raise HTTPException(status_code=403, detail=failure)
 
