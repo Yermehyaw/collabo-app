@@ -93,7 +93,7 @@ async def get_invitations_to_user(user_id: str, token: str = Depends(oauth2_sche
         raise HTTPException(status_code=401, detail=failure)
 
     # Ensure its the user requesting for their own invitations
-    user = await user_services.get_user(user_id)
+    user = await user_services.get_user_by_id(user_id)
 
     if not user or user["user_id"] != user_id:
         failure = {"error": "You are not permitted to view these invitations", "code": "PERMISSION_DENIED"}
@@ -124,9 +124,9 @@ async def update_invitation_status(status: Annotated[Status, Body()], invitation
         raise HTTPException(status_code=401, detail=failure)
 
     # validate its invitation_id and the request was sent by the invitee
-    invitation = invitation_services.get_invitation_by_id(invitation_id)
+    invitation = await invitation_services.get_invitation_by_id(invitation_id)
 
-    if not invitation or invitation["invitee_id"] != token["sub"]:
+    if not invitation or invitation["invitee_id"] != token["sub"]:  # The conditions can be separated, the first for a 404 err and the other the 403
         failure = {"error": "You are not permitted to update this invitation", "code": "PERMISSION_DENIED"}
         raise HTTPException(status_code=403, detail=failure)
 
