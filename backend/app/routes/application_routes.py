@@ -118,7 +118,7 @@ async def update_application_status(status: Annotated[Status, Body()], applicati
         raise HTTPException(status_code=401, detail=failure)
 
     # validate its application_id and the request was sent by the applicant
-    application = application_services.get_application_by_id(application_id)
+    application = await application_services.get_application_by_id(application_id)
 
     if not application or application["invitee_id"] != token["sub"]:
         failure = {"error": "You are not permitted to update this application", "code": "PERMISSION_DENIED"}
