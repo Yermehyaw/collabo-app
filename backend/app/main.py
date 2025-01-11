@@ -14,10 +14,10 @@ from routes.suggestion_routes import suggestion_router
 from routes.friend_routes import friend_router
 from routes.application_routes import application_router
 from routes.invitation_routes import invitation_router
-"""
 from routes.message_routes import message_router
 from routes.message_routes import conversation_router
-"""
+
+
 # Initialize the FastAPI app
 app = FastAPI()
 
@@ -35,10 +35,9 @@ app.include_router(suggestion_router, prefix='/suggestions', tags=['Suggestions'
 app.include_router(friend_router, prefix='/friends', tags=['Friends'])
 app.include_router(application_router, prefix='/applications', tags=['Applications'])
 app.include_router(invitation_router, prefix='/invitations', tags=['Invitations'])
-"""
 app.include_router(message_router, prefix='/messages', tags=['Messages'])
 app.include_router(conversation_router, prefix='/conversations', tags=['Conversations'])
-"""
+
 
 # Run the app via uvicorn in a shell terminal
 # uvicorn main:app --reload
