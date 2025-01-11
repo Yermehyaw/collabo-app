@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        .project-card, .peer-card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .project-card:hover, .peer-card:hover {
+            background-color: #f9f9f9;
+        }
+        .peer-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        .project-avatar {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="row mb-4">
+            <div class="col-md-12 d-flex justify-content-between align-items-center">
+                <h1 class="text-center">Search Results</h1>
+                <div class="input-group w-50">
+                    <input type="text" class="form-control" placeholder="Search projects and peers" aria-label="Search projects and peers">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button"><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <h2 class="text-primary">Results for Projects</h2>
+            </div>
+            <!-- Project Cards -->
+            <div class="col-md-4">
+                <div class="project-card">
+                    <h5 class="font-weight-bold">Project Alpha</h5>
+                    <p class="text-muted">Description of Project Alpha</p>
+                    <p><strong>Technologies:</strong> HTML, CSS, JavaScript</p>
+                    <p><strong>Schedule Date:</strong> 2023-12-01</p>
+                    <p><strong>Peers:</strong>
+                        <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="Avatar" class="project-avatar">
+                        <img src="https://randomuser.me/api/portraits/women/2.jpg" alt="Avatar" class="project-avatar">
+                        <img src="https://randomuser.me/api/portraits/men/3.jpg" alt="Avatar" class="project-avatar">
+                        <span class="more-peers" data-toggle="modal" data-target="#peersModal1">...</span>
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="project-card">
+                    <h5 class="font-weight-bold">Project Beta</h5>
+                    <p class="text-muted">Description of Project Beta</p>
+                    <p><strong>Technologies:</strong> Python, Django</p>
+                    <p><strong>Schedule Date:</strong> 2023-12-15</p>
+                    <p><strong>Peers:</strong>
+                        <img src="https://randomuser.me/api/portraits/men/4.jpg" alt="Avatar" class="project-avatar">
+                        <img src="https://randomuser.me/api/portraits/women/5.jpg" alt="Avatar" class="project-avatar">
+                        <img src="https://randomuser.me/api/portraits/men/6.jpg" alt="Avatar" class="project-avatar">
+                        <span class="more-peers" data-toggle="modal" data-target="#peersModal2">...</span>
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="project-card">
+                    <h5 class="font-weight-bold">Project Gamma</h5>
+                    <p class="text-muted">Description of Project Gamma</p>
+                    <p><strong>Technologies:</strong> Java, Spring Boot</p>
+                    <p><strong>Schedule Date:</strong> 2023-12-20</p>
+                    <p><strong>Peers:</strong>
+                        <img src="https://randomuser.me/api/portraits/men/7.jpg" alt="Avatar" class="project-avatar">
+                        <img src="https://randomuser.me/api/portraits/women/8.jpg" alt="Avatar" class="project-avatar">
+                        <img src="https://randomuser.me/api/portraits/men/9.jpg" alt="Avatar" class="project-avatar">
+                        <span class="more-peers" data-toggle="modal" data-target="#peersModal3">...</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <h2 class="text-primary">Results for Peers</h2>
+            </div>
+            <!-- Peer Cards -->
+            <div class="col-md-4 mb-4">
+                <div class="card peer-card text-center">
+                    <div class="card-body">
+                        <img src="https://randomuser.me/api/portraits/men/1.jpg" class="peer-avatar" alt="Avatar">
+                        <h5 class="card-title">John Doe</h5>
+                        <p class="card-text">Web Developer</p>
+                        <p class="card-text"><strong>Skills:</strong> HTML, CSS, JavaScript</p>
+                        <button class="btn btn-primary">Connect</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card peer-card text-center">
+                    <div class="card-body">
+                        <img src="https://randomuser.me/api/portraits/women/2.jpg" class="peer-avatar" alt="Avatar">
+                        <h5 class="card-title">Jane Smith</h5>
+                        <p class="card-text">Graphic Designer</p>
+                        <p class="card-text"><strong>Skills:</strong> Photoshop, Illustrator, InDesign</p>
+                        <button class="btn btn-primary">Connect</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card peer-card text-center">
+                    <div class="card-body">
+                        <img src="https://randomuser.me/api/portraits/women/3.jpg" class="peer-avatar" alt="Avatar">
+                        <h5 class="card-title">Alice Johnson</h5>
+                        <p class="card-text">Project Manager</p>
+                        <p class="card-text"><strong>Skills:</strong> Agile, Scrum, Leadership</p>
+                        <button class="btn btn-primary">Connect</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card peer-card text-center">
+                    <div class="card-body">
+                        <img src="https://randomuser.me/api/portraits/men/4.jpg" class="peer-avatar" alt="Avatar">
+                        <h5 class="card-title">Bob Brown</h5>
+                        <p class="card-text">Software Engineer</p>
+                        <p class="card-text"><strong>Skills:</strong> Java, Python, C++</p>
+                        <button class="btn btn-primary">Connect</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card peer-card text-center">
+                    <div class="card-body">
+                        <img src="https://randomuser.me/api/portraits/men/5.jpg" class="peer-avatar" alt="Avatar">
+                        <h5 class="card-title">Charlie Davis</h5>
+                        <p class="card-text">Data Scientist</p>
+                        <p class="card-text"><strong>Skills:</strong> R, Python, SQL</p>
+                        <button class="btn btn-primary">Connect</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card peer-card text-center">
+                    <div class="card-body">
+                        <img src="https://randomuser.me/api/portraits/women/6.jpg" class="peer-avatar" alt="Avatar">
+                        <h5 class="card-title">Diana Evans</h5>
+                        <p class="card-text">UX Designer</p>
+                        <p class="card-text"><strong>Skills:</strong> Wireframing, Prototyping, User Research</p>
+                        <button class="btn btn-primary">Connect</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card peer-card text-center">
+                    <div class="card-body">
+                        <img src="https://randomuser.me/api/portraits/men/7.jpg" class="peer-avatar" alt="Avatar">
+                        <h5 class="card-title">Ethan Foster</h5>
+                        <p class="card-text">Marketing Specialist</p>
+                        <p class="card-text"><strong>Skills:</strong> SEO, Content Marketing, Social Media</p>
+                        <button class="btn btn-primary">Connect</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card peer-card text-center">
+                    <div class="card-body">
+                        <img src="https://randomuser.me/api/portraits/women/8.jpg" class="peer-avatar" alt="Avatar">
+                        <h5 class="card-title">Fiona Green</h5>
+                        <p class="card-text">Content Writer</p>
+                        <p class="card-text"><strong>Skills:</strong> Copywriting, Blogging, Editing</p>
+                        <button class="btn btn-primary">Connect</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card peer-card text-center">
+                    <div class="card-body">
+                        <img src="https://randomuser.me/api/portraits/men/9.jpg" class="peer-avatar" alt="Avatar">
+                        <h5 class="card-title">George Harris</h5>
+                        <p class="card-text">SEO Specialist</p>
+                        <p class="card-text"><strong>Skills:</strong> SEO, Google Analytics, SEM</p>
+                        <button class="btn btn-primary">Connect</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card peer-card text-center">
+                    <div class="card-body">
+                        <img src="https://randomuser.me/api/portraits/women/10.jpg" class="peer-avatar" alt="Avatar">
+                        <h5 class="card-title">Hannah Lee</h5>
+                        <p class="card-text">Product Manager</p>
+                        <p class="card-text"><strong>Skills:</strong> Product Development, Roadmapping, Strategy</p>
+                        <button class="btn btn-primary">Connect</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card peer-card text-center">
+                    <div class="card-body">
+                        <img src="https://randomuser.me/api/portraits/men/11.jpg" class="peer-avatar" alt="Avatar">
+                        <h5 class="card-title">Ian Martinez</h5>
+                        <p class="card-text">Business Analyst</p>
+                        <p class="card-text"><strong>Skills:</strong> Data Analysis, Reporting, SQL</p>
+                        <button class="btn btn-primary">Connect</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card peer-card text-center">
+                    <div class="card-body">
+                        <img src="https://randomuser.me/api/portraits/women/12.jpg" class="peer-avatar" alt="Avatar">
+                        <h5 class="card-title">Jessica Nelson</h5>
+                        <p class="card-text">HR Manager</p>
+                        <p class="card-text"><strong>Skills:</strong> Recruitment, Employee Relations, HR Policies</p>
+                        <button class="btn btn-primary">Connect</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Pagination -->
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals for displaying all peers -->
+    <div class="modal fade" id="peersModal1" tabindex="-1" aria-labelledby="peersModalLabel1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="peersModalLabel1">Peers working on Project Alpha</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="Avatar" class="peer-avatar">
+                    <img src="https://randomuser.me/api/portraits/women/2.jpg" alt="Avatar" class="peer-avatar">
+                    <img src="https://randomuser.me/api/portraits/men/3.jpg" alt="Avatar" class="peer-avatar">
+                    <img src="https://randomuser.me/api/portraits/women/4.jpg" alt="Avatar" class="peer-avatar">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="peersModal2" tabindex="-1" aria-labelledby="peersModalLabel2" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="peersModalLabel2">Peers working on Project Beta</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <img src="https://randomuser.me/api/portraits/men/4.jpg" alt="Avatar" class="peer-avatar">
+                    <img src="https://randomuser.me/api/portraits/women/5.jpg" alt="Avatar" class="peer-avatar">
+                    <img src="https://randomuser.me/api/portraits/men/6.jpg" alt="Avatar" class="peer-avatar">
+                    <img src="https://randomuser.me/api/portraits/women/7.jpg" alt="Avatar" class="peer-avatar">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="peersModal3" tabindex="-1" aria-labelledby="peersModalLabel3" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="peersModalLabel3">Peers working on Project Gamma</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <img src="https://randomuser.me/api/portraits/men/7.jpg" alt="Avatar" class="peer-avatar">
+                    <img src="https://randomuser.me/api/portraits/women/8.jpg" alt="Avatar" class="peer-avatar">
+                    <img src="https://randomuser.me/api/portraits/men/9.jpg" alt="Avatar" class="peer-avatar">
+                    <img src="https://randomuser.me/api/portraits/women/10.jpg" alt="Avatar" class="peer-avatar">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

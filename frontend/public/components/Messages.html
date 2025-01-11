@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        .sidebar {
+            height: 100vh;
+            overflow-y: auto;
+        }
+        .conversation-area {
+            height: calc(100vh - 160px);
+            overflow-y: auto;
+        }
+        .message-input {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: white;
+            padding: 10px;
+            border-top: 1px solid #ddd;
+        }
+        .contact-bubbles {
+            display: none;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 10px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #ddd;
+        }
+        .contact-bubbles img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+            .contact-bubbles {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Contact Bubbles for Mobile View -->
+            <div class="col-12 contact-bubbles">
+                <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="John Doe" data-name="John Doe">
+                <img src="https://randomuser.me/api/portraits/women/2.jpg" alt="Jane Smith" data-name="Jane Smith">
+                <img src="https://randomuser.me/api/portraits/men/3.jpg" alt="Bob Brown" data-name="Bob Brown">
+                <img src="https://randomuser.me/api/portraits/women/4.jpg" alt="Alice Johnson" data-name="Alice Johnson">
+                <img src="https://randomuser.me/api/portraits/men/5.jpg" alt="Charlie Davis" data-name="Charlie Davis">
+            </div>
+            <!-- Sidebar for Desktop View -->
+            <div class="col-md-3 bg-white border-right sidebar">
+                <div class="p-4 border-bottom">
+                    <h1 class="text-2xl font-bold text-primary">Messages</h1>
+                </div>
+                <div class="p-4">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Search contacts" aria-label="Search contacts">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button"><i class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+                    <ul class="list-unstyled">
+                        <li class="media p-2 hover:bg-light cursor-pointer">
+                            <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="Avatar" class="mr-3 rounded-circle" width="40" height="40">
+                            <div class="media-body">
+                                <h5 class="mt-0 mb-1">John Doe</h5>
+                            </div>
+                        </li>
+                        <li class="media p-2 hover:bg-light cursor-pointer">
+                            <img src="https://randomuser.me/api/portraits/women/2.jpg" alt="Avatar" class="mr-3 rounded-circle" width="40" height="40">
+                            <div class="media-body">
+                                <h5 class="mt-0 mb-1">Jane Smith</h5>
+                            </div>
+                        </li>
+                        <li class="media p-2 hover:bg-light cursor-pointer">
+                            <img src="https://randomuser.me/api/portraits/men/3.jpg" alt="Avatar" class="mr-3 rounded-circle" width="40" height="40">
+                            <div class="media-body">
+                                <h5 class="mt-0 mb-1">Bob Brown</h5>
+                            </div>
+                        </li>
+                        <li class="media p-2 hover:bg-light cursor-pointer">
+                            <img src="https://randomuser.me/api/portraits/women/4.jpg" alt="Avatar" class="mr-3 rounded-circle" width="40" height="40">
+                            <div class="media-body">
+                                <h5 class="mt-0 mb-1">Alice Johnson</h5>
+                            </div>
+                        </li>
+                        <li class="media p-2 hover:bg-light cursor-pointer">
+                            <img src="https://randomuser.me/api/portraits/men/5.jpg" alt="Avatar" class="mr-3 rounded-circle" width="40" height="40">
+                            <div class="media-body">
+                                <h5 class="mt-0 mb-1">Charlie Davis</h5>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Conversation Area -->
+            <div class="col-md-9 bg-white">
+                <div class="p-4 border-bottom d-flex align-items-center">
+                    <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="Avatar" class="rounded-circle mr-3" width="40" height="40">
+                    <h2 class="text-xl font-bold text-dark mb-0" id="contactName">John Doe</h2>
+                </div>
+                <div class="p-4 conversation-area">
+                    <div class="media mb-4">
+                        <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="Avatar" class="mr-3 rounded-circle" width="30" height="30">
+                        <div class="media-body bg-light p-3 rounded">
+                            <p class="mb-0">Hello, how are you?</p>
+                        </div>
+                    </div>
+                    <div class="media mb-4">
+                        <img src="https://randomuser.me/api/portraits/women/2.jpg" alt="Avatar" class="mr-3 rounded-circle" width="30" height="30">
+                        <div class="media-body bg-primary text-white p-3 rounded">
+                            <p class="mb-0">I'm good, thank you! How about you?</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="message-input">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <button class="btn btn-outline-secondary" type="button" id="attachmentButton"><i class="fas fa-paperclip"></i></button>
+                            <input type="file" id="attachmentInput" style="display: none;">
+                            <button class="btn btn-outline-secondary" type="button" id="emojiButton"><i class="fas fa-smile"></i></button>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Type a message">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="button">Send</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#attachmentButton').click(function() {
+                $('#attachmentInput').click();
+            });
+
+            $('#emojiButton').click(function() {
+                alert('Emoji picker not implemented yet.');
+            });
+
+            $('.contact-bubbles img').click(function() {
+                var name = $(this).data('name');
+                $('#contactName').text(name);
+                // Load the conversation for the selected contact
+            });
+        });
+    </script>
+</body>
+</html>

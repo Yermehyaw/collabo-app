@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        .project-card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        .project-card:hover {
+            background-color: #f9f9f9;
+        }
+        .peer-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        .more-peers {
+            cursor: pointer;
+            color: blue;
+        }
+        .dropdown-menu-right {
+            right: 0;
+            left: auto;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="row mb-4">
+            <div class="col-md-12 d-flex justify-content-between align-items-center">
+                <button class="btn btn-primary">Create Project</button>
+                <div class="input-group w-50">
+                    <input type="text" class="form-control" placeholder="Search projects" aria-label="Search projects">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button"><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <!-- Project Cards -->
+            <div class="col-md-4">
+                <div class="project-card">
+                    <div class="dropdown" style="position: absolute; top: 10px; right: 10px;">
+                        <a class="text-secondary" href="#" role="button" id="dropdownMenuLink1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-pencil-alt"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink1">
+                            <a class="dropdown-item" href="#"><i class="fas fa-edit"></i> Edit Project</a>
+                            <a class="dropdown-item" href="#"><i class="fas fa-trash-alt"></i> Delete Project</a>
+                        </div>
+                    </div>
+                    <h5 class="font-weight-bold">Project Alpha</h5>
+                    <p class="text-muted">Description of Project Alpha</p>
+                    <p><strong>Technologies:</strong> HTML, CSS, JavaScript</p>
+                    <p><strong>Schedule Date:</strong> 2023-12-01</p>
+                    <p><strong>Peers:</strong>
+                        <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="Avatar" class="peer-avatar">
+                        <img src="https://randomuser.me/api/portraits/women/2.jpg" alt="Avatar" class="peer-avatar">
+                        <img src="https://randomuser.me/api/portraits/men/3.jpg" alt="Avatar" class="peer-avatar">
+                        <span class="more-peers" data-toggle="modal" data-target="#peersModal1">...</span>
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="project-card">
+                    <div class="dropdown" style="position: absolute; top: 10px; right: 10px;">
+                        <a class="text-secondary" href="#" role="button" id="dropdownMenuLink2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-pencil-alt"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink2">
+                            <a class="dropdown-item" href="#"><i class="fas fa-edit"></i> Edit Project</a>
+                            <a class="dropdown-item" href="#"><i class="fas fa-trash-alt"></i> Delete Project</a>
+                        </div>
+                    </div>
+                    <h5 class="font-weight-bold">Project Beta</h5>
+                    <p class="text-muted">Description of Project Beta</p>
+                    <p><strong>Technologies:</strong> Python, Django</p>
+                    <p><strong>Schedule Date:</strong> 2023-12-15</p>
+                    <p><strong>Peers:</strong>
+                        <img src="https://randomuser.me/api/portraits/men/4.jpg" alt="Avatar" class="peer-avatar">
+                        <img src="https://randomuser.me/api/portraits/women/5.jpg" alt="Avatar" class="peer-avatar">
+                        <img src="https://randomuser.me/api/portraits/men/6.jpg" alt="Avatar" class="peer-avatar">
+                        <span class="more-peers" data-toggle="modal" data-target="#peersModal2">...</span>
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="project-card">
+                    <div class="dropdown" style="position: absolute; top: 10px; right: 10px;">
+                        <a class="text-secondary" href="#" role="button" id="dropdownMenuLink3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-pencil-alt"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink3">
+                            <a class="dropdown-item" href="#"><i class="fas fa-edit"></i> Edit Project</a>
+                            <a class="dropdown-item" href="#"><i class="fas fa-trash-alt"></i> Delete Project</a>
+                        </div>
+                    </div>
+                    <h5 class="font-weight-bold">Project Gamma</h5>
+                    <p class="text-muted">Description of Project Gamma</p>
+                    <p><strong>Technologies:</strong> Java, Spring Boot</p>
+                    <p><strong>Schedule Date:</strong> 2023-12-20</p>
+                    <p><strong>Peers:</strong>
+                        <img src="https://randomuser.me/api/portraits/men/7.jpg" alt="Avatar" class="peer-avatar">
+                        <img src="https://randomuser.me/api/portraits/women/8.jpg" alt="Avatar" class="peer-avatar">
+                        <img src="https://randomuser.me/api/portraits/men/9.jpg" alt="Avatar" class="peer-avatar">
+                        <span class="more-peers" data-toggle="modal" data-target="#peersModal3">...</span>
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="project-card">
+                    <div class="dropdown" style="position: absolute; top: 10px; right: 10px;">
+                        <a class="text-secondary" href="#" role="button" id="dropdownMenuLink4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-pencil-alt"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink4">
+                            <a class="dropdown-item" href="#"><i class="fas fa-edit"></i> Edit Project</a>
+                            <a class="dropdown-item" href="#"><i class="fas fa-trash-alt"></i> Delete Project</a>
+                        </div>
+                    </div>
+                    <h5 class="font-weight-bold">Project Delta</h5>
+                    <p class="text-muted">Description of Project Delta</p>
+                    <p><strong>Technologies:</strong> Ruby on Rails</p>
+                    <p><strong>Schedule Date:</strong> 2023-12-25</p>
+                    <p><strong>Peers:</strong>
+                        <img src="https://randomuser.me/api/portraits/men/10.jpg" alt="Avatar" class="peer-avatar">
+                        <img src="https://randomuser.me/api/portraits/women/11.jpg" alt="Avatar" class="peer-avatar">
+                        <img src="https://randomuser.me/api/portraits/men/12.jpg" alt="Avatar" class="peer-avatar">
+                        <span class="more-peers" data-toggle="modal" data-target="#peersModal4">...</span>
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="project-card">
+                    <div class="dropdown" style="position: absolute; top: 10px; right: 10px;">
+                        <a class="text-secondary" href="#" role="button" id="dropdownMenuLink5" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-pencil-alt"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink5">
+                            <a class="dropdown-item" href="#"><i class="fas fa-edit"></i> Edit Project</a>
+                            <a class="dropdown-item" href="#"><i class="fas fa-trash-alt"></i> Delete Project</a>
+                        </div>
+                    </div>
+                    <h5 class="font-weight-bold">Project Epsilon</h5>
+                    <p class="text-muted">Description of Project Epsilon</p>
+                    <p><strong>Technologies:</strong> PHP, Laravel</p>
+                    <p><strong>Schedule Date:</strong> 2023-12-30</p>
+                    <p><strong>Peers:</strong>
+                        <img src="https://randomuser.me/api/portraits/men/13.jpg" alt="Avatar" class="peer-avatar">
+                        <img src="https://randomuser.me/api/portraits/women/14.jpg" alt="Avatar" class="peer-avatar">
+                        <img src="https://randomuser.me/api/portraits/men/15.jpg" alt="Avatar" class="peer-avatar">
+                        <span class="more-peers" data-toggle="modal" data-target="#peersModal5">...</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals for displaying all peers -->
+    <div class="modal fade" id="peersModal1" tabindex="-1" aria-labelledby="peersModalLabel1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="peersModalLabel1">Peers working on Project Alpha</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="Avatar" class="peer-avatar">
+                    <img src="https://randomuser.me/api/portraits/women/2.jpg" alt="Avatar" class="peer-avatar">
+                    <img src="https://randomuser.me/api/portraits/men/3.jpg" alt="Avatar" class="peer-avatar">
+                    <img src="https://randomuser.me/api/portraits/women/4.jpg" alt="Avatar" class="peer-avatar">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="peersModal2" tabindex="-1" aria-labelledby="peersModalLabel2" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="peersModalLabel2">Peers working on Project Beta</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <img src="https://randomuser.me/api/portraits/men/4.jpg" alt="Avatar" class="peer-avatar">
+                    <img src="https://randomuser.me/api/portraits/women/5.jpg" alt="Avatar" class="peer-avatar">
+                    <img src="https://randomuser.me/api/portraits/men/6.jpg" alt="Avatar" class="peer-avatar">
+                    <img src="https://randomuser.me/api/portraits/women/7.jpg" alt="Avatar" class="peer-avatar">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="peersModal3" tabindex="-1" aria-labelledby="peersModalLabel3" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="peersModalLabel3">Peers working on Project Gamma</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <img src="https://randomuser.me/api/portraits/men/7.jpg" alt="Avatar" class="peer-avatar">
+                    <img src="https://randomuser.me/api/portraits/women/8.jpg" alt="Avatar" class="peer-avatar">
+                    <img src="https://randomuser.me/api/portraits/men/9.jpg" alt="Avatar" class="peer-avatar">
+                    <img src="https://randomuser.me/api/portraits/women/10.jpg" alt="Avatar" class="peer-avatar">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="peersModal4" tabindex="-1" aria-labelledby="peersModalLabel4" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="peersModalLabel4">Peers working on Project Delta</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <img src="https://randomuser.me/api/portraits/men/10.jpg" alt="Avatar" class="peer-avatar">
+                    <img src="https://randomuser.me/api/portraits/women/11.jpg" alt="Avatar" class="peer-avatar">
+                    <img src="https://randomuser.me/api/portraits/men/12.jpg" alt="Avatar" class="peer-avatar">
+                    <img src="https://randomuser.me/api/portraits/women/13.jpg" alt="Avatar" class="peer-avatar">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="peersModal5" tabindex="-1" aria-labelledby="peersModalLabel5" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="peersModalLabel5">Peers working on Project Epsilon</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <img src="https://randomuser.me/api/portraits/men/13.jpg" alt="Avatar" class="peer-avatar">
+                    <img src="https://randomuser.me/api/portraits/women/14.jpg" alt="Avatar" class="peer-avatar">
+                    <img src="https://randomuser.me/api/portraits/men/15.jpg" alt="Avatar" class="peer-avatar">
+                    <img src="https://randomuser.me/api/portraits/women/16.jpg" alt="Avatar" class="peer-avatar">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
