@@ -5,34 +5,33 @@ import {
   Routes,
   Navigate,
 } from "react-router-dom";
-import Home from "./pages/home/Home";
-import Login from "./pages/Login/Login";
-import "./pages/home/Home.css";
+import Navbar from "./components/Navbar/Navbar.jsx";
+import HeroSection from "./components/HeroSection/heroSection.jsx";
+import Login from "./pages/login/Login";
 import "./assets/styles/global.css";
 import "./components/Navbar/Navbar.css";
 import "./components/Navbar/Sidebar.css";
-import Layout from "./components/Layout/Layout";
 import Profile from "./pages/profile/Profile";
-import ProjectPage from "./pages/projectDetails/ProjectDetails";
+import SignUp from "./pages/signUp/SignUp.jsx";
+import Footer from "./components/Footer/Footer.jsx";
 
 const App = () => {
   const isAuthenticated = !!localStorage.getItem("token"); // Check if user is authenticated
 
   return (
     <Router>
+      <Navbar />
       <Routes>
-        {/* All routes inside Layout will have the Navbar and Footer */}
-        <Route element={<Layout />}>
-          <Route path="/" element={<Home />} /> {/* Home page */}
-          <Route
-            path="/profile"
-            element={isAuthenticated ? <Profile /> : <Navigate to="/Login" />}
-          />{" "}
-          <Route path="/ProjectDetails" element={<ProjectPage />} />{" "}
-          {/* Add more routes here for other pages */}
-        </Route>
-        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<HeroSection />} /> {/* Home page */}
+        <Route
+          path="/profile"
+          element={isAuthenticated ? <Profile /> : <Navigate to="/Login" />}
+        />{" "}
+        <Route path="/login" element={<Login />} /> {/* Login page */}
+        <Route path="/signup" element={<SignUp />} /> {/* Sign up page */}
+        {/* Add more routes here for other pages */}
       </Routes>
+      <Footer />
     </Router>
   );
 };

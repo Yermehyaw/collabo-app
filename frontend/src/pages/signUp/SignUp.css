@@ -1,0 +1,41 @@
+#sign-up {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.alternative-signup {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.social-buttons button {
+  margin: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.facebook-button {
+  background-color: #3b5998;
+  color: white;
+}
+
+.google-button {
+  background-color: #db4437;
+  color: white;
+}
+
+.linkedin-button {
+  background-color: #0077b5;
+  color: white;
+}
+
+.social-buttons button:hover {
+  opacity: 0.9;
+}
+
+.bi-eye .bi-eye-slash {
+  background: none;
+}

@@ -1,40 +1,147 @@
-.auth-container {
-  background-color: #f9f9f9;
+body {
+  background-color: #f4f4f4;
+  font-family: "Arial", sans-serif;
 }
 
-.auth-card {
-  background-color: white;
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.logo-container {
+  margin-bottom: 20px;
+}
+
+.logo {
+  height: 80px;
+}
+
+.login-card {
+  background: #ffffff;
   border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  padding: 20px;
+  text-align: center;
+}
+
+.login-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.login-subtitle {
+  font-size: 14px;
+  color: #6c757d;
+  margin-bottom: 20px;
+}
+
+.login-subtitle a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.login-subtitle a:hover {
+  text-decoration: underline;
+}
+
+.error-message {
+  color: #d9534f;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.login-form .form-group {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.login-form .form-control {
   width: 100%;
-  max-width: 400px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  justify-self: center;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
 }
 
-h3 {
-  font-weight: 600;
-  color: #333;
-}
-
-button {
-  border-radius: 5px;
-}
-
-button.toggle-password-btn {
-  position: absolute;
+.toggle-password {
+  /* position: relative; */
   right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: transparent;
+  display: flex;
+  top: 38px;
+  background: none;
   border: none;
   cursor: pointer;
 }
 
-input.form-control {
-  border-radius: 5px;
-  box-shadow: none;
+.toggle-password i {
+  font-size: 20px;
+  color: #010911;
 }
 
-input.form-control:focus {
-  border-color: #007bff;
+.remember-me-label {
+  margin-left: 5px;
+  font-size: 14px;
+}
+
+.login-button {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  background-color: #007bff;
+  border: none;
+  color: #ffffff;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.login-button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+.login-button:hover {
+  background-color: #0056b3;
+}
+
+/* Parent container for the password input and toggle button */
+.form-group {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+/* Password input */
+.form-control {
+  width: 100%;
+  padding: 10px 40px 10px 10px; /* Leave space for the toggle button */
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+/* Toggle password button */
+.toggle-password {
+  position: absolute;
+  top: 69%;
+  right: 10px; /* Adjust as needed */
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-size: 16px; /* Adjust icon size */
+  color: #100000; /* Adjust icon color */
+}
+
+/* Hover and focus states */
+.toggle-password:hover,
+.toggle-password:focus {
+  color: #000;
+  outline: none;
 }
