@@ -1,9 +1,12 @@
 import React from "react";
 import { useLocation, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const location = useLocation();
   const { userData } = location.state || {};
+  const navigate = useNavigate();
+  const isAuthenticated = !!localStorage.getItem("token");
 
   if (!userData) {
     return (
@@ -12,6 +15,10 @@ const Profile = () => {
         <Link to="/">Go back to Login</Link>
       </div>
     );
+  }
+  if (!isAuthenticated) {
+    navigate("/login"); // Redirect to login if not authenticated
+    return null;
   }
 
   return (

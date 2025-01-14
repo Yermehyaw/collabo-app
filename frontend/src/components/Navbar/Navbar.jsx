@@ -170,7 +170,7 @@ function NavbarComponent() {
               className="dropdown-menu dropdown-menu-end"
               aria-labelledby="profiledropdown"
             >
-              <Link className="dropdown-item" to="/profile">
+              <Link className="dropdown-item" to="/Profile">
                 Profile
               </Link>
               <Link className="dropdown-item" to="/settings">

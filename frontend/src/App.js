@@ -13,6 +13,7 @@ import "./components/Navbar/Navbar.css";
 import "./components/Navbar/Sidebar.css";
 import Profile from "./pages/profile/Profile";
 import SignUp from "./pages/signUp/SignUp.jsx";
+import Peers from "./pages/Peers/peers.jsx";
 import Footer from "./components/Footer/Footer.jsx";
 
 const App = () => {
@@ -29,6 +30,7 @@ const App = () => {
         />{" "}
         <Route path="/login" element={<Login />} /> {/* Login page */}
         <Route path="/signup" element={<SignUp />} /> {/* Sign up page */}
+        <Route path="/peers" element={<Peers />} /> {/* Peers page */}
         {/* Add more routes here for other pages */}
       </Routes>
       <Footer />
