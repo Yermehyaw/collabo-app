@@ -1,0 +1,19 @@
+.project-card {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 15px;
+  background-color: white;
+  min-height: 350px;
+}
+
+.peer-avatar {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+.more-peers {
+  cursor: pointer;
+  color: blue;
+}

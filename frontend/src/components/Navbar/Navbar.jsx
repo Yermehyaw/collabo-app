@@ -8,8 +8,8 @@ import "./Navbar.css";
 
 function NavbarComponent() {
   return (
-    <Nav className="navbar navbar-expand-lg navbar-light bg-light">
-      <Link to={"/"} className="navbar-brand">
+    <Nav className="navbar navbar-expand-lg navbar-light bg-light justify-content-center mx-3">
+      <Link to={"/"} className="navbar-brand ">
         <img src="/Collabo.png" alt="Collabo" height={40} />
       </Link>
 

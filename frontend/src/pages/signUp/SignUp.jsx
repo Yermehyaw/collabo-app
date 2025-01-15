@@ -118,7 +118,10 @@ const SignUp = () => {
           />
           <h2 className="mt-3">Sign Up</h2>
           <p>
-            Already have an account? <a href="/login">Log in here</a>
+            Already have an account?{" "}
+            <a href="/login" className="text-primary">
+              Log in here
+            </a>
           </p>
         </div>
         {error && <div className="alert alert-danger">{error}</div>}
