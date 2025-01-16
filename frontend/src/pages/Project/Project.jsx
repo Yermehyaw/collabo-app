@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "bootstrap-icons/font/bootstrap-icons.css";
@@ -164,7 +165,9 @@ const Projects = () => {
     <div className="container mt-5">
       <div className="row mb-4">
         <div className="col-md-12 d-flex justify-content-between align-items-center">
-          <button className="btn btn-primary">Create Project</button>
+          <Link to="/createProject">
+            <button className="btn btn-primary">Create Project</button>
+          </Link>
           <div className="input-group w-50">
             <input
               type="text"

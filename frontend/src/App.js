@@ -14,6 +14,7 @@ import Profile from "./pages/profile/Profile";
 import SignUp from "./pages/signUp/SignUp.jsx";
 import Peers from "./pages/Peers/peers.jsx";
 import Projects from "./pages/Project/Project.jsx";
+import CreateProject from "./pages/createProject/createProject.jsx";
 import Footer from "./components/Footer/Footer.jsx";
 
 const App = () => {
@@ -31,6 +32,8 @@ const App = () => {
         <Route path="/login" element={<Login />} /> {/* Login page */}
         <Route path="/signup" element={<SignUp />} /> {/* Sign up page */}
         <Route path="/peers" element={<Peers />} /> {/* Peers page */}
+        <Route path="/createProject" element={<CreateProject />} />{" "}
+        {/* Create project page */}
         <Route path="/projects" element={<Projects />} /> {/* Projects page */}
         {/* Add more routes here for other pages */}
       </Routes>
