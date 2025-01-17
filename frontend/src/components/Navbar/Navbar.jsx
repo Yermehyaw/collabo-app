@@ -18,7 +18,7 @@ function NavbarComponent() {
         <input
           className="form-control mr-sm-2"
           type="search"
-          placeholder="Search"
+          placeholder="Search project and peers"
           aria-label="Search"
         />
         <Button
