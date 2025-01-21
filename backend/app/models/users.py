@@ -1,12 +1,10 @@
 """
-User model for fastapi app
+Users model for fastapi app
 
 MODULES:
     - typing: Optional
     - pydantic: BaseModel, EmailStr, Field, ConfigDict
     - datetime: datetime class
-    - uuid: uuid4 class
-    - bson: ObjectId class
 
 """
 from typing import (
@@ -19,12 +17,58 @@ from pydantic import (
     ConfigDict
 )
 from datetime import datetime
-from uuid import uuid4
-from bson import ObjectId
+
+
+# USER SIGNUP/CREATE
+class UserSignup(BaseModel):
+    """
+    Users description class for signing up a new user
+
+    ATTRIBUTES:
+        - name: str
+        - email: str
+        - password: str
+
+    """
+    name: str
+    email: EmailStr
+    password: str = Field(..., min_length=8)
+    model_config = ConfigDict(extra="forbid")
+
+
+# USER LOGIN
+class UserLogin(BaseModel):
+    """
+    Users description class for logging in a user
+
+    ATTRIBUTES:
+        - email: str
+        - password: str
+        - 
+
+    """
+    email: EmailStr
+    password: str = Field(..., min_length=8)
+    model_config = ConfigDict(extra="forbid")
+
+
+# JWT Token RESPONSE
+class Token(BaseModel):
+    """
+    Token description class for responses
+
+    ATTRIBUTES:
+        - access_token: str
+        - token_type: str
+
+    """
+    access_token: str
+    token_type: str = 'bearer'
+    model_config = ConfigDict(extra="forbid")
 
 
 # DEFINTION OF A USER: USED FOR USER CREATION
-class User(BaseModel):
+class UserCreate(BaseModel):
     """
     Users description class for creating a new user. 
     Only non-sensitive data should be included during retrieval.
@@ -72,7 +116,7 @@ class User(BaseModel):
     timezone: Optional[str] = 'UTC'
     model_config = ConfigDict(
         populate_by_name=True,  # permit the id alias of user_id to be used e.g when inserting into mongodb
-        arbitrary_types_allowed=True,
+        extra="forbid",
         # Example of expected format with the min req attr in the data supposed to utilize this model
         json_scheme_extra={
             "example": {
@@ -126,6 +170,7 @@ class UserResponse(BaseModel):
     location: Optional[str]
     timezone: Optional[str]
     model_config = ConfigDict(
+        extra="forbid",
         # Example of expected model format
         json_scheme_extra={
             "example": {
@@ -163,9 +208,9 @@ class UserUpdate(BaseModel):
 
     """
     name: Optional[str] = Field(None, min_length=1, max_length=100)
-    email: Optional[EmailStr]
+    email: Optional[EmailStr] = None
     password: Optional[str] = Field(None, min_length=8)
-    updated_at: str = datetime.now().isoformat()
+    # updated_at: str = datetime.now().isoformat()
     profile_pic: Optional[bytes] = None
     bio: Optional[str] = None
     skills: Optional[list] = []
@@ -180,8 +225,9 @@ class UserUpdate(BaseModel):
     location: Optional[str] = None
     timezone: Optional[str] = 'UTC'
     model_config = ConfigDict(
-        arbitrary_types_allowed=True,
-        json_encoders={ObjectId: str},
+        # arbitrary_types_allowed=True,
+        # json_encoders={ObjectId: str},
+        extra="forbid",
         # Example of expected format
         json_scheme_extra={
             "example": {
@@ -192,47 +238,3 @@ class UserUpdate(BaseModel):
             }
         }
     )
-
-
-# USER SIGNUP
-class UserSignup(User):
-    """
-    Users description class for signing up a new user
-
-    ATTRIBUTES:
-        - name: str
-        - email: str
-        - password: str
-
-    """
-    name: str
-    email: EmailStr
-    password: str = Field(..., min_length=8)
-
-# USER LOGIN
-class UserLogin(BaseModel):
-    """
-    Users description class for logging in a user
-
-    ATTRIBUTES:
-        - email: str
-        - password: str
-        - 
-
-    """
-    email: EmailStr
-    password: str = Field(..., min_length=8)
-
-
-# JWT Token RESPONSE
-class Token(BaseModel):
-    """
-    Token description class for responses
-
-    ATTRIBUTES:
-        - access_token: str
-        - token_type: str
-
-    """
-    access_token: str
-    token_type: str = 'bearer' 

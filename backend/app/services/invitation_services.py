@@ -25,16 +25,6 @@ class InvitationServices:
         """Object initializing method"""
         self.collection_name = 'invitations'
 
-    async def invitations_collection(self):
-        """
-        Get the invitations collection
-
-        RETURNS:
-            - collection: collection object
-
-        """
-        return await get_collection(self.collection_name)
-
     async def send_invitation(self, invite: dict) -> str:
         """
         Send an invitation to a user
@@ -46,15 +36,17 @@ class InvitationServices:
             - invitation_id: stringified ObjectId, id of newly created and stored project object
 
         """
+        collection = await get_collection(self.collection_name)
+
         # Add the additional params req to create an InvitationResponse during response creation
         # project_id, invitee_id and inviter_id should already be in the dict
         invite["created_at"] = datetime.now().isoformat()
         invite["status"] = "pending"
         
-        insertion_id = self.invitations_collection().insert_one(invite.model_dump(by_alias=True)).insertion_id  # the invitation_id is aliased to _id so that the db auto assigns it
-        invitation_id = str(insertion_id)
+        insertion_id = await collection.insert_one(invite.model_dump(by_alias=True))  # the invitation_id is aliased to _id so that the db auto assigns it
+        invitation_id = str(insertion_id.inserted_id)
 
-        return invitation_id  # invitation_id is saved in the db as the _id attr
+        return invitation_id
     
     async def get_invitation_by_id(self, invitation_id: str):
         """
@@ -64,13 +56,16 @@ class InvitationServices:
             - invitation_id: str
 
         RETURNS:
-            - invitation: invitation obj
+            - invitation: dict, with the format of a InvitationResponse obj
 
         """
+        collection = await get_collection(self.collection_name)
+
         if not ObjectId.is_valid(invitation_id):
             return None
 
-        invitation = await self.invitations_collection().find_one({"_id": ObjectId(invitation_id)})
+        invitation = await collection.find_one({"_id": ObjectId(invitation_id)})
+        invitation["invitation_id"] = invitation.pop("_id")
 
         return invitation
 
@@ -86,7 +81,13 @@ class InvitationServices:
             - list: invitation objs
 
         """
-        invitations = await self.invitations_collection().find({"invitee_id": user_id}).to_list()
+        collection = await get_collection(self.collection_name)
+
+        cursor = collection.find({"invitee_id": user_id})
+        invitations = await cursor.to_list(length=None)
+
+        for invitation in invitations:
+            invitation["invitation_id"] = invitation.pop("_id")
 
         return invitations
 

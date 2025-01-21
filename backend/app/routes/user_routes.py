@@ -2,10 +2,10 @@
 Routes for user endpoints
 
 MODULES:
-    - fastapi: APIRouter, Depends, HTTPException, status
+    - fastapi: APIRouter, Depends, HTTPException
+    - fastapi.security: OAuth2PasswordBearer
     - services.user_service: UserService
     - models.user: User, UserResponse
-    - utils.auth.password_utils: verify_password
     - utils.auth.jwt_handler: verify_access_token
 
 FUTURE IMPROVEMENTS:
@@ -16,21 +16,23 @@ FUTURE IMPROVEMENTS:
 """
 from fastapi import (
     APIRouter, Depends,
-    HTTPException, status
+    HTTPException
 )
-from typing_extensions import Annotated
-from services.user_service import UserService
-from models.user import (
+from fastapi.security import OAuth2PasswordBearer
+from services.user_services import UserServices
+from models.users import (
     UserUpdate, UserResponse
 )
-from utils.auth.password_utils import verify_password
 from utils.auth.jwt_handler import verify_access_token
 
+
 user_router = APIRouter()
-user_service = UserService()
+user_services = UserServices()
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
 
 @user_router.get("/profile/{user_id}", response_model=UserResponse)
-async def get_user_profile(user_id: str, token: str = Depends(verify_access_token)):
+async def get_user_profile(user_id: str, token: str = Depends(oauth2_scheme)):
     """
     Route to get a user profile
 
@@ -42,7 +44,12 @@ async def get_user_profile(user_id: str, token: str = Depends(verify_access_toke
         - UserResponse: user object
 
     """
-    user = await user_service.get_user_by_id(user_id)
+    payload = verify_access_token(token)
+    if not payload:
+        failure = {"error": "Invalid token", "code": "UNAUTHORIZED"}
+        raise HTTPException(status_code=401, detail=failure)
+
+    user = await user_services.get_user_by_id(user_id)  # Returns a UserResponse obj
     if not user:
         failure = {"error": "User not found", "code": "NOT_FOUND"}
         raise HTTPException(status_code=404, detail=failure)
@@ -50,32 +57,39 @@ async def get_user_profile(user_id: str, token: str = Depends(verify_access_toke
     return user
 
 
-@user_router.put("/profile/{user_id}", response_model=UserResponse)
-async def update_user_profile(user_id: str, user: UserUpdate, token: str = Depends(verify_access_token)):
+@user_router.put("/profile/{user_id}", response_model=dict)
+async def update_user_profile(user_id: str, user: UserUpdate, token: str = Depends(oauth2_scheme)):
     """
     Route to update a user profile
 
     PARAMETERS:
         - user_id: str, user id
+        - user: UserUpdate, json object with fields to be updated
         - token: str, access token
 
     RETURNS:
-        - UserResponse: updated user object
+        - dict: update message
+
+    NOTE:
+    There is a "bug" in this implementation 🙃, the db storing users gets updated inspite no new data was passed innthe request.
+    For example, a user could pass the same data twice or even the original data stored in the user and still get a update successful message. 
+    So . . . .  🌚 whomever is reading this, Its yr turn to ensure that only requests with a change in data gets processsed and a diff message e.g "No data entries updated" when this happens. Be of good faith soldier  😂❤️
 
     """
+    token = verify_access_token(token)  # Decoded token
+    if not token:
+        failure = {"error": "Invalid token", "code": "UNAUTHORIZED"}
+        raise HTTPException(status_code=401, detail=failure)
+    
     if str(token["sub"]) != user_id:
         failure = {"error": "Permission denied", "code": "PERMISSION_DENIED"}
         raise HTTPException(status_code=403, detail=failure)
 
-    fields_updated = await user_service.update_user(user_id, user)
+    fields_updated = await user_services.update_user(user_id, user)
 
     if fields_updated is None:  # user_id not found
         failure = {"error": "User not found", "code": "NOT_FOUND"}
         raise HTTPException(status_code=400, detail=failure)
 
-    if fields_updated == 0:  # user_id found, but no change
-        success = {"message": "No data entries updated/created"}
-    else:
-        success = {"message": "profile updated successfully"}
-
+    success = {"message": "profile updated successfully"}
     return success

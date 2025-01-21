@@ -4,28 +4,25 @@ Authentication routes
 MODULES:
     - fastapi: APIRouter, Depends, HTTPException, status
     - services.auth_service: AuthService
-    - models.user: UserSignup, UserLogin, Token
-    - utils.auth.jwt_handler: create_access_token  
+    - models.users: UserSignup, UserLogin, Token
 
 """
 from fastapi import (
     APIRouter, 
-    Depends, 
     HTTPException, 
     status
 )
-from services.auth_service import AuthService
-from models.user import (
+from services.auth_services import AuthServices
+from models.users import (
     UserSignup,
     UserLogin,
     Token
 )
-from utils.auth.jwt_handler import (
-    create_access_token
-)
+
 
 auth_router = APIRouter()
-auth_service = AuthService()
+auth_services = AuthServices()
+
 
 @auth_router.post("/signup", response_model=dict, status_code=status.HTTP_201_CREATED)
 async def signup(user: UserSignup):
@@ -40,8 +37,8 @@ async def signup(user: UserSignup):
 
     """
     try:
-        user = await auth_service.create_user(user)
-        success = {"message": "User registered successfully", "user": user.user_id}
+        user_id = await auth_services.create_user(user)
+        success = {"message": "User registered successfully", "user": user_id}
         return success
     except ValueError:
         failure = {"error": "User already exists", "code": "BAD_REQUEST"}
@@ -59,7 +56,7 @@ async def login(user: UserLogin):
         - Token: access token
 
     """
-    token = await auth_service.authenticate_user(user.email, user.password)
+    token = await auth_services.authenticate_user(user.email, user.password)
     if not token:
         failure = {"error": "Invalid email or password", "code": "UNAUTHORIZED"}
         raise HTTPException(status_code=401, detail=failure)

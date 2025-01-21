@@ -41,7 +41,7 @@ def create_access_token(data: dict) -> str:
     data_to_encode = data.copy()  # make a copy of the json dict
     expire = datetime.now(timezone.utc) + timedelta(minutes=EXPIRES)  # set the token expiration time
 
-    data_to_encode.update({"expires_in": expire})  # add the expiration time to the data
+    data_to_encode.update({"expires_in": expire.timestamp()})  # add the expiration time to the data
 
     token = jwt.encode(data_to_encode, JWT_SECRET, algorithm=JWT_ALGORITHM)  # encode the data with the secret and the hashing algorithm
     return token
@@ -55,9 +55,5 @@ def verify_access_token(token: str) -> Union[dict, None]:
     try:
         payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])  # decode the token
         return payload
-    except jwt.ExpiredSignatureError:
-        return
-    except jwt.InvalidTokenError:
-        return
-    except jwt.InvalidSubjectError:  # if the subject the token reprs is invalid
+    except jwt.PyJWTError:  # catch any jwt error
         return

@@ -21,18 +21,19 @@ from pydantic import (
 from datetime import datetime
 
 
-
 class InvitationCreate(BaseModel):
     """
     Request model to create an invitation
 
     ATTRUBUTES:
+       - invitation_id: str, stringified ObjectId
        - project_id: str
        - invitee_id: str, id of user being invuted to join a project
 
        FUTURE IMPROVEMENETS:
           - message: str, message by applicant to project owner. Must be Optional
     """
+    invitation_id: Optional[str] = Field(None, alias="_id")
     project_id: str
     invitee_id: str
     model_config = ConfigDict(
@@ -61,7 +62,7 @@ class InvitationResponse(BaseModel):
         - message: str, message by applicant to project owner
 
     """
-    invitation_id: str = Field(None, alias="_id")
+    invitation_id: Optional[str]
     project_id: str
     inviter_id: str
     invitee_id: str

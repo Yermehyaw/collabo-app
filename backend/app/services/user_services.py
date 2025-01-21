@@ -6,19 +6,17 @@ MODULES:
     - datetime: datetime class
     - models.user: UserUpdate, UserResponse
     - db: get_collection, get collections from db client
-    - bson: ObjectId, validate and create byte ids
 
 """
 from typing import Optional
 from datetime import datetime
-from models.user import (
+from models.users import (
     UserUpdate, UserResponse
 )
 from db import get_collection
-from bson import ObjectId
 
 
-class UserService:
+class UserServices:
     """
     User Services Class: Includes methods to update, delete users and retrieve user data
 
@@ -48,6 +46,7 @@ class UserService:
 
         user = await collection.find_one({"_id": user_id}, {"password": 0})
         if user:
+            user["user_id"] = user.pop("_id")
             return UserResponse(**user)
         return None
 
@@ -68,13 +67,26 @@ class UserService:
         # if not ObjectId.is_valid(user_id):
         #    return None
 
-        user.updated_at = datetime.now().isoformat()
+        update_data = user.model_dump(exclude_unset=True)  # exclude fields which are None
+
+        list_fields = {}
+        other_fields = {}
+        for key, value in update_data.items():
+            if isinstance(key, list):
+                list_fields.update({key: value})
+            else:  # key is a string, int or any other type
+                other_fields.update({key: value})
+
+        # Update list and string values fields separately
         update_response = await collection.update_one(
             {"_id": user_id},
-            {"$set": user.model_dump()},
+            {
+                "$addToSet": list_fields,  # addToSet adds the value to the array field only if its not already present
+                "$set": other_fields
+            }
         )  # update_one never returns none even if no document was flund with the user_id
-
-        if not update_response.matched_count:
+        
+        if update_response.matched_count == 0:
             return None # document with user_id dosent exist
 
         return update_response.modified_count
@@ -99,7 +111,8 @@ class UserService:
         query = {}
         for key, value in filters.items():
             if key == "name":
-                query[key] = {"$regex": value, "$options": "i"}
+                if value:
+                    query[key] = {"$regex": value, "$options": "i"}
             
             if key == "skills":
                 if isinstance(value, str):
@@ -114,15 +127,23 @@ class UserService:
                     query[key] = {"$in": value}
             
             if key == "location":
-                query[key] = {"$regex": value, "$options": "i"}
+                if value:  # Location is non-null
+                    query[key] = {"$regex": value, "$options": "i"}
             
             if key == "language":
-                query[key] = {"$regex": value, "$options": "i"}
+                if value:
+                    query[key] = {"$regex": value, "$options": "i"}
 
             if key == "timezone":
-                query[key] = value
+                if value:
+                    query[key] = {"$regex": value, "$options": "i"}
 
         users = await collection.find(query).to_list(length=None)
+
+        for user in users:
+            user.pop("password")
+            user["user_id"] = user.pop("_id")
+
         return [UserResponse(**user) for user in users]
 
     async def submit_friend_request(self, receipient: str):
