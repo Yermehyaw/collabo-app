@@ -6,13 +6,13 @@ MODULES:
 
 """
 from fastapi import FastAPI
-from routes.auth_routes import auth_router
-from routes.user_routes import user_router
-from routes.project_routes import project_router
-from routes.application_routes import application_router
-from routes.invitation_routes import invitation_router
-from routes.search_routes import search_router
-from routes.notifications import router as notifications_router
+from app.routes.auth_routes import auth_router
+from app.routes.user_routes import user_router
+from app.routes.project_routes import project_router
+from app.routes.application_routes import application_router
+from app.routes.invitation_routes import invitation_router
+from app.routes.search_routes import search_router
+from app.routes.notifications import router as notifications_router
 
 app = FastAPI()
 
