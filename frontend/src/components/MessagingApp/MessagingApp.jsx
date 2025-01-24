@@ -1,114 +1,208 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import io from "socket.io-client";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "./MessagingApp.css";
-import io from "socket.io-client"; // Install with `npm install socket.io-client`
+import "bootstrap-icons/font/bootstrap-icons.css"; // Bootstrap Icons
 
-const socket = io("http://your-backend-url"); // Replace with your backend's URL
+const socket = io("http://localhost:3000"); // Connect to WebSocket server
 
-const MessagingApp = ({ userId }) => {
-  const [messages, setMessages] = useState([]); // List of messages
-  const [inputMessage, setInputMessage] = useState(""); // Current input message
-  const [chatUser, setChatUser] = useState({ name: "", profilePicture: "" }); // Chat user details
-  const [isVisible, setIsVisible] = useState(true); // Visibility state
+const MessagingApp = () => {
+  const [message, setMessage] = useState("[]");
+  const [messageInput, setMessageInput] = useState("");
+  const [username, setUsername] = useState(
+    "User" + Math.floor(Math.random() * 1000)
+  );
 
-  // Fetch user and chat data on load
   useEffect(() => {
-    // Fetch chat user details
-    fetch(`http://your-backend-url/api/chat-user/${userId}`)
-      .then((response) => response.json())
-      .then((data) => setChatUser(data))
-      .catch((err) => console.error("Error fetching user details:", err));
-
-    // Fetch chat history
-    fetch(`http://your-backend-url/api/chats/${userId}`)
-      .then((response) => response.json())
-      .then((data) => setMessages(data))
-      .catch((err) => console.error("Error fetching chat history:", err));
-
-    // Listen for real-time messages
-    socket.on("receiveMessage", (newMessage) => {
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
+    socket.on("message", (message) => {
+      setMessage((prevMessages) => [...prevMessages, message]);
     });
+  });
 
-    // Cleanup listener on unmount
-    return () => {
-      socket.off("receiveMessage");
-    };
-  }, [userId]);
-
-  // Handle sending a message
-  const handleSendMessage = () => {
-    if (inputMessage.trim() === "") return;
-
-    const newMessage = {
+  const [activeContact, setActiveContact] = useState("John Doe");
+  const [messages, setMessages] = useState([
+    {
+      sender: "John Doe",
+      content: "Hello, how are you?",
+      timestamp: new Date().toLocaleTimeString([], {
+        minute: "2-digit",
+        second: "2-digit",
+      }),
+      status: "read",
+    },
+    {
       sender: "You",
-      text: inputMessage,
-      timestamp: new Date().toISOString(),
-    };
+      content: "I'm good, thank you! How about you?",
+      timestamp: new Date().toLocaleTimeString([], {
+        minute: "2-digit",
+        second: "2-digit",
+      }),
+      status: "read",
+    },
+  ]);
 
-    // Emit the message to the backend
-    socket.emit("sendMessage", { userId, message: newMessage });
+  const contacts = [
+    { name: "John Doe", img: "https://randomuser.me/api/portraits/men/1.jpg" },
+    {
+      name: "Jane Smith",
+      img: "https://randomuser.me/api/portraits/women/2.jpg",
+    },
+    { name: "Bob Brown", img: "https://randomuser.me/api/portraits/men/3.jpg" },
+    {
+      name: "Alice Johnson",
+      img: "https://randomuser.me/api/portraits/women/4.jpg",
+    },
+    {
+      name: "Charlie Davis",
+      img: "https://randomuser.me/api/portraits/men/5.jpg",
+    },
+  ];
 
-    // Update local messages
-    setMessages([...messages, newMessage]);
-    setInputMessage(""); // Clear the input field
+  const handleSendMessage = (e) => {
+    e.preventDefault();
+    const messageInput = e.target.message.value;
+    if (messageInput.trim()) {
+      setMessages([...messages, { sender: "You", content: messageInput }]);
+      e.target.reset();
+    }
   };
 
-  // If not visible, don't render the component
-  if (!isVisible) return null;
-
   return (
-    <div className="messaging-app">
-      {/* Header */}
-      <div className="messaging-header bg-dark">
-        <img
-          src={chatUser.profilePicture}
-          alt={`${chatUser.name}'s profile`}
-          className="profile-picture"
-        />
-        <h5>{chatUser.name}</h5>
-        <button
-          className="close-btn btn btn-sm btn-danger"
-          onClick={() => setIsVisible(false)} // Close button
-        >
-          ✖
-        </button>
-      </div>
-
-      {/* Chat Body */}
-      <div className="messaging-body">
-        <div className="messages-list">
-          {messages.map((msg, index) => (
-            <div
-              key={index}
-              className={`message ${
-                msg.sender === "You" ? "my-message" : "other-message"
-              }`}
-            >
-              <strong>{msg.sender}: </strong>
-              <span>{msg.text}</span>
-            </div>
+    <div className="container-fluid bg-light">
+      <div className="row">
+        {/* Contact Bubbles for Mobile View */}
+        <div className="col-12 contact-bubbles d-md-none">
+          {contacts.map((contact) => (
+            <img
+              key={contact.name}
+              src={contact.img}
+              alt={contact.name}
+              data-name={contact.name}
+              onClick={() => setActiveContact(contact.name)}
+            />
           ))}
         </div>
-      </div>
-
-      {/* Chat Footer */}
-      <div className="messaging-footer">
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Type your message..."
-          value={inputMessage}
-          onChange={(e) => setInputMessage(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") handleSendMessage();
-          }}
-        />
-        <button
-          className="btn btn-primary send-btn"
-          onClick={handleSendMessage}
-        >
-          Send
-        </button>
+        {/* Sidebar for Desktop View */}
+        <div className="col-md-3 bg-white border-right sidebar d-none d-md-block">
+          <div className="p-4 border-bottom">
+            <h1 className="text-2xl font-bold text-primary">Messages</h1>
+          </div>
+          <div className="p-4">
+            <div className="input-group mb-3">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Search contacts"
+                aria-label="Search contacts"
+              />
+              <div className="input-group-append">
+                <button className="btn btn-outline-secondary" type="button">
+                  <i className="bi bi-search"></i>
+                </button>
+              </div>
+            </div>
+            <ul className="list-unstyled">
+              {contacts.map((contact) => (
+                <li
+                  key={contact.name}
+                  className="media p-2 hover:bg-light cursor-pointer"
+                  onClick={() => setActiveContact(contact.name)}
+                >
+                  <img
+                    src={contact.img}
+                    alt="Avatar"
+                    className="mr-3 rounded-circle"
+                    width="40"
+                    height="40"
+                  />
+                  <div className="media-body">
+                    <h5 className="mt-0 mb-1">{contact.name}</h5>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+        {/* Conversation Area */}
+        <div className="col-md-9 bg-white">
+          <div className="p-4 border-bottom d-flex align-items-center">
+            <img
+              src={
+                contacts.find((contact) => contact.name === activeContact)?.img
+              }
+              alt="Avatar"
+              className="rounded-circle mr-3"
+              width="40"
+              height="40"
+            />
+            <h2 className="text-xl font-bold text-dark mb-0">
+              {activeContact}
+            </h2>
+          </div>
+          <div className="p-4 conversation-area">
+            {messages.map((message, index) => (
+              <div
+                key={index}
+                className={`media mb-4 ${
+                  message.sender === "You" ? "flex-row-reverse" : ""
+                }`}
+              >
+                <img
+                  src={
+                    message.sender === "You"
+                      ? "https://via.placeholder.com/30"
+                      : contacts.find(
+                          (contact) => contact.name === message.sender
+                        )?.img
+                  }
+                  alt="Avatar"
+                  className="mr-3 rounded-circle"
+                  width="30"
+                  height="30"
+                />
+                <div
+                  className={`media-body p-3 rounded ${
+                    message.sender === "You"
+                      ? "user-message" // Add this class for user messages
+                      : "incoming-message"
+                  }`}
+                >
+                  <p className="mb-0">{message.content}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="message-input">
+            <form onSubmit={handleSendMessage}>
+              <div className="input-group">
+                <div className="input-group-prepend d-flex">
+                  <button className="btn btn-outline-secondary" type="button">
+                    <i className="bi bi-paperclip"></i>
+                  </button>
+                  <button
+                    className="btn btn-outline-secondary ms-2 bg-warning"
+                    type="button"
+                  >
+                    <i className="bi bi-emoji-smile"></i>
+                  </button>
+                </div>
+                <input
+                  type="text"
+                  className="form-control ms-2"
+                  name="message"
+                  placeholder="Type a message"
+                  required
+                />
+                <div className="input-group-append">
+                  <button className="btn btn-primary" type="submit">
+                    &#10148;
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   );

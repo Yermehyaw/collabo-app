@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import Axios from "axios";
 import {
   BrowserRouter as Router,
   Route,
@@ -17,12 +18,20 @@ import Projects from "./pages/Project/Project.jsx";
 import CreateProject from "./pages/createProject/createProject.jsx";
 import Footer from "./components/Footer/Footer.jsx";
 import MessagingApp from "./components/MessagingApp/MessagingApp.jsx";
-import { useState } from "react";
 
 const App = () => {
   const isAuthenticated = !!localStorage.getItem("token"); // Check if user is authenticated
 
-  const [data, setData] = React.useState(null);
+  const [data, setData] = useState("");
+  const getData = async () => {
+    const response = await Axios.get("http://localhost:5000/api");
+    console.log(response.data);
+    setData(response.data);
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <Router>
@@ -39,7 +48,7 @@ const App = () => {
         <Route path="/createProject" element={<CreateProject />} />{" "}
         {/* Create project page */}
         <Route path="/projects" element={<Projects />} /> {/* Projects page */}
-        <Route path="/MessageApp" element={<MessagingApp />} />
+        <Route path="/MessagingApp" element={<MessagingApp />} />
         {/* Add more routes here for other pages */}
       </Routes>
       <Footer />
