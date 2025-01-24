@@ -134,7 +134,7 @@ function NavbarComponent() {
                 />
                 Jane Smith: Message 2
               </Link>
-              <Link key={3} className="dropdown-item" to="#">
+              <Link to={"/MessagingApp"} key={3} className="dropdown-item">
                 <img
                   src="https://randomuser.me/api/portraits/men/3.jpg"
                   alt="Avatar"
@@ -142,7 +142,7 @@ function NavbarComponent() {
                 Bob Brown: Message 3
               </Link>
               <div className="dropdown-footer">
-                <Link to={"/notifications"}> View all </Link>
+                <Link to={"/MessagingApp"}> View all </Link>
               </div>
             </div>
           </li>

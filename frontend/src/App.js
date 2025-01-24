@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -16,9 +16,13 @@ import Peers from "./pages/Peers/peers.jsx";
 import Projects from "./pages/Project/Project.jsx";
 import CreateProject from "./pages/createProject/createProject.jsx";
 import Footer from "./components/Footer/Footer.jsx";
+import MessagingApp from "./components/MessagingApp/MessagingApp.jsx";
+import { useState } from "react";
 
 const App = () => {
   const isAuthenticated = !!localStorage.getItem("token"); // Check if user is authenticated
+
+  const [data, setData] = React.useState(null);
 
   return (
     <Router>
@@ -35,6 +39,7 @@ const App = () => {
         <Route path="/createProject" element={<CreateProject />} />{" "}
         {/* Create project page */}
         <Route path="/projects" element={<Projects />} /> {/* Projects page */}
+        <Route path="/MessageApp" element={<MessagingApp />} />
         {/* Add more routes here for other pages */}
       </Routes>
       <Footer />
