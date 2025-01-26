@@ -9,11 +9,9 @@ pymongo==4.9.0
 bcrypt
 python-dotenv
 pyjwt
-<<<<<<< HEAD
 httpx
 pytest
 websockets
 typing_extensions
 httpx
 pytest
-
