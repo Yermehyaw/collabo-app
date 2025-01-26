@@ -5,7 +5,7 @@ import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "./MessagingApp.css";
 import "bootstrap-icons/font/bootstrap-icons.css"; // Bootstrap Icons
 
-const socket = io("http://localhost:3000"); // Connect to WebSocket server
+const socket = io("https://collabo-app.onrender.com"); // Connect to WebSocket server
 
 const MessagingApp = () => {
   const [activeContact, setActiveContact] = useState("John Doe"); // Current active contact

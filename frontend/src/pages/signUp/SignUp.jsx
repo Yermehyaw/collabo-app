@@ -29,7 +29,7 @@ const SignUp = () => {
     if (name === "username") {
       try {
         const response = await fetch(
-          `https://your-backend-api.com/check-username?username=${value}`
+          `https://collabo-app.onrender.com/check-username?username=${value}`
         );
         const data = await response.json();
         setUsernameAvailable(data.available);
@@ -80,7 +80,7 @@ const SignUp = () => {
     }
 
     try {
-      const response = await fetch("https://your-backend-api.com/signup", {
+      const response = await fetch("https://collabo-app.onrender.com/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -89,6 +89,7 @@ const SignUp = () => {
       });
 
       const data = await response.json();
+      console.log(data);
 
       if (response.ok) {
         alert("Sign up successful! Please log in.");

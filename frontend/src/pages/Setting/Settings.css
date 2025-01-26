@@ -11,3 +11,7 @@
 img.rounded-circle {
   border: 2px solid #007bff;
 }
+
+form label {
+  font-weight: bold;
+}

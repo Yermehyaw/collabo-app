@@ -22,7 +22,7 @@ import Notifications from "./components/Notifications/Notification.jsx";
 import Settings from "./pages/Setting/Setting.jsx";
 
 // Axios Configuration
-Axios.defaults.baseURL = "http://localhost:5000/api"; // Backend Base URL
+Axios.defaults.baseURL = "https://collabo-app.onrender.com/api"; // Backend Base URL
 Axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem(
   "token"
 )}`; // Attach token to every request if available
@@ -77,7 +77,16 @@ const App = () => {
         />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/peers" element={<Peers />} />
-        <Route path="/createProject" element={<CreateProject />} />
+        <Route
+          path="/createProject"
+          element={
+            isAuthenticated ? (
+              <CreateProject />
+            ) : (
+              <Navigate to="/Login" replace />
+            )
+          }
+        />
         <Route path="/projects" element={<Projects />} />
         <Route path="Notifications" element={<Notifications />} />
         <Route path="Settings" element={<Settings />} />
