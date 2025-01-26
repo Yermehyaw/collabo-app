@@ -1,4 +1,4 @@
-[Collabo logo](Collabo_20241216_194310_0000-removebg-preview.png)
+[Collabo logo](https://raw.githubusercontent.com/Yermehyaw/collabo-app/deploy/Collabo_20241216_194310_0000-removebg-preview.png)
 # Collabo - Full-Stack Project
 
 Collabo is a collaborative platform designed to streamline project management and team communication. It provides tools for managing user profiles, projects, notifications, and messaging, all within an integrated and user-friendly environment. The project consists of a frontend built with React and a backend powered by Python. The application follows best practices for single-page applications (SPA) and RESTful APIs.
