@@ -94,6 +94,54 @@ const HeroSection = ({
           </div>
         </div>
       </section>
+
+      {/* Our Services Section */}
+      <section className="services-section py-5 bg-light">
+        <div className="container">
+          <h2 className="section-title text-center mb-4">
+            Our <span>Services</span>
+          </h2>
+          <p className="section-subtitle text-center mb-5">
+            Explore our range of services designed to enhance your collaborative
+            experience and help you succeed.
+          </p>
+          <div className="row">
+            <div className="col-md-4 text-center">
+              <i
+                className="bi bi-gear-fill service-icon mb-3"
+                style={{ color: "#007bff", fontSize: "2rem" }}
+              ></i>
+              <h3>Project Management</h3>
+              <p>
+                Simplify project tracking and ensure your team stays on target
+                with clear goals and milestones.
+              </p>
+            </div>
+            <div className="col-md-4 text-center">
+              <i
+                className="bi bi-graph-up-arrow service-icon mb-3"
+                style={{ color: "#28a745", fontSize: "2rem" }}
+              ></i>
+              <h3>Performance Insights</h3>
+              <p>
+                Gain valuable insights into team performance and identify
+                opportunities for growth.
+              </p>
+            </div>
+            <div className="col-md-4 text-center">
+              <i
+                className="bi bi-cloud-upload-fill service-icon mb-3"
+                style={{ color: "#ffc107", fontSize: "2rem" }}
+              ></i>
+              <h3>Cloud Integration</h3>
+              <p>
+                Access your data securely from anywhere, anytime, with our
+                cloud-based solutions.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
     </>
   );
 };

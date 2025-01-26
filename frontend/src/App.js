@@ -18,39 +18,73 @@ import Projects from "./pages/Project/Project.jsx";
 import CreateProject from "./pages/createProject/createProject.jsx";
 import Footer from "./components/Footer/Footer.jsx";
 import MessagingApp from "./components/MessagingApp/MessagingApp.jsx";
+import Notifications from "./components/Notifications/Notification.jsx";
+import Settings from "./pages/Setting/Setting.jsx";
+
+// Axios Configuration
+Axios.defaults.baseURL = "http://localhost:5000/api"; // Backend Base URL
+Axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem(
+  "token"
+)}`; // Attach token to every request if available
 
 const App = () => {
-  const isAuthenticated = !!localStorage.getItem("token"); // Check if user is authenticated
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    !!localStorage.getItem("token")
+  ); // Track authentication state
+  const [data, setData] = useState(""); // Backend data
+  const [error, setError] = useState(null); // Handle errors
 
-  const [data, setData] = useState("");
+  // Fetch Data from Backend
   const getData = async () => {
-    const response = await Axios.get("http://localhost:5000/api");
-    console.log(response.data);
-    setData(response.data);
+    try {
+      const response = await Axios.get("/"); // Replace '/' with your backend endpoint if needed
+      setData(response.data);
+    } catch (err) {
+      console.error("Error fetching data:", err);
+      setError("Failed to fetch data from the server.");
+    }
+  };
+
+  // Refresh authentication state
+  const handleAuthenticationChange = () => {
+    const token = localStorage.getItem("token");
+    setIsAuthenticated(!!token);
   };
 
   useEffect(() => {
     getData();
+    handleAuthenticationChange(); // Ensure auth state is updated on component mount
   }, []);
 
   return (
     <Router>
-      <Navbar />
+      <Navbar
+        isAuthenticated={isAuthenticated}
+        onAuthChange={handleAuthenticationChange}
+      />
       <Routes>
-        <Route path="/" element={<HeroSection />} /> {/* Home page */}
+        <Route path="/" element={<HeroSection data={data} />} />{" "}
+        {/* Home page */}
         <Route
           path="/profile"
-          element={isAuthenticated ? <Profile /> : <Navigate to="/Login" />}
-        />{" "}
-        <Route path="/login" element={<Login />} /> {/* Login page */}
-        <Route path="/signup" element={<SignUp />} /> {/* Sign up page */}
-        <Route path="/peers" element={<Peers />} /> {/* Peers page */}
-        <Route path="/createProject" element={<CreateProject />} />{" "}
-        {/* Create project page */}
-        <Route path="/projects" element={<Projects />} /> {/* Projects page */}
+          element={
+            isAuthenticated ? <Profile /> : <Navigate to="/login" replace />
+          }
+        />
+        <Route
+          path="/login"
+          element={<Login onAuthChange={handleAuthenticationChange} />}
+        />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/peers" element={<Peers />} />
+        <Route path="/createProject" element={<CreateProject />} />
+        <Route path="/projects" element={<Projects />} />
+        <Route path="Notifications" element={<Notifications />} />
+        <Route path="Settings" element={<Settings />} />
         <Route path="/MessagingApp" element={<MessagingApp />} />
-        {/* Add more routes here for other pages */}
       </Routes>
+      {error && <p className="error-message">{error}</p>}{" "}
+      {/* Display error if it exists */}
       <Footer />
     </Router>
   );

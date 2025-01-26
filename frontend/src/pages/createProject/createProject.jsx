@@ -12,6 +12,8 @@ const CreateProject = () => {
     technologies: "",
   });
 
+  const [showCancelPopup, setShowCancelPopup] = useState(false);
+
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData({
@@ -20,22 +22,49 @@ const CreateProject = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Safely send formData to the backend
-    console.log("Form Data Submitted:", formData);
+    try {
+      // Send data to the backend
+      const response = await fetch("/api/create-project", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-    // Example: Post data to backend
-    // fetch("/api/create-project", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(formData),
-    // })
-    //   .then((response) => response.json())
-    //   .then((data) => console.log(data));
+      if (response.ok) {
+        alert("Project created successfully!");
+        // Redirect to the projects page or reset the form
+        setFormData({
+          projectName: "",
+          projectDescription: "",
+          projectPeers: "",
+          scheduleDate: "",
+          technologies: "",
+        });
+      } else {
+        alert("Failed to create the project. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error creating project:", error);
+      alert("An error occurred. Please try again.");
+    }
+  };
+
+  const handleCancel = () => {
+    setShowCancelPopup(true); // Show the confirmation popup
+  };
+
+  const handleConfirmCancel = (confirm) => {
+    if (confirm) {
+      // Redirect to the projects page (or perform another action)
+      window.location.href = "/projects"; // Adjust the path based on your app's routing
+    } else {
+      setShowCancelPopup(false); // Close the popup
+    }
   };
 
   return (
@@ -118,13 +147,39 @@ const CreateProject = () => {
               <button type="submit" className="btn btn-success">
                 Create
               </button>
-              <button type="button" className="btn btn-secondary">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={handleCancel}
+              >
                 Cancel
               </button>
             </div>
           </form>
         </div>
       </div>
+
+      {showCancelPopup && (
+        <div className="popup-overlay">
+          <div className="popup">
+            <p>Are you sure you want to cancel?</p>
+            <div className="d-flex justify-content-around">
+              <button
+                className="btn btn-danger"
+                onClick={() => handleConfirmCancel(true)}
+              >
+                Yes
+              </button>
+              <button
+                className="btn btn-primary"
+                onClick={() => handleConfirmCancel(false)}
+              >
+                No
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

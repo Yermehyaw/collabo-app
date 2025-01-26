@@ -8,19 +8,7 @@ import "bootstrap-icons/font/bootstrap-icons.css"; // Bootstrap Icons
 const socket = io("http://localhost:3000"); // Connect to WebSocket server
 
 const MessagingApp = () => {
-  const [message, setMessage] = useState("[]");
-  const [messageInput, setMessageInput] = useState("");
-  const [username, setUsername] = useState(
-    "User" + Math.floor(Math.random() * 1000)
-  );
-
-  useEffect(() => {
-    socket.on("message", (message) => {
-      setMessage((prevMessages) => [...prevMessages, message]);
-    });
-  });
-
-  const [activeContact, setActiveContact] = useState("John Doe");
+  const [activeContact, setActiveContact] = useState("John Doe"); // Current active contact
   const [messages, setMessages] = useState([
     {
       sender: "John Doe",
@@ -58,6 +46,17 @@ const MessagingApp = () => {
       img: "https://randomuser.me/api/portraits/men/5.jpg",
     },
   ];
+
+  useEffect(() => {
+    socket.on("message", (message) => {
+      setMessages((prevMessages) => [...prevMessages, message]);
+    });
+
+    // Cleanup listener on unmount
+    return () => {
+      socket.off("message");
+    };
+  }, []);
 
   const handleSendMessage = (e) => {
     e.preventDefault();

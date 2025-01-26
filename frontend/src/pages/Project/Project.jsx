@@ -6,7 +6,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import "./Project.css";
 
 const ProjectCard = ({ project }) => (
-  <div className="col-md-4 mb-4">
+  <div className="col-md-3 mb-4">
     <div className="card project-card shadow-sm h-100">
       <div className="card-body d-flex flex-column">
         <h5 className="font-weight-bold">{project.title}</h5>
@@ -23,64 +23,7 @@ const ProjectCard = ({ project }) => (
         <p>
           <strong>Date Created:</strong> {project.dateCreated}
         </p>
-        <p>
-          <strong>Peers:</strong>
-          {project.peers.slice(0, 3).map((peer, index) => (
-            <img
-              key={index}
-              src={peer.avatar}
-              alt="Avatar"
-              className="peer-avatar"
-            />
-          ))}
-          {project.peers.length > 3 && (
-            <span
-              className="more-peers"
-              data-toggle="modal"
-              data-target={`#peersModal${project.id}`}
-            >
-              ...
-            </span>
-          )}
-        </p>
         <button className="btn btn-primary mt-auto">Join</button>
-      </div>
-    </div>
-
-    {/* Modal for displaying all peers */}
-    <div
-      className="modal fade"
-      id={`peersModal${project.id}`}
-      tabIndex="-1"
-      aria-labelledby={`peersModalLabel${project.id}`}
-      aria-hidden="true"
-    >
-      <div className="modal-dialog">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title" id={`peersModalLabel${project.id}`}>
-              Peers working on {project.title}
-            </h5>
-            <button
-              type="button"
-              className="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div className="modal-body">
-            {project.peers.map((peer, index) => (
-              <img
-                key={index}
-                src={peer.avatar}
-                alt="Avatar"
-                className="peer-avatar"
-              />
-            ))}
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -96,12 +39,6 @@ const Projects = () => {
       scheduleDate: "2023-12-01",
       creator: "John Doe",
       dateCreated: "2023-01-15",
-      peers: [
-        { avatar: "https://randomuser.me/api/portraits/men/1.jpg" },
-        { avatar: "https://randomuser.me/api/portraits/women/2.jpg" },
-        { avatar: "https://randomuser.me/api/portraits/men/3.jpg" },
-        { avatar: "https://randomuser.me/api/portraits/women/4.jpg" },
-      ],
     },
     {
       id: 2,
@@ -111,12 +48,6 @@ const Projects = () => {
       scheduleDate: "2023-12-15",
       creator: "Jane Smith",
       dateCreated: "2023-02-01",
-      peers: [
-        { avatar: "https://randomuser.me/api/portraits/men/4.jpg" },
-        { avatar: "https://randomuser.me/api/portraits/women/5.jpg" },
-        { avatar: "https://randomuser.me/api/portraits/men/6.jpg" },
-        { avatar: "https://randomuser.me/api/portraits/women/7.jpg" },
-      ],
     },
     {
       id: 3,
@@ -126,20 +57,68 @@ const Projects = () => {
       scheduleDate: "2023-12-20",
       creator: "Alice Johnson",
       dateCreated: "2023-03-10",
-      peers: [
-        { avatar: "https://randomuser.me/api/portraits/men/8.jpg" },
-        { avatar: "https://randomuser.me/api/portraits/women/9.jpg" },
-        { avatar: "https://randomuser.me/api/portraits/men/10.jpg" },
-      ],
+    },
+    {
+      id: 4,
+      title: "Project Delta",
+      description: "Description of Project Delta",
+      technologies: ["Vue", "Firebase"],
+      scheduleDate: "2024-01-05",
+      creator: "Michael Brown",
+      dateCreated: "2023-04-12",
+    },
+    {
+      id: 5,
+      title: "Project Epsilon",
+      description: "Description of Project Epsilon",
+      technologies: ["Angular", "TypeScript"],
+      scheduleDate: "2024-01-10",
+      creator: "Sarah Wilson",
+      dateCreated: "2023-05-20",
+    },
+    {
+      id: 6,
+      title: "Project Zeta",
+      description: "Description of Project Zeta",
+      technologies: ["Ruby", "Rails"],
+      scheduleDate: "2024-01-15",
+      creator: "Chris Evans",
+      dateCreated: "2023-06-25",
+    },
+    {
+      id: 7,
+      title: "Project Eta",
+      description: "Description of Project Eta",
+      technologies: ["Java", "Spring"],
+      scheduleDate: "2024-01-20",
+      creator: "Emma Watson",
+      dateCreated: "2023-07-10",
+    },
+    {
+      id: 8,
+      title: "Project Theta",
+      description: "Description of Project Theta",
+      technologies: ["PHP", "Laravel"],
+      scheduleDate: "2024-01-25",
+      creator: "Daniel Craig",
+      dateCreated: "2023-08-01",
+    },
+    {
+      id: 9,
+      title: "Project Iota",
+      description: "Description of Project Iota",
+      technologies: ["C#", ".NET"],
+      scheduleDate: "2024-01-30",
+      creator: "Olivia Benson",
+      dateCreated: "2023-09-05",
     },
   ];
 
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
-  const projectsPerPage = 6;
+  const projectsPerPage = 4;
 
-  // Filter projects based on search query
   const filteredProjects = projectsData.filter(
     (project) =>
       project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -152,7 +131,9 @@ const Projects = () => {
 
   const totalPages = Math.ceil(filteredProjects.length / projectsPerPage);
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   const indexOfLastProject = currentPage * projectsPerPage;
   const indexOfFirstProject = indexOfLastProject - projectsPerPage;
@@ -177,7 +158,7 @@ const Projects = () => {
               value={searchQuery}
               onChange={(e) => {
                 setSearchQuery(e.target.value);
-                setCurrentPage(1); // Reset to the first page when searching
+                setCurrentPage(1);
               }}
             />
             <div className="input-group-append">
@@ -198,7 +179,6 @@ const Projects = () => {
           </div>
         )}
       </div>
-      {/* Pagination */}
       {filteredProjects.length > projectsPerPage && (
         <div className="row mt-4">
           <div className="col-md-12">

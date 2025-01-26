@@ -17,3 +17,12 @@
   cursor: pointer;
   color: blue;
 }
+
+#project-bi {
+  height: 26px;
+  color: rgb(0, 119, 255);
+}
+
+#project-bi:hover {
+  text-decoration: underline;
+}

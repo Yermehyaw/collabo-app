@@ -11,7 +11,9 @@
     100vh - 120px
   ); /* Adjust height to leave space for header and input */
   overflow-y: auto;
-  background-color: #f9f9f9; /* Light background for a soft distinction */
+  background: url("https://source.unsplash.com/1600x900/?nature,water"); /* Optional: background image */
+  background-size: cover; /* Optional: cover the entire area */
+  padding: 20px; /* Optional padding */
 }
 
 .message-input {
@@ -66,7 +68,6 @@
 /* Bubble styling for "You" (home user) */
 .conversation-area .media.flex-row-reverse .media-body {
   background-color: #98c4f798; /* Light green bubble (WhatsApp style) */
-  color: #000; /* Text color for contrast */
   border-radius: 20px 0 20px 20px; /* Rounded bubble with a tail on the left */
   max-width: 70%; /* Limit the width of messages */
   align-self: flex-end;
@@ -76,7 +77,7 @@
 .conversation-area .media:not(.flex-row-reverse) .media-body {
   background-color: #fff; /* White bubble for incoming messages */
   color: #000; /* Black text */
-  border-radius: 0 20px 20px 20px; /* Rounded bubble with a tail on the right */
+  border-radius: 5px; /* Rounded bubble with a tail on the right */
   max-width: 70%; /* Limit the width of messages */
   align-self: flex-start;
   border: 1px solid #e0e0e0; /* Optional border for contrast */
