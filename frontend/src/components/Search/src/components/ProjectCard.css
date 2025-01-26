@@ -1,0 +1,44 @@
+.project-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.project-card h5 {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.project-description {
+  color: #6b7280;
+  margin-bottom: 0.5rem;
+}
+
+.peers-list {
+  margin-bottom: 0;
+}
+
+.peers-avatars {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.peer-avatar {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+}
+
+.more-peers-button {
+  color: #3b82f6;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.more-peers-button:hover {
+  color: #2563eb;
+}

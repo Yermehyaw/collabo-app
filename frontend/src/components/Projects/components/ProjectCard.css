@@ -1,0 +1,57 @@
+.project-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  background-color: white;
+  transition: background-color 0.2s;
+}
+
+.project-card:hover {
+  background-color: #f9fafb;
+}
+
+.project-title {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.project-description {
+  color: #6b7280;
+  margin-bottom: 0.75rem;
+}
+
+.project-info {
+  margin-bottom: 0.5rem;
+}
+
+.peers-section {
+  margin-top: 1rem;
+}
+
+.peers-list {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.peer-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.more-peers {
+  background: none;
+  border: none;
+  color: #3b82f6;
+  cursor: pointer;
+  padding: 0;
+  font-size: 1.2rem;
+}
+
+.more-peers:hover {
+  color: #2563eb;
+}

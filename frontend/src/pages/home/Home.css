@@ -1,0 +1,189 @@
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: rgb(22, 52, 47);
+
+  /* color: #ffffff; */
+}
+
+main {
+  display: block;
+  margin: auto;
+}
+
+.hero-content img {
+  width: 100px;
+  height: 100px;
+  position: absolute;
+}
+
+/* Hero Section */
+#hero {
+  width: 100%;
+  background-image: url("boxbg.jpg");
+  background-position: center;
+  background-size: cover;
+  color: white;
+  display: flex;
+  justify-content: left;
+
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-content {
+  text-align: left;
+  padding: 8%;
+
+  z-index: 1;
+}
+
+.hero-content h1 {
+  font-size: 3rem;
+  font-weight: bold;
+}
+
+.hero-content h3 {
+  font-size: 1.5rem;
+  margin: 0.5rem 0 1rem;
+  font-weight: normal;
+}
+
+.hero-content p {
+  font-size: 20px;
+  margin-bottom: 2rem;
+  max-width: 600px;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 5rem;
+  /* justify-content: center; */
+  float: left;
+
+  margin-top: 20%;
+}
+
+.btn {
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 5px;
+  background: #049659;
+  color: #faeeee;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+}
+
+.btn:hover {
+  background-color: #0c4314;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+/* Background Pattern */
+#hero::before {
+  content: "";
+  position: absolute;
+  width: 120%;
+  height: 120%;
+  background: radial-gradient(
+    circle,
+    rgba(0, 0, 0, 0.2) 0%,
+    rgba(0, 0, 0, 0) 70%
+  );
+  z-index: 0;
+}
+
+#hero h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  color: chartreuse;
+  margin-top: 5%;
+  font-family: Georgia, "Times New Roman", Times, serif;
+}
+
+#welcome {
+  margin-top: 10%;
+  font-weight: bolder;
+  font-family: "Times New Roman", Times, serif;
+}
+
+#logo-name {
+  color: bisque;
+  text-shadow: 0 0 10px #eb510f, 0 0 20px #ff6a00, 0 0 30px #1d1904;
+
+  font-size: 5rem;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.chat-icon-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #c3d103;
+  color: white;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+}
+
+.chat-icon-container:hover {
+  background-color: #c4f405;
+}
+
+.chat-icon {
+  font-size: 28px;
+}
+
+.red-dot {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 12px;
+  height: 12px;
+  background-color: red;
+  border-radius: 50%;
+  box-shadow: 0 0 6px rgba(255, 0, 0, 0.8);
+}
+
+.messaging-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
+  border-radius: 5px 5px 0 0;
+}
+
+.profile-picture {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.messaging-header h5 {
+  margin: 0;
+  flex: 1;
+}
+
+@media only screen and (max-width: 768px) {
+  #logo-name {
+    font-size: 2rem;
+  }
+}

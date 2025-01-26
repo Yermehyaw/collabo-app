@@ -1,0 +1,81 @@
+/* Toggle Button */
+.toggle-chat-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  font-size: 16px;
+  padding: 10px 20px;
+  border-radius: 50px;
+}
+
+/* Messaging App */
+.messaging-app {
+  position: fixed;
+  bottom: 70px;
+  right: 20px;
+  width: 60vw;
+  height: 500px;
+  background: url("./lst-bg.jpeg");
+  background-size: cover;
+  background-position: center;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Header */
+.messaging-header {
+  background-color: #24d09f;
+  color: white;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Body */
+.messaging-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.messages-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.message {
+  padding: 8px;
+  border-radius: 6px;
+  max-width: 80%;
+}
+
+.my-message {
+  align-self: flex-end;
+  background-color: #007bff;
+  color: white;
+}
+
+.other-message {
+  align-self: flex-start;
+  background-color: #e9ecef;
+}
+
+/* Footer */
+.messaging-footer {
+  display: flex;
+  padding: 10px;
+  gap: 10px;
+  border-top: 1px solid #ddd;
+}
+
+.send-btn {
+  flex-shrink: 0;
+}
