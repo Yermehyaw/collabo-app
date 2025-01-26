@@ -1,16 +1,45 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Login.css";
 import Footer from "../../components/Footer/Footer";
 import { Link } from "react-router-dom";
 import { FaHome } from "react-icons/fa";
 
-const AuthPage = () => {
+
+// Use fetch to submit http login request
+async function loginUser(credentials) {
+  return fetch("https://collabo-app.onrender.com/auth/login", {
+    method: "POST",
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(credentials)
+  })
+    .then(data => data.json())
+}
+
+// Use fetch to submit signup request
+async function signupUser(credentials) {
+  return fetch("https://collabo-app.onrender.com/auth/signup", {
+    method: "POST",
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(credentials)
+  })
+    .then(data => data.json())
+}
+
+const AuthPage = ( {setToken} ) => {
   const [isLogin, setIsLogin] = useState(true); // Toggle between Login and Sign Up forms
   const [passwordVisibility, setPasswordVisibility] = useState({
     createPassword: false,
     confirmPassword: false,
   });
+  const [email, setEmail] = useState;
+  const [name, setUserName] = useState();
+  const [password, setPassword] = useState();
 
   // Toggle password visibility
   const togglePasswordVisibility = (field) => {
@@ -20,13 +49,20 @@ const AuthPage = () => {
     }));
   };
 
-  const handleLoginSubmit = (e) => {
+  const handleLoginSubmit = async (e) => {
     e.preventDefault();
+    const response = await loginUser({
+      email, password
+    });
+    setToken(response.access_token)
     console.log("Login form submitted");
   };
 
-  const handleSignUpSubmit = (e) => {
+  const handleSignUpSubmit = async (e) => {
     e.preventDefault();
+    const response = await signupUser({
+      email, password, name
+    });
     console.log("Sign Up form submitted");
   };
 
@@ -53,6 +89,7 @@ const AuthPage = () => {
               </label>
               <input
                 type="email"
+		onChange={e => setEmail(e.target.value)}
                 className="form-control"
                 id="loginEmail"
                 placeholder="Enter your email"
@@ -65,6 +102,7 @@ const AuthPage = () => {
               </label>
               <input
                 type="password"
+		onChange={e => setPassword(e.target.value)}
                 className="form-control"
                 id="loginPassword"
                 placeholder="Enter your password"
@@ -103,8 +141,8 @@ const AuthPage = () => {
                 First Name
               </label>
               <input
-                type="email"
-                className="form-control"
+                type="text"
+		className="form-control"
                 id="signupEmail"
                 placeholder="Enter your first name"
                 required
@@ -116,7 +154,7 @@ const AuthPage = () => {
                 Last Name
               </label>
               <input
-                type="email"
+                type="text"
                 className="form-control"
                 id="signupEmail"
                 placeholder="Enter your last name"
@@ -130,6 +168,7 @@ const AuthPage = () => {
               </label>
               <input
                 type="text"
+		onChange={e => setUserName(e.target.value)}
                 className="form-control"
                 id="username"
                 placeholder="Choose a username"
@@ -143,6 +182,7 @@ const AuthPage = () => {
               </label>
               <input
                 type="email"
+	        onChange={e => setEmail(e.target.value)}
                 className="form-control"
                 id="signupEmail"
                 placeholder="Enter your email"
@@ -155,6 +195,7 @@ const AuthPage = () => {
               </label>
               <input
                 type={passwordVisibility.createPassword ? "text" : "password"}
+	        onChange={e => setPassword(e.target.value)}
                 className="form-control"
                 id="createPassword"
                 placeholder="Create your password"
@@ -206,6 +247,10 @@ const AuthPage = () => {
       <Footer />
     </div>
   );
+
+  AuthPage.Login.propTypes = (
+    setToken: PropTypes.func.isRequired
+  )
 };
 
 export default AuthPage;
