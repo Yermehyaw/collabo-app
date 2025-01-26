@@ -60,5 +60,5 @@ app.include_router(conversation_router, prefix='/conversations', tags=['Conversa
 
 
 # Run the app via uvicorn in a shell terminal
-if __name__ == "__main__":
-    uvicorn main:app --reload
+#if __name__ == "__main__":
+#uvicorn main:app --reload
