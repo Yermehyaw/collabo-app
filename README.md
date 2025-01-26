@@ -4,20 +4,40 @@ Collabo is a collaborative platform designed to streamline project management an
 
 ## Table of Contents
 
--   Frontend
-    
--   Backend
+-   Use Online  
+
+-   Local Installation
+      - Frontend
+      - Backend
     
 -   File Structure
     
 -   Features
     
 -   Contributing
-    
 
-## Frontend
 
-### Installation
+## Use Online
+
+### Frontend
+1. Visit:
+   ```
+   https://collabo-bice.vercel.app
+   ```
+   to use the app frontend interface 
+
+### Backend
+1. Make Queries to:
+   ```
+   https://collabo-app.onrender.com
+   ```
+   Kindly visit [MVP file](https://shorturl.at/CGwuA) for a list of endpoints
+
+  
+
+## Local Installation
+
+### Frontend
 
 1.  Navigate to the frontend folder:
     
@@ -49,8 +69,6 @@ Collabo is a collaborative platform designed to streamline project management an
 
 ## Backend
 
-### Installation
-
 1.  Navigate to the backend folder:
     
     ```
@@ -75,7 +93,7 @@ Collabo is a collaborative platform designed to streamline project management an
 1.  Start the backend server:
     
     ```
-    python backend/app/main.py
+    bash run_app.sh
     ```
     
 
