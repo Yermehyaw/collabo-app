@@ -14,7 +14,8 @@
     "react-router-dom": "^6.16.0",
     "react-scripts": "5.0.1",
     "react-typing-effect": "^2.0.5",
-    "socket.io-client": "^4.8.1"
+    "socket.io-client": "^4.8.1",
+    "prop-types": "^15.7.2"
   },
   "scripts": {
     "start": "react-scripts start",
