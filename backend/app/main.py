@@ -6,6 +6,9 @@ MODULES:
 
 """
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
+import os
 from routes.auth_routes import auth_router
 from routes.user_routes import user_router
 from routes.project_routes import project_router
@@ -17,9 +20,26 @@ from routes.invitation_routes import invitation_router
 from routes.message_routes import message_router
 from routes.message_routes import conversation_router
 
+load_dotenv()  # Load the .env file
+FRONTEND_URL = os.getenv("FRONTEND_URL")
 
 # Initialize the FastAPI app
 app = FastAPI()
+
+# frontend origins
+origins = [
+    "http://localhost:5173",
+    "http://localhost:3000",
+    FRONTEND_URL
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
 
 # Homepage
 app.get('/')
@@ -40,4 +60,5 @@ app.include_router(conversation_router, prefix='/conversations', tags=['Conversa
 
 
 # Run the app via uvicorn in a shell terminal
-# uvicorn main:app --reload
+if __name__ == "__main__":
+    uvicorn main:app --reload
