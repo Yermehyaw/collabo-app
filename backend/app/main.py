@@ -19,6 +19,7 @@ from routes.application_routes import application_router
 from routes.invitation_routes import invitation_router
 from routes.message_routes import message_router
 from routes.message_routes import conversation_router
+from app.routes.notifications import router as notifications_router
 
 load_dotenv()  # Load the .env file
 FRONTEND_URL = os.getenv("FRONTEND_URL")
@@ -57,6 +58,7 @@ app.include_router(application_router, prefix='/applications', tags=['Applicatio
 app.include_router(invitation_router, prefix='/invitations', tags=['Invitations'])
 app.include_router(message_router, prefix='/messages', tags=['Messages'])
 app.include_router(conversation_router, prefix='/conversations', tags=['Conversations'])
+app.include_router(notifications_router, prefix="/notifications", tags=["Notifications"])
 
 
 # Run the app via uvicorn in a shell terminal
