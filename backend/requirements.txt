@@ -9,6 +9,9 @@ pymongo==4.9.0
 bcrypt
 python-dotenv
 pyjwt
+httpx
+pytest
+websockets
 typing_extensions
 httpx
 pytest

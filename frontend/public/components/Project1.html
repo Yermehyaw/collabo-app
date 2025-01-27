@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        .project-card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .project-card:hover {
+            background-color: #f9f9f9;
+        }
+        .peer-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        .more-peers {
+            cursor: pointer;
+            color: blue;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="row mb-4">
+            <div class="col-md-12 text-center">
+                <h1 class="text-primary">Project Alpha</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="project-card">
+                    <h5 class="font-weight-bold">Project Alpha</h5>
+                    <p class="text-muted">Description of Project Alpha</p>
+                    <p><strong>Technologies:</strong> HTML, CSS, JavaScript</p>
+                    <p><strong>Schedule Date:</strong> 2023-12-01</p>
+                    <p><strong>Peers:</strong>
+                        <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="Avatar" class="peer-avatar">
+                        <img src="https://randomuser.me/api/portraits/women/2.jpg" alt="Avatar" class="peer-avatar">
+                        <img src="https://randomuser.me/api/portraits/men/3.jpg" alt="Avatar" class="peer-avatar">
+                        <span class="more-peers" data-toggle="modal" data-target="#peersModal">...</span>
+                    </p>
+                    <button class="btn btn-success">Join Project</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for displaying all peers -->
+    <div class="modal fade" id="peersModal" tabindex="-1" aria-labelledby="peersModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="peersModalLabel">Peers working on Project Alpha</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="Avatar" class="peer-avatar">
+                    <img src="https://randomuser.me/api/portraits/women/2.jpg" alt="Avatar" class="peer-avatar">
+                    <img src="https://randomuser.me/api/portraits/men/3.jpg" alt="Avatar" class="peer-avatar">
+                    <img src="https://randomuser.me/api/portraits/women/4.jpg" alt="Avatar" class="peer-avatar">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

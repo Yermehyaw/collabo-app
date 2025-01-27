@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        .dropdown-item {
+            padding: 10px 20px;
+            font-size: 14px;
+        }
+        .dropdown-item:hover {
+            background-color: #f1f1f1;
+        }
+        .dropdown-header {
+            font-weight: bold;
+            font-size: 16px;
+            padding: 10px 20px;
+            background-color: #f8f9fa;
+        }
+        .dropdown-footer {
+            text-align: center;
+            padding: 10px 20px;
+            background-color: #f8f9fa;
+        }
+        .dropdown-item img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        /* New styles for notifications and messages */
+        .notification-icon .fa-bell,
+        .notification-icon .fa-envelope {
+            color: #007bff;
+            font-size: 1.2rem;
+        }
+        .notification-icon .badge-notification {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: #ff4444;
+            color: white;
+            border-radius: 50%;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            transform: translate(25%, -25%);
+        }
+        .notification-icon {
+            position: relative;
+            padding-right: 1rem;
+        }
+        /* Remove dropdown arrow */
+        .notification-icon.dropdown-toggle::after {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">
+            <img src="./Collabo.png" alt="Brand Logo" height="40">
+        </a>
+        <form class="form-inline ml-3">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-primary my-2 my-sm-0" type="submit"><i class="fas fa-search"></i></button>
+        </form>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="#">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Peers</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Projects</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle notification-icon" href="#" id="notificationsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge badge-notification">3</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="notificationsDropdown">
+                        <div class="dropdown-header">Notifications</div>
+                        <a class="dropdown-item" href="#">
+                            <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="Avatar">
+                            Notification 1
+                        </a>
+                        <a class="dropdown-item" href="#">
+                            <img src="https://randomuser.me/api/portraits/women/2.jpg" alt="Avatar">
+                            Notification 2
+                        </a>
+                        <a class="dropdown-item" href="#">
+                            <img src="https://randomuser.me/api/portraits/men/3.jpg" alt="Avatar">
+                            Notification 3
+                        </a>
+                        <div class="dropdown-footer"><a href="#">View all</a></div>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle notification-icon" href="#" id="messagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-envelope"></i>
+                        <span class="badge badge-notification">5</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="messagesDropdown">
+                        <div class="dropdown-header">Messages</div>
+                        <a class="dropdown-item" href="#">
+                            <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="Avatar">
+                            John Doe: Message 1
+                        </a>
+                        <a class="dropdown-item" href="#">
+                            <img src="https://randomuser.me/api/portraits/women/2.jpg" alt="Avatar">
+                            Jane Smith: Message 2
+                        </a>
+                        <a class="dropdown-item" href="#">
+                            <img src="https://randomuser.me/api/portraits/men/3.jpg" alt="Avatar">
+                            Bob Brown: Message 3
+                        </a>
+                        <div class="dropdown-footer"><a href="#">View all</a></div>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="Avatar" class="rounded-circle" width="30" height="30">
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="profileDropdown">
+                        <a class="dropdown-item" href="#">Profile</a>
+                        <a class="dropdown-item" href="#">Settings</a>
+                        <a class="dropdown-item" href="#">Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
