@@ -61,7 +61,7 @@ async def submit_application(application: ApplicationCreate, token: str = Depend
         failure = {"error": "Project not found", "code": "NOT_FOUND"}
         raise HTTPException(status_code=404, detail=failure)
 
-    application["applicant_id"] = token["sub"]
+    application.applicant_id = token["sub"]
     application_id = application_services.submit_application(application)
 
     if not application_id:
