@@ -74,7 +74,7 @@ async def submit_application(application: ApplicationCreate, token: str = Depend
 @application_router.get("/{project_id}", response_model=List[ApplicationResponse])
 async def get_applications_to_project(project_id: str, token: str = Depends(oauth2_scheme)):
     """
-    Get a list of applications to a project
+    Get a list of applications to your project
 
     ATTRIBUTES:
         - project_id: str, unique id of project
