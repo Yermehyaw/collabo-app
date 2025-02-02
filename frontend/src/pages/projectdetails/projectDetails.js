@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./ProjectDetails.css";
+import "./projectDetails.css";
 
 const sampleProjects = [
   { id: 1, name: "Weather App", description: "A simple weather forecast app." },
