@@ -253,8 +253,8 @@ const AuthPage = ( {setToken} ) => {
   );
 };
 
-  AuthPage.propTypes = {
-    setToken: PropTypes.func.isRequired,
-  };
+AuthPage.propTypes = {
+  setToken: PropTypes.func.isRequired,
+};
 
 export default AuthPage;
