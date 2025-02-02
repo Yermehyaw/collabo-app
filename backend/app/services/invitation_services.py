@@ -39,7 +39,7 @@ class InvitationServices:
         collection = await get_collection(self.collection_name)
 
         # Add the additional params req to create an InvitationResponse during response creation
-        # project_id, invitee_id and inviter_id should already be in the dict
+        # i.e project_id, invitee_id and inviter_id should already be in the dict
         invite["created_at"] = datetime.now().isoformat()
         invite["status"] = "pending"
         

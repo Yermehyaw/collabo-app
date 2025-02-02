@@ -37,9 +37,9 @@ const AuthPage = ( {setToken} ) => {
     createPassword: false,
     confirmPassword: false,
   });
-  const [email, setEmail] = useState;
-  const [name, setUserName] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState("");
+  const [name, setUserName] = useState("");
+  const [password, setPassword] = useState("");
 
   // Toggle password visibility
   const togglePasswordVisibility = (field) => {
@@ -54,8 +54,12 @@ const AuthPage = ( {setToken} ) => {
     const response = await loginUser({
       email, password
     });
-    setToken(response.access_token)
-    console.log("Login form submitted");
+    if (response.access_token) {
+      setToken(response.access_token);
+      console.log("Login form submitted");
+    } else {
+      console.log("Login failed". response);
+    }
   };
 
   const handleSignUpSubmit = async (e) => {
@@ -247,10 +251,10 @@ const AuthPage = ( {setToken} ) => {
       <Footer />
     </div>
   );
+};
 
-  AuthPage.Login.propTypes = (
-    setToken: PropTypes.func.isRequired
-  )
+AuthPage.propTypes = {
+  setToken: PropTypes.func.isRequired,
 };
 
 export default AuthPage;
