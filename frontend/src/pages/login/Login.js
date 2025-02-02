@@ -251,10 +251,10 @@ const AuthPage = ( {setToken} ) => {
       <Footer />
     </div>
   );
+};
 
-  AuthPage.Login.propTypes = (
-    setToken: PropTypes.func.isRequired,
-  );
+AuthPage.Login.propTypes = {
+  setToken: PropTypes.func.isRequired,
 };
 
 export default AuthPage;
