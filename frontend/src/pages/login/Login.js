@@ -253,7 +253,7 @@ const AuthPage = ( {setToken} ) => {
   );
 };
 
-AuthPage.Login.propTypes = {
+AuthPage.propTypes = {
   setToken: PropTypes.func.isRequired,
 };
 
