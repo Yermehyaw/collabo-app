@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./Login.css";
+import "./login.css";
 import Footer from "../../components/Footer/Footer";
 import { Link } from "react-router-dom";
 import { FaHome } from "react-icons/fa";
