@@ -31,7 +31,7 @@ const App = () => {
           <Route path="/ProjectDetails" element={<ProjectPage />} />{" "}
           {/* Add more routes here for other pages */}
         </Route>
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login setToken={setToken}/>} />
       </Routes>
     </Router>
   );
