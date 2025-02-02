@@ -13,7 +13,7 @@ import "./components/Navbar/Navbar.css";
 import "./components/Navbar/Sidebar.css";
 import Layout from "./components/Layout/Layout";
 import Profile from "./pages/profile/Profile";
-import ProjectPage from "./pages/projectdetails/ProjectDetails";
+import ProjectPage from "./pages/projectdetails/projectDetails";
 
 const App = () => {
   const isAuthenticated = !!localStorage.getItem("token"); // Check if user is authenticated
