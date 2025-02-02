@@ -63,7 +63,7 @@ async def send_invitation(invite: InvitationCreate, token: str = Depends(oauth2_
         failure = {"error": "You are not permitted to send invites to other users on this project", "code": "PERMISSION_DENIED"}
         raise HTTPException(status_code=403, detail=failure)
 
-    invite["inviter_id"] = token["sub"]
+    invite.inviter_id = token["sub"]
     invitation_id = await invitation_services.send_invitation(invite)
 
     if not invitation_id:
@@ -74,10 +74,10 @@ async def send_invitation(invite: InvitationCreate, token: str = Depends(oauth2_
     return success
 
 
-@invitation_router.get("/{user_id}", response_model=InvitationResponse)
-async def get_invitations_to_user(user_id: str, token: str = Depends(oauth2_scheme)):
+@invitation_router.get("/", response_model=InvitationResponse)
+async def get_invitations_to_user(token: str = Depends(oauth2_scheme)):
     """
-    Get all invitations to a user
+    Get all invitations a user has received
 
     ATTRIBUTES:
         - user_id: str, id of user
@@ -92,7 +92,8 @@ async def get_invitations_to_user(user_id: str, token: str = Depends(oauth2_sche
         failure = {"error": "Invalid token", "code": "UNAUTHORIZED"}
         raise HTTPException(status_code=401, detail=failure)
 
-    # Ensure its the user requesting for their own invitations
+    # Ensure the user_id ia valid and its the user requesting for their own invitations
+    user_id = token["sub"]
     user = await user_services.get_user_by_id(user_id)
 
     if not user or user["user_id"] != user_id:
