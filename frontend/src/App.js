@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -16,7 +16,16 @@ import Profile from "./pages/profile/Profile";
 import ProjectPage from "./pages/projectdetails/projectDetails";
 
 const App = () => {
-  const isAuthenticated = !!localStorage.getItem("token"); // Check if user is authenticated
+  // Manage authetication in state
+  const [token, setToken] = useState(localStorage.getItem("token"));
+
+  // Handles saving the token in state and to local storage
+  const handleSetToken = (userToken) => {
+    localStorage.setItem("token", userToken);
+    setToken(userToken);
+  };
+
+  const isAuthenticated = !!token; // Check if user is authenticated
 
   return (
     <Router>
@@ -31,7 +40,7 @@ const App = () => {
           <Route path="/ProjectDetails" element={<ProjectPage />} />{" "}
           {/* Add more routes here for other pages */}
         </Route>
-        <Route path="/login" element={<Login setToken={setToken}/>} />
+        <Route path="/login" element={<Login setToken={handleSetToken}/>} />
       </Routes>
     </Router>
   );
