@@ -5,18 +5,16 @@ import "./login.css";
 import Footer from "../../components/Footer/Footer";
 import { Link } from "react-router-dom";
 import { FaHome } from "react-icons/fa";
+import { apiRequest } from "../services/api";
 
 
 // Use fetch to submit http login request
 async function loginUser(credentials) {
-  return fetch("https://collabo-app.onrender.com/auth/login", {
-    method: "POST",
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(credentials)
-  })
-    .then(data => data.json())
+  return apiRequest("/auth/login",
+    {
+      method: "POST",
+      body: JSON.stringify(credentials)
+  });
 }
 
 // Use fetch to submit signup request
@@ -54,6 +52,7 @@ const AuthPage = ( {setToken} ) => {
     const response = await loginUser({
       email, password
     });
+    // if () // Add status code checks
     if (response.access_token) {
       setToken(response.access_token);
       console.log("Login form submitted");
