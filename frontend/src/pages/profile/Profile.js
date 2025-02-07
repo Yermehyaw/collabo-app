@@ -9,7 +9,7 @@ const Profile = () => {
     return (
       <div className="text-center">
         <h2>No user data found. Please log in first.</h2>
-        <Link to="/">Go back to Login</Link>
+        <Link to="">Go back to Login</Link>
       </div>
     );
   }

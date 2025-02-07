@@ -5,6 +5,7 @@ import {
   Routes,
   Navigate,
 } from "react-router-dom";
+import jwtDecode from "jwt-decode";
 import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
 import "./pages/home/Home.css";
@@ -15,9 +16,28 @@ import Layout from "./components/Layout/Layout";
 import Profile from "./pages/profile/Profile";
 import ProjectPage from "./pages/projectdetails/projectDetails";
 
+// Check for expired token before server returns a 401
+const getToken = () => {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    return null
+  }
+
+  try {
+    const decoded = jwtDecode(token);
+    if (decoded.expires_in * 1000 < Date.now()) {
+      localStorage.removeItem("token");
+      return null;
+    }
+    return token;
+  } catch (error) {
+    return null;
+  }
+};
+
 const App = () => {
   // Manage authetication in state
-  const [token, setToken] = useState(localStorage.getItem("token"));
+  const [token, setToken] = useState(getToken());
 
   // Handles saving the token in state and to local storage
   const handleSetToken = (userToken) => {

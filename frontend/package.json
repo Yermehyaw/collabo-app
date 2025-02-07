@@ -16,7 +16,8 @@
     "react-typing-effect": "^2.0.5",
     "socket.io-client": "^4.8.1",
     "prop-types": "^15.7.2",
-    "dotenv": "^10.0.0"
+    "dotenv": "^10.0.0",
+    "jwt-decode": "^1.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
